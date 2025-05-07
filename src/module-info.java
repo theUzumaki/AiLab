@@ -6,4 +6,5 @@
  *
  */
 module Jason {
+	requires java.desktop;
 }
