@@ -1,9 +1,13 @@
-package Main;
+package main;
 
 import javax.swing.JPanel;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
+
+import entities.GameMaster;
+import entities.AnimatedEntity;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable {
@@ -12,12 +16,24 @@ public class Game extends JPanel implements Runnable {
     private boolean running = false;
 
     // Size of the game window
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int ROWS = 15;
+    private final int COLUMNS = 30;
+    private final int SIZETILE = 48;
+    private final int WIDTH = COLUMNS * SIZETILE;
+    private final int HEIGHT = ROWS * SIZETILE;
+    
+    // Main objects
+    KeyManager keys;
+    GameMaster gm;
 
     public Game() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
+        setFocusable(true);
+        
+		keys = new KeyManager();
+		addKeyListener(keys);
+		gm = GameMaster.getInstance(SIZETILE, ROWS, COLUMNS);
     }
 
     public void start() {
@@ -55,21 +71,39 @@ public class Game extends JPanel implements Runnable {
 
     // Game logic update
     private void update() {
-        // Example: print update
-        System.out.println("Game updating...");
+
+        String key = getKeyPressed();
+        
+        for(AnimatedEntity ent : gm.animatedEntities) {
+        	ent.update(key);
+        }
+        
     }
 
     // Rendering logic
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Example: draw a red rectangle
-        g.setColor(Color.RED);
-        g.fillRect(100, 100, 50, 50);
+        
+        for(AnimatedEntity ent : gm.animatedEntities) {
+        	ent.draw(g);
+        }
     }
 
     public void stop() {
         running = false;
+    }
+    
+    private String getKeyPressed () {
+    	
+        for (int i = 0; i < keys.keys.length; i++) {
+            if (keys.keys[i]) {
+                // Convert index to character
+                return String.valueOf((char) ('a' + i));
+            }
+        }
+		return "z";
+    	
     }
 }
 

@@ -1,11 +1,11 @@
-package Main;
+package main;
 
 import javax.swing.JFrame;
 
 public class Main {
     public static void main(String[] args) {
         // Create a window (JFrame)
-        JFrame window = new JFrame("Basic Java Game");
+        JFrame window = new JFrame("Jason");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
 
