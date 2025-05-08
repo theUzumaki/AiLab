@@ -24,7 +24,7 @@ public class Floor extends BackgroundEntity {
 		
 		try {
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor1.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			
