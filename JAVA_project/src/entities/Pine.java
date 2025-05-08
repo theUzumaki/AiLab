@@ -6,13 +6,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Pine extends BackgroundEntity{
+public class Pine extends StaticEntity{
 
 	public Pine(int x, int y, int width, int heigth, int TILE) {
 		super(x, y, width, heigth, TILE);
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void draw(Graphics brush) {
 		
@@ -34,4 +40,5 @@ public class Pine extends BackgroundEntity{
 		}
 		
 	}
+
 }

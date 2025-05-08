@@ -8,9 +8,10 @@ import javax.imageio.ImageIO;
 
 public class Grass extends BackgroundEntity{
 
-	public Grass(int x, int y, int width, int heigth, int TILE) {
-		super(x, y, width, heigth, TILE);
-		// TODO Auto-generated constructor stub
+	public Grass(int x, int y, int width, int heigth, int TILE, int selector) {
+		
+		super(x, y, width, heigth, TILE, selector);
+		
 	}
 
 	@Override
@@ -24,8 +25,9 @@ public class Grass extends BackgroundEntity{
 	protected void loadImages() {
 		
 		try {
+
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass" + selector + ".png")),
 			};
 			imgResizer(sprites, width, heigth);
 			

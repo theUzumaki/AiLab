@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 import entities.GameMaster;
+import entities.StaticEntity;
 import entities.AnimatedEntity;
 import entities.BackgroundEntity;
 
@@ -91,6 +92,10 @@ public class Game extends JPanel implements Runnable {
         }
         
         for(AnimatedEntity ent : gm.animatedEntities) {
+        	ent.draw(g);
+        }
+        
+        for(StaticEntity ent : gm.staticEntities) {
         	ent.draw(g);
         }
     }

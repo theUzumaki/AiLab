@@ -8,6 +8,7 @@ public abstract class ConceptEntity {
 	public int x, y;
 	public int width, heigth;
 	public int tile;
+	public int selector;
 	protected BufferedImage[] sprites;
 	
 	public ConceptEntity (int x, int y, int width, int heigth, int TILE) {
@@ -17,8 +18,6 @@ public abstract class ConceptEntity {
 		this.width = width * TILE;
 		this.heigth = heigth * TILE;
 		this.tile = TILE;
-		
-		loadImages();
 		
 	}
 	
