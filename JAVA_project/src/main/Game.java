@@ -4,9 +4,12 @@ import javax.swing.JPanel;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Collections;
+import java.util.Comparator;
 import java.awt.Color;
 
 import entities.GameMaster;
+import entities.PhysicalEntity;
 import entities.StaticEntity;
 import entities.AnimatedEntity;
 import entities.BackgroundEntity;
@@ -87,6 +90,8 @@ public class Game extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
+        Collections.sort(gm.physicalEntities, Comparator.comparingInt(c -> c.y + c.heigth));
+        
         for(BackgroundEntity ent : gm.bgEntities1) {
         	ent.draw(g);
         }
@@ -95,13 +100,10 @@ public class Game extends JPanel implements Runnable {
         	ent.draw(g);
         }
         
-        for(AnimatedEntity ent : gm.animatedEntities) {
+        for(PhysicalEntity ent : gm.physicalEntities) {
         	ent.draw(g);
         }
         
-        for(StaticEntity ent : gm.staticEntities) {
-        	ent.draw(g);
-        }
     }
 
     public void stop() {
