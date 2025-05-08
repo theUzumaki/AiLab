@@ -17,6 +17,7 @@ public class GameMaster {
     
     public List<AnimatedEntity> animatedEntities = new ArrayList<>();
     public List<StaticEntity> staticEntities = new ArrayList<>();
+    public List<PhysicalEntity> physicalEntities = new ArrayList<>();
     public List<BackgroundEntity> bgEntities1 = new ArrayList<>();
     public List<BackgroundEntity> bgEntities2 = new ArrayList<>();
     
@@ -25,6 +26,7 @@ public class GameMaster {
     private GameMaster(int TILE, int ROWS, int COLUMNS) {
     	
     	animatedEntities.add(Jason.getInstance(20, 20, 1, 1, STEP, TILE));
+    	physicalEntities.add(Jason.getInstance());
     	
     	this.rows= ROWS;
     	this.columns = COLUMNS;
@@ -89,6 +91,8 @@ public class GameMaster {
     			case 0: staticEntities.add(new Pine(x * sizetile, (y - 1) * sizetile, 1, 2, sizetile)); break;
     		
     			}
+    			
+    			physicalEntities.add(staticEntities.getLast());
     			x += 1;
     		}
     		y+= 1;
