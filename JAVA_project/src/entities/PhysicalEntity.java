@@ -4,7 +4,7 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	
 	static private int serialId;
 	public int id;
-	public CollisionBox box;
+	private int oldx, oldy;
 
 	public PhysicalEntity(int x, int y, int width, int heigth, int TILE) {
 		
@@ -14,11 +14,19 @@ public abstract class PhysicalEntity extends ConceptEntity{
 		serialId++;
 		id = serialId - 1;
 		
-		box = new CollisionBox(x, y, width, heigth, TILE, id);
 	}
 
 	@Override
-	protected void loadImages() {
+	protected abstract void loadImages();
+	
+	public void memorizeValues() {
+		oldx = x;
+		oldy = y;
+	}
+	
+	public void setBack() {
+		x = oldx;
+		y = oldy;
 	}
 
 }

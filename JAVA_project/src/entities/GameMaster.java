@@ -92,11 +92,36 @@ public class GameMaster {
     		
     			}
     			
-    			physicalEntities.add(staticEntities.getLast());
+    			physicalEntities.add(staticEntities.get( staticEntities.size() - 1 ));
     			x += 1;
     		}
     		y+= 1;
     	}
+    	
+    }
+    
+    public boolean checkCollision(PhysicalEntity ent) {
+    	
+    	int ent_left = ent.x;
+    	int ent_right = ent.x + ent.width;
+    	int ent_top = ent.y;
+    	int ent_bottom = ent.y + ent.heigth;
+    	
+    	for (PhysicalEntity collision : physicalEntities) {
+    		
+        	int col_left = collision.x;
+        	int col_right = collision.x + collision.width;
+        	int col_top = collision.y;
+        	int col_bottom = collision.y + collision.heigth;
+        	
+        	if ( col_left < ent_left && ent_left < col_right || col_left < ent_right && ent_right < col_right ) {
+        		if ( col_top < ent_top && ent_top < col_bottom ) return true;
+        		else if ( col_top < ent_bottom && ent_bottom < col_bottom ) return true;
+        	}
+    		
+    	}
+    	
+		return false;
     	
     }
     
