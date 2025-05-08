@@ -31,6 +31,9 @@ public class Jason extends AnimatedEntity{
 	@Override
 	public void update(String key) {
 		
+		int oldx = x;
+		int oldy = y;
+		
 		switch ( key ) {
 		
 		case "w":
@@ -50,6 +53,12 @@ public class Jason extends AnimatedEntity{
 			break;
 			
 		}
+		
+		if ( box.checkCollision() ) {
+			x = oldx;
+			y = oldy;
+		}
+
 	}
 
 	@Override
