@@ -87,7 +87,11 @@ public class Game extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        for(BackgroundEntity ent : gm.bgEntities) {
+        for(BackgroundEntity ent : gm.bgEntities1) {
+        	ent.draw(g);
+        }
+        
+        for(BackgroundEntity ent : gm.bgEntities2) {
         	ent.draw(g);
         }
         
