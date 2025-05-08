@@ -1,8 +1,6 @@
 package entities;
 
-import java.awt.Graphics;
-
-public abstract class AnimatedEntity extends ConceptEntity{
+public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int step;
 	
@@ -10,11 +8,9 @@ public abstract class AnimatedEntity extends ConceptEntity{
 		
 		super(x, y, width, heigth, TILE);
 		this.step = STEP;
-		loadImages();
+		
 	}
 	
 	public abstract void update(String key);
-	
-	public abstract void draw(Graphics g);
 	
 }

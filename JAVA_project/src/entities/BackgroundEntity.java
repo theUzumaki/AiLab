@@ -1,7 +1,5 @@
 package entities;
 
-import java.awt.Graphics;
-
 public abstract class BackgroundEntity extends ConceptEntity{
 	
 	int selector;
@@ -13,7 +11,5 @@ public abstract class BackgroundEntity extends ConceptEntity{
 		loadImages();
 		
 	}
-	
-	public abstract void draw(Graphics brush);
 
 }

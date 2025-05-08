@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class ConceptEntity {
-	
+
 	public int x, y;
 	public int width, heigth;
 	public int tile;
@@ -20,6 +20,8 @@ public abstract class ConceptEntity {
 		this.tile = TILE;
 		
 	}
+	
+	public abstract void draw(Graphics brush);
 	
 	protected abstract void loadImages();
 	
