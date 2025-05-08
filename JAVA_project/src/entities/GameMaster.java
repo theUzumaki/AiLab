@@ -16,17 +16,20 @@ public class GameMaster {
     private int rows, columns, sizetile;
     
     public List<AnimatedEntity> animatedEntities = new ArrayList<>();
+    public List<BackgroundEntity> bgEntities = new ArrayList<>();
     
-    private BufferedImage[] sprites;
+    private int[][] tilemap;
 
     private GameMaster(int TILE, int ROWS, int COLUMNS) {
     	
-    	loadImages();
     	animatedEntities.add(Jason.getInstance(20, 20, 1, 1, STEP, TILE));
     	
     	this.rows= ROWS;
     	this.columns = COLUMNS;
     	this.sizetile = TILE;
+    	
+    	loadTileMap(0);
+    	loadStage();
     	
     }
 
@@ -36,34 +39,57 @@ public class GameMaster {
         }
         return instance;
     }
-    
-    public void draw(Graphics brush) {
+  
+    private void loadStage() {
     	
+    	int x = 0;
     	
+    	for (int[] row : tilemap) {
+    		int y = 0;
+    		
+    		for (int element : row) {
+    			
+    			switch (element) {
+    			
+    			case 0: bgEntities.add(new Grass(y * sizetile, x * sizetile, 1, 1, sizetile)); break;
+    			case 1: bgEntities.add(new Pine(y * sizetile, x * sizetile, 1, 1, sizetile)); break;
+    		
+    			}
+    			y += 1;
+    		}
+    		x+= 1;
+    	}
     	
     }
     
-	private void loadImages() {
-		
-		try {
-			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/jason/0.png")),
-			};
-			imgResizer(sprites, columns*sizetile, rows*sizetile);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void imgResizer(BufferedImage[] sprites, int width, int height) {	// scales immediately the images to avoid doing it at runtime
-		for (int i= 0; i< sprites.length; i++) {
-			BufferedImage scaledImage= new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-			Graphics g= scaledImage.createGraphics();
-			g.drawImage(sprites[i], 0, 0, width, height, null);
-			sprites[i]= scaledImage;
-		}
-	}
+    private void loadTileMap(int stage) {
+    	
+    	switch (stage) {
+    	
+    	case 0:
+    		
+    		tilemap = new int[][]{
+    			
+    				{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    				{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+    				
+    		};
+    	
+    	}
+    	
+    }
 	
 }

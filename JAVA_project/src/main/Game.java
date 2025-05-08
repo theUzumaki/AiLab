@@ -8,6 +8,7 @@ import java.awt.Color;
 
 import entities.GameMaster;
 import entities.AnimatedEntity;
+import entities.BackgroundEntity;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable {
@@ -84,6 +85,10 @@ public class Game extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
+        for(BackgroundEntity ent : gm.bgEntities) {
+        	ent.draw(g);
+        }
         
         for(AnimatedEntity ent : gm.animatedEntities) {
         	ent.draw(g);
