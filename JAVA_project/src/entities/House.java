@@ -6,11 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Pine extends StaticEntity{
+public class House extends StaticEntity{
 
-	public Pine(int x, int y, int width, int heigth, int TILE, int selector) {
+	public House(int x, int y, int width, int heigth, int TILE, int selector) {
 		super(x, y, width, heigth, TILE, selector);
-		box = new CollisionBox(x, y + 1, 1, 1, TILE, id);
+		
+		box = new CollisionBox(x, y + 2, width, heigth - 2, TILE, id);
 	}
 	
 	@Override
@@ -31,7 +32,10 @@ public class Pine extends StaticEntity{
 		
 		try {
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/trees/pine/front.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/houses/casa2.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/houses/casa3.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/houses/casa5.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/houses/casa6.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			

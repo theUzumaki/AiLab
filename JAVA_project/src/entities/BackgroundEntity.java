@@ -6,9 +6,10 @@ public abstract class BackgroundEntity extends ConceptEntity{
 
 	public BackgroundEntity(int x, int y, int width, int heigth, int TILE, int selector) {
 		
-		super(x, y, width, heigth, TILE);
+		super(x, y, width, heigth, TILE, selector);
 		this.selector = selector;
 		loadImages();
+		img = sprites[selector];
 		
 	}
 

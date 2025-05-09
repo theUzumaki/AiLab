@@ -8,18 +8,18 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
-	public Jason(int x, int y, int width, int heigth, int STEP, int TILE) {
+	public Jason(int x, int y, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, width, heigth, STEP, TILE);
-		box = new CollisionBox(x, y, width, heigth, TILE, id);
+		super(x, y, width, heigth, STEP, TILE, selector);
+		box = new CollisionBox(x, y, width, heigth, TILE, id, true);
 		
 	}
 
 	private static Jason instance;
 	
-    public static synchronized Jason getInstance(int x, int y, int width, int heigth, int STEP, int TILE) {
+    public static synchronized Jason getInstance(int x, int y, int width, int heigth, int STEP, int TILE, int selector) {
         if (instance == null) {
-            instance = new Jason(x, y, width, heigth, STEP, TILE);
+            instance = new Jason(x, y, width, heigth, STEP, TILE, selector);
         }
         return instance;
     }
@@ -59,7 +59,7 @@ public class Jason extends AnimatedEntity{
 	@Override
 	public void draw(Graphics brush) {
 		
-		brush.drawImage(sprites[0], x, y, null);
+		brush.drawImage(img, x, y, null);
 		
 	}
 

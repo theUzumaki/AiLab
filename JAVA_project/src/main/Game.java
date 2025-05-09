@@ -4,9 +4,12 @@ import javax.swing.JPanel;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Collections;
 import java.util.Comparator;
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 
 import entities.GameMaster;
 import entities.PhysicalEntity;
@@ -21,9 +24,9 @@ public class Game extends JPanel implements Runnable {
     private boolean running = false;
 
     // Size of the game window
-    private final int ROWS = 15;
-    private final int COLUMNS = 30;
-    private final int SIZETILE = 48;
+    private final int ROWS = 20;
+    private final int COLUMNS = 40;
+    private final int SIZETILE = 36;
     private final int WIDTH = COLUMNS * SIZETILE;
     private final int HEIGHT = ROWS * SIZETILE;
     
@@ -115,9 +118,19 @@ public class Game extends JPanel implements Runnable {
         
         /*
         for(CollisionBox box : gm.collisionBoxes) {
-        	g.fillRect(box.left, box.top, SIZETILE, SIZETILE);
+
+        	// Save the old composite so you can restore it later
+        	Composite oldComposite = ((Graphics2D) g).getComposite();
+
+        	((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+        	g.setColor(new Color(255, 0, 0)); // Red
+
+        	g.fillRect(box.left, box.top, box.right - box.left, box.bottom - box.top);
+        	
+        	((Graphics2D) g).setComposite(oldComposite);
         }
         */
+
     }
 
     public void stop() {

@@ -10,14 +10,19 @@ public abstract class ConceptEntity {
 	public int tile;
 	public int selector;
 	protected BufferedImage[] sprites;
+	protected BufferedImage img;
 	
-	public ConceptEntity (int x, int y, int width, int heigth, int TILE) {
+	public ConceptEntity (int x, int y, int width, int heigth, int TILE, int selector) {
 		
 		this.x = x * TILE;
 		this.y = y * TILE;
 		this.width = width * TILE;
 		this.heigth = heigth * TILE;
 		this.tile = TILE;
+		this.selector = selector;
+		
+		loadImages();
+		img = sprites[selector];
 		
 	}
 	

@@ -6,11 +6,16 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Grass extends BackgroundEntity{
+public class Well extends StaticEntity{
 
-	public Grass(int x, int y, int width, int heigth, int TILE, int selector) {
-		
+	public Well(int x, int y, int width, int heigth, int TILE, int selector) {
 		super(x, y, width, heigth, TILE, selector);
+		box = new CollisionBox(x, y, 2, 2, TILE, id);
+	}
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -20,16 +25,13 @@ public class Grass extends BackgroundEntity{
 		brush.drawImage(img, x, y, null);
 		
 	}
-
+	
 	@Override
 	protected void loadImages() {
 		
 		try {
-
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass1.png")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass2.png")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass3.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/Pozzo.PNG")),
 			};
 			imgResizer(sprites, width, heigth);
 			

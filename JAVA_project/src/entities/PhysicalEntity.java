@@ -7,10 +7,9 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	public int id;
 	public CollisionBox box;
 
-	public PhysicalEntity(int x, int y, int width, int heigth, int TILE) {
+	public PhysicalEntity(int x, int y, int width, int heigth, int TILE, int selector) {
 		
-		super(x, y, width, heigth, TILE);
-		loadImages();
+		super(x, y, width, heigth, TILE, selector);
 		
 		serialId++;
 		id = serialId - 1;

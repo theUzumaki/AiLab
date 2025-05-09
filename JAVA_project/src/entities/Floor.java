@@ -9,13 +9,15 @@ import javax.imageio.ImageIO;
 public class Floor extends BackgroundEntity {
 
 	public Floor(int x, int y, int width, int heigth, int TILE, int selector) {
+		
 		super(x, y, width, heigth, TILE, selector);
+		
 	}
 
 	@Override
 	public void draw(Graphics brush) {
 		
-		brush.drawImage(sprites[0], x, y, null);
+		brush.drawImage(img, x, y, null);
 		
 	}
 
@@ -25,6 +27,14 @@ public class Floor extends BackgroundEntity {
 		try {
 			sprites= new BufferedImage[] {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor1.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_up.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_left.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_down.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_right.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/top_left.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/top_right.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/bottom_right.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/bottom_left.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			
