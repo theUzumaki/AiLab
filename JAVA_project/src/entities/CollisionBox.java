@@ -7,13 +7,13 @@ public class CollisionBox {
 	public int left, right, top, bottom;
 	public int animatedCoeff = 0;
 	
-	public CollisionBox (int x, int y, int width, int heigth, int TILE, int id) {
+	public CollisionBox (int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int id) {
 		
 		
-		left = x * TILE;
-		right = ( x + width ) * TILE;
-		top = y * TILE;
-		bottom = ( y + heigth ) * TILE;
+		left = x * TILE + xoffset;
+		right = ( x + width ) * TILE + xoffset;
+		top = y * TILE + yoffset;
+		bottom = ( y + heigth ) * TILE + yoffset;
 		this.width = width;
 		this.heigth = heigth;
 		this.tile = TILE;
@@ -21,12 +21,12 @@ public class CollisionBox {
 		
 	}
 	
-	public CollisionBox (int x, int y, int width, int heigth, int TILE, int id, boolean animated) {
+	public CollisionBox (int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int id, boolean animated) {
 		
-		left = x * TILE + 1;
-		right = ( x + width ) * TILE - 1;
-		top = y * TILE + 1;
-		bottom = ( y + heigth ) * TILE - 1;
+		left = x * TILE + xoffset;
+		right = ( x + width ) * TILE + xoffset;
+		top = y * TILE + yoffset;
+		bottom = ( y + heigth ) * TILE + yoffset;
 		this.width = width;
 		this.heigth = heigth;
 		this.tile = TILE;

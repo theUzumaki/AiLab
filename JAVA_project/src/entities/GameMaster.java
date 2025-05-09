@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,7 +14,8 @@ public class GameMaster {
 
     private static GameMaster instance;
     private final int STEP = 2;
-    private int rows, columns, sizetile;
+    private int[][] windowValues; // rows, columns
+    private int tile;
     
     public List<CollisionBox> collisionBoxes = new ArrayList<>();
     public List<AnimatedEntity> animatedEntities = new ArrayList<>();
@@ -22,106 +24,131 @@ public class GameMaster {
     public List<BackgroundEntity> bgEntities1 = new ArrayList<>();
     public List<BackgroundEntity> bgEntities2 = new ArrayList<>();
     
-    private int[][] bgTilemap1, bgTilemap2, boxTilemap;
+    private int[][][][] windowTileMaps;
 
-    private GameMaster(int TILE, int ROWS, int COLUMNS) {
+    private GameMaster(int[][] windowValues) {
     	
-    	animatedEntities.add(Jason.getInstance(4, 4, 1, 1, STEP, TILE, 0));
-    	physicalEntities.add(Jason.getInstance());
-    	collisionBoxes.add(Jason.getInstance().box);
+    	this.windowValues = windowValues;
+    	windowTileMaps = new int[][][][] {
+        		new int[3][windowValues[0][1]][windowValues[0][2]],
+        		new int[3][windowValues[1][1]][windowValues[1][2]],
+        		new int[3][windowValues[2][1]][windowValues[2][2]]
+        };
     	
-    	this.rows= ROWS;
-    	this.columns = COLUMNS;
-    	this.sizetile = TILE;
-    	
-    	loadTileMap(0);
+    	loadImage();
     	loadStage();
     	
     }
 
-    public static synchronized GameMaster getInstance(int TILE, int ROWS, int COLUMNS) {
+    public static synchronized GameMaster getInstance(int[][] windowValues) {
         if (instance == null) {
-            instance = new GameMaster(TILE, ROWS, COLUMNS);
+            instance = new GameMaster(windowValues);
         }
         return instance;
     }
-  
+    
+    public static synchronized GameMaster getInstance() {
+        if (instance == null) {
+            return null;
+        }
+        return instance;
+    }
+    
     private void loadStage() {
     	
-    	int y = 0;
+    	animatedEntities.add(Jason.getInstance(4, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0));
+    	physicalEntities.add(Jason.getInstance());
+    	collisionBoxes.add(Jason.getInstance().box);
+    
+    	int indexWindow = 0;
+    	int xoffset = 0, yoffset = 0;
+    	int x = 0, y = 0;
     	
-    	for (int[] row : bgTilemap1) {
-    		int x = 0;
+    	for (int[][][] tilemap : windowTileMaps) {
     		
-    		for (int element : row) {
-    			
-    			switch (element) {
-    			
-    			case 0: bgEntities1.add(new Grass(x, y, 1, 1, sizetile, 0)); break;
-    			case 1: bgEntities1.add(new Grass(x, y, 1, 1, sizetile, 1)); break;
-    			case 2: bgEntities1.add(new Grass(x, y, 1, 1, sizetile, 2)); break;
+    		int sizetile = windowValues[indexWindow][0];
     		
+    		y = 0;
+    		
+    		for (int[] row : tilemap[0]) {
+    			x = 0;
+    			
+    			for (int element : row) {
+    				
+    				switch (element) {
+    				
+    				case 0: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
+    				case 1: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
+    				case 2: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
+    				
+    				}
+    				x += 1;
+    				
     			}
-    			x += 1;
-    			
+    			y+= 1;
     		}
-    		y+= 1;
-    	}
-    	
-    	y = 0;
-    	
-    	for (int[] row : bgTilemap2) {
-    		int x = 0;
     		
-    		for (int element : row) {
-    			
-    			switch (element) {
-    			
-    			case 1: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 0)); break;
-    			case 2: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 1)); break;
-    			case 3: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 2)); break;
-    			case 4: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 3)); break;
-    			case 5: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 4)); break;
-    			case 6: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 5)); break;
-    			case 7: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 6)); break;
-    			case 8: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 7)); break;
-    			case 9: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 8)); break;
+    		y = 0;
     		
+    		for (int[] row : tilemap[1]) {
+    			x = 0;
+    			
+    			for (int element : row) {
+    				
+    				switch (element) {
+    				
+    				case 1: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
+    				case 2: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
+    				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
+    				case 4: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 3)); break;
+    				case 5: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 4)); break;
+    				case 6: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 5)); break;
+    				case 7: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 6)); break;
+    				case 8: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 7)); break;
+    				case 9: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 8)); break;
+    				
+    				}
+    				x += 1;
     			}
-    			x += 1;
+    			y+= 1;
     		}
-    		y+= 1;
-    	}
-    	
-    	y = 0;
-    	boolean match;
-    	
-    	for (int[] row : boxTilemap) {
-    		int x = 0;
     		
-    		for (int element : row) {
-    			
-    			match = false;
-    			
-    			switch (element) {
-    			
-    			case 0: staticEntities.add(new Pine(x, (y - 1), 1, 2, sizetile, 0)); match = true; break;
-    			case 1: staticEntities.add(new House(x, (y - 2), 7, 8, sizetile, 0)); match = true; break;
-    			case 2: staticEntities.add(new House(x, (y - 2), 7, 8, sizetile, 1)); match = true; break;
-    			case 3: staticEntities.add(new House(x, (y - 2), 5, 8, sizetile, 2)); match = true; break;
-    			case 4: staticEntities.add(new House(x, (y - 2), 4, 5, sizetile, 3)); match = true; break;
-    			case 5: staticEntities.add(new Well(x, y, 2, 2, sizetile, 0)); match = true; break;
+    		y = 0;
+    		boolean match;
     		
-    			}
+    		for (int[] row : tilemap[2]) {
+    			x = 0;
     			
-    			if (match) {    				
-    				physicalEntities.add(staticEntities.getLast());
-    				collisionBoxes.add(staticEntities.getLast().box);
+    			for (int element : row) {
+    				
+    				match = false;
+    				
+    				switch (element) {
+    				
+    				case 0: staticEntities.add(new Pine(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 0)); match = true; break;
+    				case 1: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 7, 8, sizetile, 0)); match = true; break;
+    				case 2: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 7, 8, sizetile, 1)); match = true; break;
+    				case 3: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 5, 8, sizetile, 2)); match = true; break;
+    				case 4: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 4, 5, sizetile, 3)); match = true; break;
+    				case 5: staticEntities.add(new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
+    				
+    				}
+    				
+    				if (match) {    				
+    					physicalEntities.add(staticEntities.getLast());
+    					collisionBoxes.add(staticEntities.getLast().box);
+    				}
+    				x += 1;
     			}
-    			x += 1;
+    			y+= 1;
     		}
-    		y+= 1;
+    		
+    		xoffset += x * sizetile;
+    		yoffset += y * sizetile;
+
+    		indexWindow+= 1;
     	}
+
     	
     }
     
@@ -147,13 +174,61 @@ public class GameMaster {
     	
     }
     
+    private void loadImage() {
+    	try {
+    		
+            BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/sprites/tilemap/back.png"));
+
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            for (int y = 0; y < height; y++) {
+            	
+            	int[] temp = windowTileMaps[0][2][y];
+            	
+                for (int x = 0; x < width; x++) {
+                	
+                    int rgb = image.getRGB(x, y);
+                    Color color = new Color(rgb, true);
+
+                    int red = color.getRed();
+                    int green = color.getGreen();
+                    int blue = color.getBlue();
+                    int alpha = color.getAlpha();
+
+                    if (alpha != 0 && red == 0 && green == 0 && blue == 0) {
+                    	temp[x] = 0;
+                    } else if (alpha != 0 && red == 67 && green == 67 && blue == 67) {
+                    	temp[x] = 5;
+                    } else if (alpha != 0 && red == 120 && green == 120 && blue == 120){
+                    	temp[x] = 3;
+                    } else if (alpha != 0 && red == 178 && green == 178 && blue == 178){
+                    	temp[x] = 2;
+                    } else if (alpha != 0 && red == 242 && green == 123 && blue == 123) {
+                    	temp[x] = 4;
+                    } else if (alpha != 0 && red == 71 && green == 42 && blue == 42) {
+                    	temp[x] = 1;
+                    } else {
+                    	temp[x] = -1;
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    	
+    }
+    
+    
     private void loadTileMap(int stage) {
     	
     	switch (stage) {
     	
     	case 0:
     		
-    		bgTilemap1 = new int[][]{
+    		windowTileMaps[0][0] = new int[][]{
     			
     			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -178,7 +253,7 @@ public class GameMaster {
     				
     		};
     		
-    		bgTilemap2 = new int[][]{
+    		windowTileMaps[0][1] = new int[][]{
     			
     			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -204,7 +279,7 @@ public class GameMaster {
     		};
     		
     		
-    		boxTilemap = new int[][]{
+    		windowTileMaps[0][2] = new int[][]{
     			
     			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 0 },

@@ -1,152 +1,68 @@
 package main;
 
 import javax.swing.JPanel;
-
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Collections;
 import java.util.Comparator;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Composite;
 
-import entities.GameMaster;
-import entities.PhysicalEntity;
-import entities.AnimatedEntity;
-import entities.BackgroundEntity;
-import entities.CollisionBox;
+import entities.*;
 
 @SuppressWarnings("serial")
-public class Game extends JPanel implements Runnable {
+public class Game extends JPanel {
 
-    private Thread gameThread;
-    private boolean running = false;
+    private final GameMaster gm;
+    private final KeyManager keys;
+    private final Rectangle camera;
 
-    // Size of the game window
-    private final int ROWS = 20;
-    private final int COLUMNS = 40;
-    private final int SIZETILE = 36;
-    private final int WIDTH = COLUMNS * SIZETILE;
-    private final int HEIGHT = ROWS * SIZETILE;
-    
-    // Main objects
-    KeyManager keys;
-    GameMaster gm;
+    public Game(Rectangle camera) {
+        this.camera = camera;
+        this.gm = GameMaster.getInstance();  // Shared game logic
+        this.keys = new KeyManager();
 
-    public Game() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(camera.width, camera.height));
         setBackground(Color.BLACK);
         setFocusable(true);
-        
-		keys = new KeyManager();
-		addKeyListener(keys);
-		gm = GameMaster.getInstance(SIZETILE, ROWS, COLUMNS);
+        addKeyListener(keys);
     }
 
-    public void start() {
-        if (gameThread == null) {
-            running = true;
-            gameThread = new Thread(this);
-            gameThread.start();
-        }
+    public KeyManager getKeyManager() {
+        return keys;
     }
 
-    @Override
-    public void run() {
-        // Basic game loop with fixed frame rate
-        int fps = 60;
-        long frameTime = 1000 / fps;
-
-        while (running) {
-            long startTime = System.currentTimeMillis();
-
-            update();
-            repaint(); // Calls paintComponent
-
-            long endTime = System.currentTimeMillis();
-            long delta = endTime - startTime;
-
-            if (delta < frameTime) {
-                try {
-                    Thread.sleep(frameTime - delta);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // Game logic update
-    private void update() {
-
-        String key = getKeyPressed();
-        
-        for(AnimatedEntity ent : gm.animatedEntities) {
-        	
-        	ent.memorizeValues();
-        	
-        	ent.update(key);
-        	ent.box.updatePosition(ent.x, ent.y);
-        	
-        	if ( gm.checkCollision(ent.box) ) {
-        		ent.setBack();
-        		ent.box.updatePosition(ent.x, ent.y);
-        	}        	
-        }
-        
-    }
-
-    // Rendering logic
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        // Shift rendering to simulate camera
+        g2d.translate(-camera.x, -camera.y);
+
         Collections.sort(gm.physicalEntities, Comparator.comparingInt(c -> c.y + c.heigth));
+
+        for (BackgroundEntity ent : gm.bgEntities1) ent.draw(g);
+        for (BackgroundEntity ent : gm.bgEntities2) ent.draw(g);
+        for (PhysicalEntity ent : gm.physicalEntities) ent.draw(g);
         
-        for(BackgroundEntity ent : gm.bgEntities1) {
-        	ent.draw(g);
-        }
-        
-        for(BackgroundEntity ent : gm.bgEntities2) {
-        	ent.draw(g);
-        }
-        
-        for(PhysicalEntity ent : gm.physicalEntities) {
-        	ent.draw(g);
-        }
-        
-        /*
+        printCollisionBox(g2d);
+    }
+
+    public Rectangle getCamera() {
+        return camera;
+    }
+    
+    private void printCollisionBox(Graphics2D g) {
         for(CollisionBox box : gm.collisionBoxes) {
 
         	// Save the old composite so you can restore it later
-        	Composite oldComposite = ((Graphics2D) g).getComposite();
+        	Composite oldComposite = g.getComposite();
 
-        	((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+        	g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
         	g.setColor(new Color(255, 0, 0)); // Red
 
         	g.fillRect(box.left, box.top, box.right - box.left, box.bottom - box.top);
         	
-        	((Graphics2D) g).setComposite(oldComposite);
+        	g.setComposite(oldComposite);
         }
-        */
-
-    }
-
-    public void stop() {
-        running = false;
-    }
-    
-    private String getKeyPressed () {
-    	
-        for (int i = 0; i < keys.keys.length; i++) {
-            if (keys.keys[i]) {
-                // Convert index to character
-                return String.valueOf((char) ('a' + i));
-            }
-        }
-		return "z";
-    	
     }
 }
-

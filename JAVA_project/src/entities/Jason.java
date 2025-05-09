@@ -8,18 +8,18 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
-	public Jason(int x, int y, int width, int heigth, int STEP, int TILE, int selector) {
+	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, width, heigth, STEP, TILE, selector);
-		box = new CollisionBox(x, y, width, heigth, TILE, id, true);
+		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector);
+		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
 		
 	}
 
 	private static Jason instance;
 	
-    public static synchronized Jason getInstance(int x, int y, int width, int heigth, int STEP, int TILE, int selector) {
+    public static synchronized Jason getInstance(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
         if (instance == null) {
-            instance = new Jason(x, y, width, heigth, STEP, TILE, selector);
+            instance = new Jason(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector);
         }
         return instance;
     }
