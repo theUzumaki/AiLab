@@ -9,7 +9,10 @@ import javax.imageio.ImageIO;
 public class Jason extends AnimatedEntity{
 	
 	public Jason(int x, int y, int width, int heigth, int STEP, int TILE) {
+		
 		super(x, y, width, heigth, STEP, TILE);
+		box = new CollisionBox(x, y, width, heigth, TILE, id);
+		
 	}
 
 	private static Jason instance;

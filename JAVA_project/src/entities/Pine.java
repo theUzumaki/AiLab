@@ -10,7 +10,7 @@ public class Pine extends StaticEntity{
 
 	public Pine(int x, int y, int width, int heigth, int TILE) {
 		super(x, y, width, heigth, TILE);
-		// TODO Auto-generated constructor stub
+		box = new CollisionBox(x, y + 1, 1, 1, TILE, id);
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ public class GameMaster {
     private final int STEP = 2;
     private int rows, columns, sizetile;
     
+    public List<CollisionBox> collisionBoxes = new ArrayList<>();
     public List<AnimatedEntity> animatedEntities = new ArrayList<>();
     public List<StaticEntity> staticEntities = new ArrayList<>();
     public List<PhysicalEntity> physicalEntities = new ArrayList<>();
@@ -25,8 +26,9 @@ public class GameMaster {
 
     private GameMaster(int TILE, int ROWS, int COLUMNS) {
     	
-    	animatedEntities.add(Jason.getInstance(20, 20, 1, 1, STEP, TILE));
+    	animatedEntities.add(Jason.getInstance(4, 4, 1, 1, STEP, TILE));
     	physicalEntities.add(Jason.getInstance());
+    	collisionBoxes.add(Jason.getInstance().box);
     	
     	this.rows= ROWS;
     	this.columns = COLUMNS;
@@ -54,11 +56,12 @@ public class GameMaster {
     		for (int element : row) {
     			
     			switch (element) {
-    			case 0: bgEntities1.add(new Floor(x * sizetile, y * sizetile, 1, 1, sizetile, 0)); break;
-    			case 1: bgEntities1.add(new Grass(x * sizetile, y * sizetile, 1, 1, sizetile, element)); break;
+    			case 0: bgEntities1.add(new Floor(x, y, 1, 1, sizetile, 0)); break;
+    			case 1: bgEntities1.add(new Grass(x, y, 1, 1, sizetile, element)); break;
     		
     			}
     			x += 1;
+    			
     		}
     		y+= 1;
     	}
@@ -71,8 +74,8 @@ public class GameMaster {
     		for (int element : row) {
     			
     			switch (element) {
-    			case 2: bgEntities2.add(new Grass(x * sizetile, y * sizetile, 1, 1, sizetile, element)); break;
-    			case 3: bgEntities2.add(new Grass(x * sizetile, y * sizetile, 1, 1, sizetile, element)); break;
+    			case 2: bgEntities2.add(new Grass(x, y, 1, 1, sizetile, element)); break;
+    			case 3: bgEntities2.add(new Grass(x, y, 1, 1, sizetile, element)); break;
     			}
     			x += 1;
     		}
@@ -88,11 +91,12 @@ public class GameMaster {
     			
     			switch (element) {
     			
-    			case 0: staticEntities.add(new Pine(x * sizetile, (y - 1) * sizetile, 1, 2, sizetile)); break;
+    			case 0: staticEntities.add(new Pine(x, (y - 1), 1, 2, sizetile)); break;
     		
     			}
     			
-    			physicalEntities.add(staticEntities.get( staticEntities.size() - 1 ));
+    			physicalEntities.add(staticEntities.getLast());
+    			collisionBoxes.add(staticEntities.getLast().box);
     			x += 1;
     		}
     		y+= 1;
@@ -100,23 +104,13 @@ public class GameMaster {
     	
     }
     
-    public boolean checkCollision(PhysicalEntity ent) {
+    public boolean checkCollision(CollisionBox box) {
     	
-    	int ent_left = ent.x;
-    	int ent_right = ent.x + ent.width;
-    	int ent_top = ent.y;
-    	int ent_bottom = ent.y + ent.heigth;
-    	
-    	for (PhysicalEntity collision : physicalEntities) {
-    		
-        	int col_left = collision.x;
-        	int col_right = collision.x + collision.width;
-        	int col_top = collision.y;
-        	int col_bottom = collision.y + collision.heigth;
+    	for (CollisionBox col : collisionBoxes) {
         	
-        	if ( col_left < ent_left && ent_left < col_right || col_left < ent_right && ent_right < col_right ) {
-        		if ( col_top < ent_top && ent_top < col_bottom ) return true;
-        		else if ( col_top < ent_bottom && ent_bottom < col_bottom ) return true;
+        	if ( col.left < box.left && box.left < col.right || col.left < box.right && box.right < col.right ) {
+        		if ( col.top < box.top && box.top < col.bottom ) return true;
+        		else if ( col.top < box.bottom && box.bottom < col.bottom ) return true;
         	}
     		
     	}

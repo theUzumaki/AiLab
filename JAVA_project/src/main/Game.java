@@ -12,6 +12,7 @@ import entities.GameMaster;
 import entities.PhysicalEntity;
 import entities.AnimatedEntity;
 import entities.BackgroundEntity;
+import entities.CollisionBox;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable {
@@ -79,7 +80,16 @@ public class Game extends JPanel implements Runnable {
         String key = getKeyPressed();
         
         for(AnimatedEntity ent : gm.animatedEntities) {
+        	
+        	ent.memorizeValues();
+        	
         	ent.update(key);
+        	ent.box.updatePosition(ent.x, ent.y);
+        	
+        	if ( gm.checkCollision(ent.box) ) {
+        		ent.setBack();
+        		ent.box.updatePosition(ent.x, ent.y);
+        	}        	
         }
         
     }
@@ -102,6 +112,12 @@ public class Game extends JPanel implements Runnable {
         for(PhysicalEntity ent : gm.physicalEntities) {
         	ent.draw(g);
         }
+        
+        /*
+        for(CollisionBox box : gm.collisionBoxes) {
+        	g.fillRect(box.left, box.top, SIZETILE, SIZETILE);
+        }
+        */
     }
 
     public void stop() {

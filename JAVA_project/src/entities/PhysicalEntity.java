@@ -3,8 +3,9 @@ package entities;
 public abstract class PhysicalEntity extends ConceptEntity{
 	
 	static private int serialId;
-	public int id;
 	private int oldx, oldy;
+	public int id;
+	public CollisionBox box;
 
 	public PhysicalEntity(int x, int y, int width, int heigth, int TILE) {
 		
