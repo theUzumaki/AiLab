@@ -26,6 +26,8 @@ public class Floor extends BackgroundEntity {
 		
 		try {
 			sprites= new BufferedImage[] {
+					
+					// CAMP ROAD
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor1.png")),
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_up.png")),
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/floor_left.png")),
@@ -35,6 +37,9 @@ public class Floor extends BackgroundEntity {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/top_right.png")),
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/bottom_right.png")),
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/bottom_left.png")),
+					
+					// HOUSE FLOORS
+					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/pavimento3.PNG")),
 			};
 			imgResizer(sprites, width, heigth);
 			

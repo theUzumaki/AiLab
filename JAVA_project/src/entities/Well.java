@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 public class Well extends StaticEntity{
 
 	public Well(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
-		super(x, y, xoffset, yoffset, width, heigth, TILE, selector);
+		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "well");
 		box = new CollisionBox(x, y, xoffset, yoffset, 2, 2, TILE, id);
 	}
 	

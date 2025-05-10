@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 public class Pine extends StaticEntity{
 
 	public Pine(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
-		super(x, y, xoffset, yoffset, width, heigth, TILE, selector);
+		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "pine");
 		box = new CollisionBox(x, y + 1, xoffset, yoffset, 1, 1, TILE, id);
 	}
 	

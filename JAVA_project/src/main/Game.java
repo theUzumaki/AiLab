@@ -51,18 +51,28 @@ public class Game extends JPanel {
         return camera;
     }
     
-    private void printCollisionBox(Graphics2D g) {
-        for(CollisionBox box : gm.collisionBoxes) {
+    protected void printCollisionBox(Graphics2D g) {
 
-        	// Save the old composite so you can restore it later
-        	Composite oldComposite = g.getComposite();
+    	Composite oldComposite = g.getComposite();
+    	
+        for(CollisionBox box : gm.collisionBoxes) {
 
         	g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
         	g.setColor(new Color(255, 0, 0)); // Red
 
         	g.fillRect(box.left, box.top, box.right - box.left, box.bottom - box.top);
         	
-        	g.setComposite(oldComposite);
         }
+        
+        for(InteractionBox intrBox : gm.interactionBoxes ) {
+
+        	g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+        	g.setColor(new Color(0, 255, 0)); // Red
+
+        	g.fillRect(intrBox.left, intrBox.top, intrBox.right - intrBox.left, intrBox.bottom - intrBox.top);
+        	
+        }
+        
+        g.setComposite(oldComposite);
     }
 }

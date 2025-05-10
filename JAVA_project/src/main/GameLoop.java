@@ -1,10 +1,10 @@
 package main;
 
 import java.util.List;
-import java.awt.Component;
 
 import entities.AnimatedEntity;
 import entities.GameMaster;
+import entities.InteractionBox;
 
 public class GameLoop implements Runnable {
 	
@@ -38,12 +38,40 @@ public class GameLoop implements Runnable {
                 String key = getKeyPressed(window.getKeyManager());
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
+                	
                     ent.memorizeValues();
+                    
                     ent.update(key);
                     ent.box.updatePosition(ent.x, ent.y);
-                    if (gm.checkCollision(ent.box)) {
+
+                    boolean match = false;
+                    
+                	if (ent.interaction) {
+                		
+                		ent.intrBox.updatePosition(ent.x, ent.y);
+                		String kind = "";
+                		
+                		for (InteractionBox intr : gm.interactionBoxes) {
+                			
+                			if (gm.checkInteraction(ent.intrBox, intr)) { kind = intr.kind; break; }
+                			
+                		}
+                		
+                		switch (kind) {
+                		
+                		case "door0": ent.exitHouse(); match = true; break;
+                		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
+                		
+                		}
+                		
+                		
+                	}
+                    
+                    if (!match && gm.checkCollision(ent.box)) {
+                    	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
+                        
                     }
                 }
             }

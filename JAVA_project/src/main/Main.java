@@ -12,8 +12,8 @@ public class Main {
         
         int[][] windowValues = new int[][] {
         	{ 36, 20, 40 },
-        	{ 24, 15, 30 },
-        	{ 24, 15, 30 }
+        	{ 48, 8, 16 },
+        	{ 48, 8, 16 }
         };
         
         int[] dims1 = new int[] { windowValues[0][2] * windowValues[0][0], windowValues[0][1] * windowValues[0][0] };

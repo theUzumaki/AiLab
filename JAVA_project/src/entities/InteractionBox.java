@@ -1,0 +1,33 @@
+package entities;
+
+public class InteractionBox {
+
+	public int id;
+	public int width, heigth, tile;
+	public int left, right, top, bottom;
+
+	public String kind;
+	
+	public InteractionBox (int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, String kind) {
+		
+		left = x * TILE + xoffset - TILE / 2;
+		right = ( x + width ) * TILE + xoffset + TILE / 2;
+		top = y * TILE + yoffset - TILE / 2;
+		bottom = ( y + heigth ) * TILE + yoffset + TILE / 2;
+		this.width = width;
+		this.heigth = heigth;
+		this.tile = TILE;
+		this.kind = kind;
+		
+	}
+
+	public void updatePosition(int x, int y) {
+		
+		left = x - tile / 2;
+		right = x + width * tile + tile / 2;
+		top = y - tile / 2;
+		bottom = y + heigth * tile + tile / 2;
+		
+	}
+	
+}

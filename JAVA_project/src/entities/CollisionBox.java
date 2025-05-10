@@ -9,7 +9,6 @@ public class CollisionBox {
 	
 	public CollisionBox (int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int id) {
 		
-		
 		left = x * TILE + xoffset;
 		right = ( x + width ) * TILE + xoffset;
 		top = y * TILE + yoffset;

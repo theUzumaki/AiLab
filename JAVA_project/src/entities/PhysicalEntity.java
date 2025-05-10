@@ -6,11 +6,13 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	private int oldx, oldy;
 	public int id;
 	public CollisionBox box;
+	public String kind;
 
-	public PhysicalEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
+	public PhysicalEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector, String kind) {
 		
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector);
 		
+		this.kind = kind;
 		serialId++;
 		id = serialId - 1;
 		

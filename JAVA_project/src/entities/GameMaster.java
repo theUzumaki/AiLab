@@ -5,7 +5,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +13,13 @@ public class GameMaster {
 
     private static GameMaster instance;
     private final int STEP = 2;
-    private int[][] windowValues; // rows, columns
-    private int tile;
+    public int[][] windowValues; // rows, columns
     
     public List<CollisionBox> collisionBoxes = new ArrayList<>();
-    public List<AnimatedEntity> animatedEntities = new ArrayList<>();
+    public List<InteractionBox> interactionBoxes = new ArrayList<>();
+    
     public List<StaticEntity> staticEntities = new ArrayList<>();
+    public List<AnimatedEntity> animatedEntities = new ArrayList<>();
     public List<PhysicalEntity> physicalEntities = new ArrayList<>();
     public List<BackgroundEntity> bgEntities1 = new ArrayList<>();
     public List<BackgroundEntity> bgEntities2 = new ArrayList<>();
@@ -30,9 +30,9 @@ public class GameMaster {
     	
     	this.windowValues = windowValues;
     	windowTileMaps = new int[][][][] {
-        		new int[3][windowValues[0][1]][windowValues[0][2]],
-        		new int[3][windowValues[1][1]][windowValues[1][2]],
-        		new int[3][windowValues[2][1]][windowValues[2][2]]
+        		new int[4][windowValues[0][1]][windowValues[0][2]],
+        		new int[4][windowValues[1][1]][windowValues[1][2]],
+        		new int[4][windowValues[2][1]][windowValues[2][2]]
         };
     	
     	loadImage();
@@ -56,9 +56,11 @@ public class GameMaster {
     
     private void loadStage() {
     	
-    	animatedEntities.add(Jason.getInstance(4, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0));
-    	physicalEntities.add(Jason.getInstance());
-    	collisionBoxes.add(Jason.getInstance().box);
+    	Jason jason = Jason.getInstance(4, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	animatedEntities.add(jason);
+    	physicalEntities.add(jason);
+    	collisionBoxes.add(jason.box);
+    	interactionBoxes.add(jason.intrBox);
     
     	int indexWindow = 0;
     	int xoffset = 0, yoffset = 0;
@@ -70,14 +72,8 @@ public class GameMaster {
     		
     		y = 0;
     		
-    		System.out.println();
     		for (int[] row : tilemap[0]) {
     			x = 0;
-    			for (int h = 0; h < tilemap[0][x].length; h++) {
-    				
-    				System.out.print(tilemap[0][x][h] + " ");
-    			}
-    			System.out.println();
     			
     			for (int element : row) {
     				
@@ -86,7 +82,7 @@ public class GameMaster {
     				case 0: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
     				case 1: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
     				case 2: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
-    				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 9)); break;
+    				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 2, 2, sizetile, 9)); break;
     				
     				}
     				x += 1;
@@ -104,15 +100,16 @@ public class GameMaster {
     				
     				switch (element) {
     				
-    				case 1: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
-    				case 2: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
-    				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
-    				case 4: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 3)); break;
-    				case 5: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 4)); break;
-    				case 6: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 5)); break;
-    				case 7: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 6)); break;
-    				case 8: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 7)); break;
-    				case 9: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 8)); break;
+    				case 1: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
+    				case 2: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
+    				case 3: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
+    				case 4: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 3)); break;
+    				case 5: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 4)); break;
+    				case 6: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 5)); break;
+    				case 7: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 6)); break;
+    				case 8: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 7)); break;
+    				case 9: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 8)); break;
+    				case 10: bgEntities2.add(new Carpet(x, y, xoffset, yoffset, 3, 3, sizetile, 0)); break;
     				
     				}
     				x += 1;
@@ -138,6 +135,34 @@ public class GameMaster {
     				case 3: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 5, 8, sizetile, 2)); match = true; break;
     				case 4: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 4, 5, sizetile, 3)); match = true; break;
     				case 5: staticEntities.add(new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
+    				case 6: staticEntities.add(new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0)); match = true; break;
+    				case 7: staticEntities.add(new Desk(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); match = true; break;
+    				
+    				}
+    				
+    				if (match) {    				
+    					physicalEntities.add(staticEntities.getLast());
+    					collisionBoxes.add(staticEntities.getLast().box);
+    				}
+    				x += 1;
+    			}
+    			y+= 1;
+    		}
+    		
+    		y = 0;
+    		match = false;
+    		
+    		for (int[] row : tilemap[3]) {
+    			x = 0;
+    			
+    			for (int element : row) {
+    				
+    				match = false;
+    				
+    				switch (element) {
+    				
+    				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); match = true; break;
+    				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); match = true; break;
     				
     				}
     				
@@ -181,12 +206,23 @@ public class GameMaster {
     	
     }
     
+    public boolean checkInteraction(InteractionBox box, InteractionBox intr) {
+
+    	if ( intr.left < box.left && box.left < intr.right || intr.left < box.right && box.right < intr.right ) {
+    		if ( intr.top < box.top && box.top < intr.bottom ) return true;
+    		else if ( intr.top < box.bottom && box.bottom < intr.bottom ) return true;
+    	}
+    	
+		return false;
+    	
+    }
+    
     private void loadImage() {
     	try {
     		
 
     		for (int j = 0; j < 3; j++) {    			
-    			for (int i = 0; i < 3; i++) {
+    			for (int i = 0; i < 4; i++) {
     				
     				BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/sprites/tilemap/"+(j+1)+"/"+i+".png"));
     				
@@ -207,24 +243,40 @@ public class GameMaster {
     						int blue = color.getBlue();
     						int alpha = color.getAlpha();
     						
-    						if (alpha != 0 && red == 0 && green == 0 && blue == 0) {
-    							temp[x] = 0; // PINE
-    						} else if (alpha != 0 && red == 37 && green == 138 && blue == 0) {
-    							temp[x] = 0; // GRASS 0
-    						} else if (alpha != 0 && red == 67 && green == 67 && blue == 67) {
-    							temp[x] = 5; // WELL
-    						} else if (alpha != 0 && red == 242 && green == 123 && blue == 123) {
-    							temp[x] = 4; // HOUSE 3
-    						} else if (alpha != 0 && red == 69 && green == 39 && blue == 4) {
-    							temp[x] = 3; // HOUSE FLOOR - FLOOR 9
-    						} else if (alpha != 0 && red == 120 && green == 120 && blue == 120){
-    							temp[x] = 3; // HOUSE 2
-    						} else if (alpha != 0 && red == 178 && green == 178 && blue == 178){
-    							temp[x] = 2; // HOUSE 1
-    						} else if (alpha != 0 && red == 71 && green == 42 && blue == 42) {
-    							temp[x] = 1; // HOUSE 0
-    						} else {
-    							temp[x] = -1;
+    						switch (i) {
+    						
+    						case 0:
+    							
+    							if (alpha != 0 && red == 37 && green == 138 && blue == 0) temp[x] = 0; // GRASS 0
+    							else if (alpha != 0 && red == 138 && green == 75 && blue == 0) temp[x] = 3; // HOUSE FLOOR - FLOOR 9
+    							else temp[x] = -1;
+    							break;
+    							
+    						case 1:
+    							
+    							if (alpha != 0 && red == 178 && green == 10 && blue == 38) temp[x] = 10; // CARPET 0
+    							break;
+    							
+    						case 2:
+    							
+    							if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 0; // PINE
+    							else if (alpha != 0 && red == 69 && green == 39 && blue == 4) temp[x] = 7; // DESK 0
+    							else if (alpha != 0 && red == 30 && green == 210 && blue == 12) temp[x] = 6; // BED 0
+    							else if (alpha != 0 && red == 67 && green == 67 && blue == 67) temp[x] = 5; // WELL
+        						else if (alpha != 0 && red == 242 && green == 123 && blue == 123) temp[x] = 4; // HOUSE 3
+        						else if (alpha != 0 && red == 120 && green == 120 && blue == 120) temp[x] = 3; // HOUSE 2
+        						else if (alpha != 0 && red == 178 && green == 178 && blue == 178) temp[x] = 2; // HOUSE 1
+        						else if (alpha != 0 && red == 71 && green == 42 && blue == 42) temp[x] = 1; // HOUSE 0
+        						else temp[x] = -1;
+    							break;
+    							
+    						case 3:
+    							
+    							if (alpha != 0 && red == 255 && green == 255 && blue == 255) temp[x] = 0; // DOOR 0
+    							else if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 1; // DOOR 1
+    							else temp[x] = -1;
+    							break;
+    							
     						}
     					}
     					
@@ -235,93 +287,6 @@ public class GameMaster {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    	
-    }
-    
-    
-    private void loadTileMap(int stage) {
-    	
-    	switch (stage) {
-    	
-    	case 0:
-    		
-    		windowTileMaps[0][0] = new int[][]{
-    			
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-    				
-    		};
-    		
-    		windowTileMaps[0][1] = new int[][]{
-    			
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 2, 2, 2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 4, 4, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 3, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 3, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 2, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 4, 4, 4, 4, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-    				
-    		};
-    		
-    		
-    		windowTileMaps[0][2] = new int[][]{
-    			
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 4, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, 3, -2, -2, -2, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0 },
-    			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-    			
-    		};
-    	
-    	}
     	
     }
 	

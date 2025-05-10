@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
+	private int timer = 0;
+	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector);
+		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "jason");
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
 		
 	}
@@ -34,6 +36,8 @@ public class Jason extends AnimatedEntity{
 	@Override
 	public void update(String key) {
 		
+		interaction = false;
+		
 		switch ( key ) {
 		
 		case "w":
@@ -52,7 +56,13 @@ public class Jason extends AnimatedEntity{
 			x += step;
 			break;
 			
+		case "e":
+			if (timer >= 60) { interaction = true; timer = 0; }
+			break;
+			
 		}
+		
+		timer++;
 
 	}
 
