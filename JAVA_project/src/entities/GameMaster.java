@@ -70,8 +70,14 @@ public class GameMaster {
     		
     		y = 0;
     		
+    		System.out.println();
     		for (int[] row : tilemap[0]) {
     			x = 0;
+    			for (int h = 0; h < tilemap[0][x].length; h++) {
+    				
+    				System.out.print(tilemap[0][x][h] + " ");
+    			}
+    			System.out.println();
     			
     			for (int element : row) {
     				
@@ -80,6 +86,7 @@ public class GameMaster {
     				case 0: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
     				case 1: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
     				case 2: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
+    				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 9)); break;
     				
     				}
     				x += 1;
@@ -177,42 +184,52 @@ public class GameMaster {
     private void loadImage() {
     	try {
     		
-            BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/sprites/tilemap/back.png"));
 
-            int width = image.getWidth();
-            int height = image.getHeight();
-
-            for (int y = 0; y < height; y++) {
-            	
-            	int[] temp = windowTileMaps[0][2][y];
-            	
-                for (int x = 0; x < width; x++) {
-                	
-                    int rgb = image.getRGB(x, y);
-                    Color color = new Color(rgb, true);
-
-                    int red = color.getRed();
-                    int green = color.getGreen();
-                    int blue = color.getBlue();
-                    int alpha = color.getAlpha();
-
-                    if (alpha != 0 && red == 0 && green == 0 && blue == 0) {
-                    	temp[x] = 0;
-                    } else if (alpha != 0 && red == 67 && green == 67 && blue == 67) {
-                    	temp[x] = 5;
-                    } else if (alpha != 0 && red == 120 && green == 120 && blue == 120){
-                    	temp[x] = 3;
-                    } else if (alpha != 0 && red == 178 && green == 178 && blue == 178){
-                    	temp[x] = 2;
-                    } else if (alpha != 0 && red == 242 && green == 123 && blue == 123) {
-                    	temp[x] = 4;
-                    } else if (alpha != 0 && red == 71 && green == 42 && blue == 42) {
-                    	temp[x] = 1;
-                    } else {
-                    	temp[x] = -1;
-                    }
-                }
-
+    		for (int j = 0; j < 3; j++) {    			
+    			for (int i = 0; i < 3; i++) {
+    				
+    				BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/sprites/tilemap/"+(j+1)+"/"+i+".png"));
+    				
+    				int width = image.getWidth();
+    				int height = image.getHeight();
+    				
+    				for (int y = 0; y < height; y++) {
+    					
+    					int[] temp = windowTileMaps[j][i][y];
+    					
+    					for (int x = 0; x < width; x++) {
+    						
+    						int rgb = image.getRGB(x, y);
+    						Color color = new Color(rgb, true);
+    						
+    						int red = color.getRed();
+    						int green = color.getGreen();
+    						int blue = color.getBlue();
+    						int alpha = color.getAlpha();
+    						
+    						if (alpha != 0 && red == 0 && green == 0 && blue == 0) {
+    							temp[x] = 0; // PINE
+    						} else if (alpha != 0 && red == 37 && green == 138 && blue == 0) {
+    							temp[x] = 0; // GRASS 0
+    						} else if (alpha != 0 && red == 67 && green == 67 && blue == 67) {
+    							temp[x] = 5; // WELL
+    						} else if (alpha != 0 && red == 242 && green == 123 && blue == 123) {
+    							temp[x] = 4; // HOUSE 3
+    						} else if (alpha != 0 && red == 69 && green == 39 && blue == 4) {
+    							temp[x] = 3; // HOUSE FLOOR - FLOOR 9
+    						} else if (alpha != 0 && red == 120 && green == 120 && blue == 120){
+    							temp[x] = 3; // HOUSE 2
+    						} else if (alpha != 0 && red == 178 && green == 178 && blue == 178){
+    							temp[x] = 2; // HOUSE 1
+    						} else if (alpha != 0 && red == 71 && green == 42 && blue == 42) {
+    							temp[x] = 1; // HOUSE 0
+    						} else {
+    							temp[x] = -1;
+    						}
+    					}
+    					
+    				}
+    			}
             }
 
         } catch (IOException e) {
