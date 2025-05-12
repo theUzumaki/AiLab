@@ -273,6 +273,15 @@ public class GameMaster {
     						case 1:
     							
     							if (alpha != 0 && red == 178 && green == 10 && blue == 38) temp[x] = 10; // CARPET 0
+    							else if(alpha != 0 && red == 255 && green == 255 && blue == 255) temp[x] = 1; // FLOOR 1 - MAP
+    							else if(alpha != 0 && red == 94 && green == 94 && blue == 94) temp[x] = 5;	// FLOOR RIGHT
+    							else if(alpha != 0 && red == 154 && green == 153 && blue == 153) temp[x] = 7; // FLOOR TOP - RIGHT
+    							else if(alpha != 0 && red == 172 && green == 172 && blue == 172) temp[x] = 2; // FLOOR TOP
+    							else if(alpha != 0 && red == 37 && green == 37 && blue == 37) temp[x] = 6; // FLOOR TOP - LEFT
+    							else if(alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 3; // FLOOR LEFT
+    							else if(alpha != 0 && red == 92 && green == 67 && blue == 67) temp[x] = 9; // BOTTOM - LEFT
+    							else if(alpha != 0 && red == 97 && green == 56 && blue == 56) temp[x] = 4; // BOTTOM
+    							else if(alpha != 0 && red == 146 && green == 48 && blue == 48) temp[x] = 8; // BOTTOM - RIGHT
     							break;
     							
     						case 2:
@@ -294,6 +303,9 @@ public class GameMaster {
     							
     							if (alpha != 0 && red == 255 && green == 255 && blue == 255) temp[x] = 0; // DOOR 0
     							else if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 1; // DOOR 1
+    							else if (alpha != 0 && red == 66 && green == 66 &&  blue == 66) temp[x] = 2; // HOUSE UP
+    							else if(alpha != 0 && red == 133 && green == 133 && blue == 133) temp[x] = 3; // HOUSE RIGHT
+    							else if(alpha != 0 && red == 219 && green == 219 && blue == 219) temp[x] = 5; // HOUSE DOWN 
     							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 4; // BREAK BOX
     							else temp[x] = -1;
     							break;
