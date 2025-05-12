@@ -1,6 +1,8 @@
 package entities;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +16,8 @@ public class GameMaster {
     private static GameMaster instance;
     private final int STEP = 2;
     public int[][] windowValues; // rows, columns
+    
+    public Queue<PhysicalEntity> linkingObjects = new LinkedList<>();
     
     public List<CollisionBox> collisionBoxes = new ArrayList<>();
     public List<InteractionBox> interactionBoxes = new ArrayList<>();
@@ -61,6 +65,12 @@ public class GameMaster {
     	physicalEntities.add(jason);
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
+    	
+    	Panam panam = Panam.getInstance(24, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	animatedEntities.add(panam);
+    	physicalEntities.add(panam);
+    	collisionBoxes.add(panam.box);
+    	interactionBoxes.add(panam.intrBox);
     
     	int indexWindow = 0;
     	int xoffset = 0, yoffset = 0;
@@ -137,6 +147,13 @@ public class GameMaster {
     				case 5: staticEntities.add(new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
     				case 6: staticEntities.add(new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0)); match = true; break;
     				case 7: staticEntities.add(new Desk(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); match = true; break;
+    				case 8: 
+    					StaticEntity obj = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
+    					staticEntities.add(obj);
+    					linkingObjects.add(obj);
+    					match = true;
+    					break;
+    				case 9: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
     				
     				}
     				
@@ -163,6 +180,7 @@ public class GameMaster {
     				
     				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); match = true; break;
     				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); match = true; break;
+    				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); match = true; break;
     				
     				}
     				
@@ -260,6 +278,8 @@ public class GameMaster {
     						case 2:
     							
     							if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 0; // PINE
+    							else if (alpha != 0 && red == 176 && green == 82 && blue == 5) temp[x] = 9; // STUFF
+    							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 8; // BOX
     							else if (alpha != 0 && red == 69 && green == 39 && blue == 4) temp[x] = 7; // DESK 0
     							else if (alpha != 0 && red == 30 && green == 210 && blue == 12) temp[x] = 6; // BED 0
     							else if (alpha != 0 && red == 67 && green == 67 && blue == 67) temp[x] = 5; // WELL
@@ -274,6 +294,7 @@ public class GameMaster {
     							
     							if (alpha != 0 && red == 255 && green == 255 && blue == 255) temp[x] = 0; // DOOR 0
     							else if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 1; // DOOR 1
+    							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 4; // BREAK BOX
     							else temp[x] = -1;
     							break;
     							

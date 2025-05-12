@@ -6,27 +6,27 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Jason extends AnimatedEntity{
+public class Panam extends AnimatedEntity{
 	
 	private int timer = 0;
 	
-	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
+	public Panam(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "jason");
+		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "panam");
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
 		
 	}
 
-	private static Jason instance;
+	private static Panam instance;
 	
-    public static synchronized Jason getInstance(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
+    public static synchronized Panam getInstance(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
         if (instance == null) {
-            instance = new Jason(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector);
+            instance = new Panam(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector);
         }
         return instance;
     }
     
-    public static synchronized Jason getInstance() {
+    public static synchronized Panam getInstance() {
         if (instance == null) {
             return null;
         }
@@ -38,18 +38,20 @@ public class Jason extends AnimatedEntity{
 		
 		interaction = false;
 		
-		if (keys[22])
+		if (keys[8])
 			y -= step;
-		else if (keys[0])
+		else if (keys[9])
 			x -= step;
-		else if (keys[18])
+		else if (keys[10])
 			y += step;
-		else if (keys[3])
+		else if (keys[11])
 			x += step;
-		else if (keys[4])
+		else if (keys[14])
 			if (timer >= 60) { interaction = true; timer = 0; }
 		
 		timer++;
+
+
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class Jason extends AnimatedEntity{
 		
 		try {
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/jason/0.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/panam/0.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			

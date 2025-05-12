@@ -21,6 +21,10 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	@Override
 	protected abstract void loadImages();
 	
+	public void triggerIntr(String kind) {
+		
+	};
+	
 	public void memorizeValues() {
 		oldx = x;
 		oldy = y;

@@ -16,7 +16,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		
 	}
 	
-	public abstract void update(String key);
+	public abstract void update(boolean[] keys);
 	
 	public void setLocation(int x, int y) {
 		

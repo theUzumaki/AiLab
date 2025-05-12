@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import entities.AnimatedEntity;
 import entities.GameMaster;
@@ -35,13 +36,13 @@ public class GameLoop implements Runnable {
             // Update all entities with input from any view
             for (Game window : windows) {
             	
-                String key = getKeyPressed(window.getKeyManager());
+                ArrayList<String> key = getKeyPressed(window.getKeyManager());
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
                 	
                     ent.memorizeValues();
                     
-                    ent.update(key);
+                    ent.update(window.getKeyManager().keys);
                     ent.box.updatePosition(ent.x, ent.y);
 
                     boolean match = false;
@@ -49,18 +50,20 @@ public class GameLoop implements Runnable {
                 	if (ent.interaction) {
                 		
                 		ent.intrBox.updatePosition(ent.x, ent.y);
-                		String kind = "";
+                		InteractionBox intr = null;
                 		
-                		for (InteractionBox intr : gm.interactionBoxes) {
+                		for (InteractionBox intr2 : gm.interactionBoxes) {
                 			
-                			if (gm.checkInteraction(ent.intrBox, intr)) { kind = intr.kind; break; }
+                			if (gm.checkInteraction(ent.intrBox, intr2)) { intr = intr2; break; }
                 			
                 		}
                 		
-                		switch (kind) {
+                		if (intr != null)
+                		switch (intr.kind) {
                 		
                 		case "door0": ent.exitHouse(); match = true; break;
                 		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
+                		case "box": intr.linkObj.triggerIntr(ent.kind); break;
                 		
                 		}
                 		
@@ -91,14 +94,16 @@ public class GameLoop implements Runnable {
         }
     }
 
-    private String getKeyPressed(KeyManager keys) {
+    private ArrayList<String> getKeyPressed(KeyManager keys) {
 
+    	ArrayList<String> keysPressed = new ArrayList<>();
+    	
         for (int i = 0; i < keys.keys.length; i++) {
         	
             if (keys.keys[i]) {
-                return String.valueOf((char) ('a' + i));
+                keysPressed.add(String.valueOf((char) ('a' + i)));
             }
         }
-        return "z";
+        return keysPressed;
     }
 }
