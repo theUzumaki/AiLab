@@ -84,7 +84,7 @@ public class GameLoop implements Runnable {
                     
                     if (ent.dead) deadEntities.add(ent);
                     
-                    if (!match && gm.checkCollision(ent.box)) {
+                    if (!match && gm.checkCollision(ent.box, ent)) {
                     	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);

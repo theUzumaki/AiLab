@@ -3,14 +3,25 @@ package entities;
 public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int olddoorX, olddoorY;
+	
+	// Velocita attuale
 	protected int step;
+	
 	public boolean interaction, dead;
 	public InteractionBox intrBox;
+	
+	// Quanto va lento
+	public int slow;
+	
+	// Velocita base
+	public int defaultStep;
 	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
 		
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, kind);
 		this.step = STEP;
+		this.slow = STEP - 1;
+		this.defaultStep = STEP;
 		
 		intrBox = new InteractionBox (x, y, xoffset, yoffset, width, heigth, TILE, "animated");
 		intrBox.linkObj = this;

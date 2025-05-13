@@ -60,13 +60,13 @@ public class GameMaster {
     
     private void loadStage() {
     	
-    	Jason jason = Jason.getInstance(16, 4, 0, 0, 1, 1, 3, windowValues[0][0], 0);
+    	Jason jason = Jason.getInstance(16, 2, 0, 0, 1, 1, 3, windowValues[0][0], 0);
     	animatedEntities.add(jason);
     	physicalEntities.add(jason);
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
     	
-    	Panam panam = Panam.getInstance(24, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
     	animatedEntities.add(panam);
     	physicalEntities.add(panam);
     	collisionBoxes.add(panam.box);
@@ -165,6 +165,10 @@ public class GameMaster {
     					break;
     				case 9: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
     				
+    				// LACHI
+    				case 10: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 1, 1, sizetile, 1, 1)); match = true; break;	// Erba alta
+    				case 11: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 1, 1, sizetile, 2, 1)); match = true; break;	// Mattoni
+    				
     				}
     				
     				if (match) {    				
@@ -215,7 +219,7 @@ public class GameMaster {
     	
     }
     
-    public boolean checkCollision(CollisionBox box) {
+    public boolean checkCollision(CollisionBox box, AnimatedEntity ent) {
     	
     	for (CollisionBox col : collisionBoxes) {
     		
@@ -225,11 +229,20 @@ public class GameMaster {
     			System.out.println("COL: "+ col.left + " - " + col.right + " / " + col.top + " - " + col.bottom);
     		}
     		*/
-        	
-        	if ( col.left < box.left && box.left < col.right || col.left < box.right && box.right < col.right ) {
-        		if ( col.top < box.top && box.top < col.bottom ) return true;
-        		else if ( col.top < box.bottom && box.bottom < col.bottom ) return true;
-        	}
+    		
+    		if (col.slow == 1){
+    			if ( col.left < box.left && box.left < col.right || col.left < box.right && box.right < col.right ) {
+            		if ( col.top < box.top && box.top < col.bottom ) { ent.step = ent.slow; return false; }
+            		else if ( col.top < box.bottom && box.bottom < col.bottom ) { ent.step = ent.slow; return false; }
+            	}
+    		} else  {
+    			if ( col.left < box.left && box.left < col.right || col.left < box.right && box.right < col.right ) {
+            		if ( col.top < box.top && box.top < col.bottom ) return true;
+            		else if ( col.top < box.bottom && box.bottom < col.bottom ) return true;
+            	}
+    		}
+    		
+    		ent.step = ent.defaultStep;
     		
     	}
     	
@@ -309,6 +322,10 @@ public class GameMaster {
         						else if (alpha != 0 && red == 120 && green == 120 && blue == 120) temp[x] = 3; // HOUSE 2
         						else if (alpha != 0 && red == 178 && green == 178 && blue == 178) temp[x] = 2; // HOUSE 1
         						else if (alpha != 0 && red == 71 && green == 42 && blue == 42) temp[x] = 1; // HOUSE 0
+    							
+    							// LACHI
+        						else if (alpha != 0 && red == 9 && green == 103 && blue == 13) temp[x] = 10; // GRASS
+        						else if (alpha != 0 && red == 142 && green == 3 && blue == 3) temp[x] = 11; // MATTONI 
         						else temp[x] = -1;
     							break;
     							
