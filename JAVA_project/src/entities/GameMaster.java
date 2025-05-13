@@ -60,7 +60,7 @@ public class GameMaster {
     
     private void loadStage() {
     	
-    	Jason jason = Jason.getInstance(4, 4, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	Jason jason = Jason.getInstance(16, 4, 0, 0, 1, 1, 3, windowValues[0][0], 0);
     	animatedEntities.add(jason);
     	physicalEntities.add(jason);
     	collisionBoxes.add(jason.box);
@@ -143,14 +143,24 @@ public class GameMaster {
     				case 1: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 7, 8, sizetile, 0)); match = true; break;
     				case 2: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 7, 8, sizetile, 1)); match = true; break;
     				case 3: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 5, 8, sizetile, 2)); match = true; break;
-    				case 4: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 4, 5, sizetile, 3)); match = true; break;
-    				case 5: staticEntities.add(new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
+    				case 4:
+    					StaticEntity warehouse = new House((x - 2), (y - 4), xoffset, yoffset, 4, 5, sizetile, 3);
+    					staticEntities.add(warehouse);
+    					linkingObjects.add(warehouse);
+    					match = true;
+    					break;
+    				case 5:
+    					StaticEntity well = new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0);
+    					staticEntities.add(well);
+    					linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well);
+    					match = true;
+    					break;
     				case 6: staticEntities.add(new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0)); match = true; break;
     				case 7: staticEntities.add(new Desk(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); match = true; break;
     				case 8: 
-    					StaticEntity obj = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
-    					staticEntities.add(obj);
-    					linkingObjects.add(obj);
+    					StaticEntity box = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
+    					staticEntities.add(box);
+    					linkingObjects.add(box);
     					match = true;
     					break;
     				case 9: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
@@ -172,6 +182,7 @@ public class GameMaster {
     		for (int[] row : tilemap[3]) {
     			x = 0;
     			
+    			
     			for (int element : row) {
     				
     				match = false;
@@ -180,6 +191,8 @@ public class GameMaster {
     				
     				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); match = true; break;
     				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); match = true; break;
+    				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); match = true; break;
+    				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); match = true; break;
     				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); match = true; break;
     				
     				}
@@ -303,7 +316,7 @@ public class GameMaster {
     							
     							if (alpha != 0 && red == 255 && green == 255 && blue == 255) temp[x] = 0; // DOOR 0
     							else if (alpha != 0 && red == 0 && green == 0 && blue == 0) temp[x] = 1; // DOOR 1
-    							else if (alpha != 0 && red == 66 && green == 66 &&  blue == 66) temp[x] = 2; // HOUSE UP
+    							else if (alpha != 0 && red == 168 && green == 168 &&  blue == 168) temp[x] = 2; // WAREHOUSE
     							else if(alpha != 0 && red == 133 && green == 133 && blue == 133) temp[x] = 3; // HOUSE RIGHT
     							else if(alpha != 0 && red == 219 && green == 219 && blue == 219) temp[x] = 5; // HOUSE DOWN 
     							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 4; // BREAK BOX

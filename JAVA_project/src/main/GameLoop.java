@@ -14,6 +14,8 @@ public class GameLoop implements Runnable {
     // Main objects
     private final GameMaster gm;
     private final List<Game> windows;
+    
+    private List<AnimatedEntity> deadEntities= new ArrayList<>();
 
     public GameLoop(List<Game> views) {
         gm = GameMaster.getInstance();
@@ -36,39 +38,51 @@ public class GameLoop implements Runnable {
             // Update all entities with input from any view
             for (Game window : windows) {
             	
-                ArrayList<String> key = getKeyPressed(window.getKeyManager());
+            	for (AnimatedEntity dead : deadEntities) {
+            		gm.animatedEntities.remove(dead);
+            		gm.interactionBoxes.remove(dead.intrBox);
+            	}
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
                 	
-                    ent.memorizeValues();
+                    if (ent.y != -1000) ent.memorizeValues();
                     
                     ent.update(window.getKeyManager().keys);
-                    ent.box.updatePosition(ent.x, ent.y);
+                    if (ent.y != -1000) { ent.box.updatePosition(ent.x, ent.y); ent.intrBox.updatePosition(ent.x, ent.y); }
 
                     boolean match = false;
                     
-                	if (ent.interaction) {
-                		
-                		ent.intrBox.updatePosition(ent.x, ent.y);
-                		InteractionBox intr = null;
-                		
-                		for (InteractionBox intr2 : gm.interactionBoxes) {
-                			
-                			if (gm.checkInteraction(ent.intrBox, intr2)) { intr = intr2; break; }
-                			
-                		}
-                		
-                		if (intr != null)
-                		switch (intr.kind) {
-                		
-                		case "door0": ent.exitHouse(); match = true; break;
-                		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
-                		case "box": intr.linkObj.triggerIntr(ent.kind); break;
-                		
-                		}
+                    if (ent.interaction && ent.y == -1000) {
+                    	
+                    	ent.triggerIntr(null);
+                    	
+                    } else if (ent.interaction) {
+            		
+	            		
+	            		InteractionBox intr = null;
+	            		
+	            		for (InteractionBox intr2 : gm.interactionBoxes) {
+	            			
+	            			if (gm.checkInteraction(ent.intrBox, intr2)) { intr = intr2; break; }
+            			
+            		}
+            		if (intr != null) System.out.println(ent.kind + " INTERACTING WITH: " + intr.kind);
+            		if (intr != null)
+            		switch (intr.kind) {
+            		
+            		case "door0": ent.exitHouse(); match = true; break;
+            		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
+            		case "door2": ent.setLocation(windows.get(2).getCamera().x, windows.get(2).getCamera().y + gm.windowValues[2][0]); match = true; break;
+            		case "box": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
+            		case "warehouse": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
+            		case "animated": intr.linkObj.triggerIntr(ent);
+            		
+            		}
                 		
                 		
                 	}
+                    
+                    if (ent.dead) deadEntities.add(ent);
                     
                     if (!match && gm.checkCollision(ent.box)) {
                     	
@@ -94,16 +108,4 @@ public class GameLoop implements Runnable {
         }
     }
 
-    private ArrayList<String> getKeyPressed(KeyManager keys) {
-
-    	ArrayList<String> keysPressed = new ArrayList<>();
-    	
-        for (int i = 0; i < keys.keys.length; i++) {
-        	
-            if (keys.keys[i]) {
-                keysPressed.add(String.valueOf((char) ('a' + i)));
-            }
-        }
-        return keysPressed;
-    }
 }

@@ -4,7 +4,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int olddoorX, olddoorY;
 	protected int step;
-	public boolean interaction;
+	public boolean interaction, dead;
 	public InteractionBox intrBox;
 	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
@@ -13,6 +13,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		this.step = STEP;
 		
 		intrBox = new InteractionBox (x, y, xoffset, yoffset, width, heigth, TILE, "animated");
+		intrBox.linkObj = this;
 		
 	}
 	

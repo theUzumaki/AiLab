@@ -44,5 +44,12 @@ public class House extends StaticEntity{
 		}
 		
 	}
+	
+	@Override
+	public void triggerIntr(PhysicalEntity ent) {
+		
+
+		
+	}
 
 }

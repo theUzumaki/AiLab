@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Box extends StaticEntity {
+	
+	private boolean full = false;
 
 	public Box(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "box");
@@ -26,6 +28,25 @@ public class Box extends StaticEntity {
 		
 	}
 	
+	public boolean handleHiding(String client) {
+		
+		switch (client) {
+		
+		case "panam":
+			if (!full) { full = true; return false; }
+			else { full = false; return true; }
+		
+		}
+		return false;
+	}
+	
+	@Override
+	public void triggerIntr(PhysicalEntity ent) {
+		if (ent.kind == "jason") img = sprites[1];
+		else if (ent.kind == "panam") handleHiding("panam");
+		
+	}
+
 	@Override
 	protected void loadImages() {
 		
@@ -41,11 +62,4 @@ public class Box extends StaticEntity {
 		}
 		
 	}
-	
-	@Override
-	public void triggerIntr(String kind) {
-		if (kind == "jason") img = sprites[1];
-		
-	}
-
 }

@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 public class Panam extends AnimatedEntity{
 	
 	private int timer = 0;
+	private boolean hidden;
+	private PhysicalEntity interactingObj;
 	
 	public Panam(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
@@ -38,16 +40,26 @@ public class Panam extends AnimatedEntity{
 		
 		interaction = false;
 		
-		if (keys[8])
-			y -= step;
-		else if (keys[9])
-			x -= step;
-		else if (keys[10])
-			y += step;
-		else if (keys[11])
-			x += step;
-		else if (keys[14])
-			if (timer >= 60) { interaction = true; timer = 0; }
+		if (y != -1000) {
+			
+			if (keys[8])
+				y -= step;
+			else if (keys[9])
+				x -= step;
+			else if (keys[10])
+				y += step;
+			else if (keys[11])
+				x += step;
+			else if (keys[14])
+				if (timer >= 60) { interaction = true; timer = 0; }
+			
+		} else {
+			
+			if (keys[14])
+				if (timer >= 60) { interaction = true; timer = 0; }
+			
+		}
+		
 		
 		timer++;
 
@@ -59,6 +71,19 @@ public class Panam extends AnimatedEntity{
 		
 		brush.drawImage(img, x, y, null);
 		
+	}
+	
+	public boolean handleHiding(PhysicalEntity ent) {
+		
+		if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000; return false; }
+		else { hidden = false; setBack(); interactingObj.triggerIntr(this); return true; }
+		
+	}
+	
+	@Override
+	public void triggerIntr(PhysicalEntity ent) {
+		if (ent != null && ent.kind == "jason") dead = true;
+		else handleHiding(ent);
 	}
 
 	@Override
