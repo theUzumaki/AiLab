@@ -120,6 +120,10 @@ public class GameMaster {
     				case 8: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 7)); break;
     				case 9: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 8)); break;
     				case 10: bgEntities2.add(new Carpet(x, y, xoffset, yoffset, 3, 3, sizetile, 0)); break;
+    				case 11: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 10)); break;
+    				case 12: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 11)); break;
+    				case 13: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 12)); break;
+    				case 14: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 13)); break;
     				
     				}
     				x += 1;
@@ -133,9 +137,13 @@ public class GameMaster {
     		for (int[] row : tilemap[2]) {
     			x = 0;
     			
+    			System.out.println();
+    			
     			for (int element : row) {
     				
     				match = false;
+    				
+    				System.out.print(element + " ");
     				
     				switch (element) {
     				
@@ -166,8 +174,41 @@ public class GameMaster {
     				case 9: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 2, 2, sizetile, 0)); match = true; break;
     				
     				// LACHI
-    				case 10: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 1, 1, sizetile, 1, 1)); match = true; break;	// Erba alta
-    				case 11: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 1, 1, sizetile, 2, 1)); match = true; break;	// Mattoni
+    				case 10: staticEntities.add(new Stuff(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); match = true; break;	// BRICKS
+    				case 11: staticEntities.add(new SlowObj(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); match = true; break;	// HIGH GRASS
+    				case 12: staticEntities.add(new SlowObj(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); match = true; break;	// POND
+    				case 13: 
+    					StaticEntity PondB = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
+    					staticEntities.add(PondB);
+    					linkingObjects.add(PondB); match = true; break;
+    				case 14: 
+    					StaticEntity PondBDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 1);
+    					staticEntities.add(PondBDX);
+    					linkingObjects.add(PondBDX); match = true; break;
+    				case 15:
+    					StaticEntity PondBSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 2);
+    					staticEntities.add(PondBSX);
+    					linkingObjects.add(PondBSX); match = true; break;
+    				case 16:
+    					StaticEntity PondDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 3);
+    					staticEntities.add(PondDX);
+    					linkingObjects.add(PondDX); match = true; break;
+    				case 17:
+    					StaticEntity PondSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 4);
+    					staticEntities.add(PondSX);
+    					linkingObjects.add(PondSX); match = true; break;
+    				case 18:
+    					StaticEntity PondT = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 5);
+    					staticEntities.add(PondT);
+    					linkingObjects.add(PondT); match = true; break;
+    				case 19:
+    					StaticEntity PondTDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 6);
+    					staticEntities.add(PondTDX);
+    					linkingObjects.add(PondTDX); match = true; break;
+    				case 20: 
+    					StaticEntity PondTSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 7);
+    					staticEntities.add(PondTSX);
+    					linkingObjects.add(PondTSX); match = true; break;
     				
     				}
     				
@@ -176,7 +217,9 @@ public class GameMaster {
     					collisionBoxes.add(staticEntities.getLast().box);
     				}
     				x += 1;
+    				
     			}
+    			System.out.println();
     			y+= 1;
     		}
     		
@@ -198,6 +241,7 @@ public class GameMaster {
     				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); match = true; break;
     				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); match = true; break;
     				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); match = true; break;
+    				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); match = true; break;
     				
     				}
     				
@@ -310,6 +354,10 @@ public class GameMaster {
     							else if(alpha != 0 && red == 92 && green == 67 && blue == 67) temp[x] = 9; // BOTTOM - LEFT
     							else if(alpha != 0 && red == 97 && green == 56 && blue == 56) temp[x] = 4; // BOTTOM
     							else if(alpha != 0 && red == 146 && green == 48 && blue == 48) temp[x] = 8; // BOTTOM - RIGHT
+    							else if(alpha != 0 && red == 141 && green == 141 && blue == 141) temp[x] = 11; // BDX
+    							else if(alpha != 0 && red == 141 && green == 141 && blue == 145) temp[x] = 12; // BSX
+    							else if(alpha != 0 && red == 141 && green == 141 && blue == 150) temp[x] = 13; // TDX
+    							else if(alpha != 0 && red == 141 && green == 141 && blue == 155) temp[x] = 14; // TSX
     							break;
     							
     						case 2:
@@ -326,8 +374,17 @@ public class GameMaster {
         						else if (alpha != 0 && red == 71 && green == 42 && blue == 42) temp[x] = 1; // HOUSE 0
     							
     							// LACHI
-        						else if (alpha != 0 && red == 9 && green == 103 && blue == 13) temp[x] = 10; // GRASS
-        						else if (alpha != 0 && red == 142 && green == 3 && blue == 3) temp[x] = 11; // MATTONI 
+        						else if (alpha != 0 && red == 142 && green == 3 && blue == 3) temp[x] = 10; // MATTONI 
+        						else if (alpha != 0 && red == 9 && green == 103 && blue == 13) temp[x] = 11; // GRASS
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 142) temp[x] = 12; // POND
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 143) temp[x] = 13; // POND B
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 144) temp[x] = 14; // POND BDX
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 145) temp[x] = 15; // POND BSX
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 146) temp[x] = 16; // POND DX
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 147) temp[x] = 17; // POND SX
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 148) temp[x] = 18; // POND T
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 149) temp[x] = 19; // POND TDX
+        						else if (alpha != 0 && red == 3 && green == 61 && blue == 150) temp[x] = 20; // POND TSX
         						else temp[x] = -1;
     							break;
     							
@@ -339,6 +396,7 @@ public class GameMaster {
     							else if(alpha != 0 && red == 133 && green == 133 && blue == 133) temp[x] = 3; // HOUSE RIGHT
     							else if(alpha != 0 && red == 219 && green == 219 && blue == 219) temp[x] = 5; // HOUSE DOWN 
     							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 4; // BREAK BOX
+    							else if (alpha != 0 && red == 3 && green == 61 && blue == 148) temp[x] = 6; // BORDER
     							else temp[x] = -1;
     							break;
     							

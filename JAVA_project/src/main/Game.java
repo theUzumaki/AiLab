@@ -44,7 +44,7 @@ public class Game extends JPanel {
         for (BackgroundEntity ent : gm.bgEntities2) ent.draw(g);
         for (PhysicalEntity ent : gm.physicalEntities) ent.draw(g);
         
-        //printCollisionBox(g2d);
+        printCollisionBox(g2d);
     }
 
     public Rectangle getCamera() {

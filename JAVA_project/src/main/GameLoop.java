@@ -76,6 +76,7 @@ public class GameLoop implements Runnable {
             		case "door2": ent.setLocation(windows.get(2).getCamera().x, windows.get(2).getCamera().y + gm.windowValues[2][0]); match = true; break;
             		case "box": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
             		case "warehouse": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
+            		case "border": ent.triggerIntr(intr.linkObj); break;
             		case "animated": intr.linkObj.triggerIntr(ent);
             		
             		}

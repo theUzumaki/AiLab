@@ -3,7 +3,7 @@ package entities;
 public abstract class PhysicalEntity extends ConceptEntity{
 	
 	static private int serialId;
-	private int oldx, oldy;
+	protected int oldx, oldy;
 	
 	protected boolean full = false;
 	
@@ -27,16 +27,5 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	public void triggerIntr(PhysicalEntity ent) {
 		
 	};
-	
-	public void memorizeValues() {
-		oldx = x;
-		oldy = y;
-	}
-	
-	public void setBack() {
-		
-		x = oldx;
-		y = oldy;
-	}
 
 }

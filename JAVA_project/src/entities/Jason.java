@@ -58,6 +58,11 @@ public class Jason extends AnimatedEntity{
 		brush.drawImage(img, x, y, null);
 		
 	}
+	
+	@Override
+	public void triggerIntr(PhysicalEntity ent) {
+		if (ent != null && ent.kind == "border") { x = 2*ent.x - x; y = 2*ent.y - y; }
+	};
 
 	@Override
 	protected void loadImages() {

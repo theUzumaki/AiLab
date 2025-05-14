@@ -29,7 +29,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	}
 	
 	public abstract void update(boolean[] keys);
-	
+
 	public void setLocation(int x, int y) {
 		
 		olddoorX = this.x;
@@ -46,6 +46,17 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		this.x = olddoorX;
 		this.y = olddoorY;
 		
+	}
+	
+	public void memorizeValues() {
+		oldx = x;
+		oldy = y;
+	}
+	
+	public void setBack() {
+		
+		x = oldx;
+		y = oldy;
 	}
 	
 }
