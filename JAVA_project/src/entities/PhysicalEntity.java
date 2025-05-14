@@ -4,6 +4,9 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	
 	static private int serialId;
 	private int oldx, oldy;
+	
+	protected boolean full = false;
+	
 	public int id;
 	public CollisionBox box;
 	public String kind;

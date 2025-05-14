@@ -6,11 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Box extends HideoutEntity {
+public class Warehouse extends HideoutEntity{
 
-	public Box(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
-		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "box");
-		box = new CollisionBox(x, y, xoffset, yoffset, 1, 1, TILE, id);
+	public Warehouse(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
+		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "warehouse");
+		
+		box = new CollisionBox(x, y + 2, xoffset, yoffset, width, heigth - 2, TILE, id);
 	}
 	
 	@Override
@@ -25,14 +26,13 @@ public class Box extends HideoutEntity {
 		brush.drawImage(img, x, y, null);
 		
 	}
-
+	
 	@Override
 	protected void loadImages() {
 		
 		try {
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/cassa.PNG")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/cassaRotta.PNG")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/houses/casa6.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			
@@ -45,9 +45,9 @@ public class Box extends HideoutEntity {
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
 		
-		if (ent.kind == "jason") { img = sprites[1]; selector = 1; full = false; }
+		if (ent.kind == "jason") full = false;
 		else if (ent.kind == "panam") if (selector == 0) handleHiding("panam");
 		
 	}
-	
+
 }

@@ -144,7 +144,7 @@ public class GameMaster {
     				case 2: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 7, 8, sizetile, 1)); match = true; break;
     				case 3: staticEntities.add(new House(x, (y - 2), xoffset, yoffset, 5, 8, sizetile, 2)); match = true; break;
     				case 4:
-    					StaticEntity warehouse = new House((x - 2), (y - 4), xoffset, yoffset, 4, 5, sizetile, 3);
+    					StaticEntity warehouse = new Warehouse((x - 2), (y - 4), xoffset, yoffset, 4, 5, sizetile, 0);
     					staticEntities.add(warehouse);
     					linkingObjects.add(warehouse);
     					match = true;
@@ -219,7 +219,9 @@ public class GameMaster {
     	
     }
     
-    public boolean checkCollision(CollisionBox box, AnimatedEntity ent) {
+    public boolean checkCollision(CollisionBox box, AnimatedEntity ent, int num_window) {
+    	
+    	if ( box.left <= windowValues[num_window][1] ) return true;
     	
     	for (CollisionBox col : collisionBoxes) {
     		

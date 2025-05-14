@@ -55,8 +55,13 @@ public class Panam extends AnimatedEntity{
 			
 		} else {
 			
-			if (keys[14])
+			if (hidden && !interactingObj.full) {
+				hidden = false;
+				setBack();
+			} else if (keys[14]) {
+				
 				if (timer >= 60) { interaction = true; timer = 0; }
+			}
 			
 		}
 		
@@ -73,16 +78,18 @@ public class Panam extends AnimatedEntity{
 		
 	}
 	
-	public boolean handleHiding(PhysicalEntity ent) {
-		
-		if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000; return false; }
-		else { hidden = false; setBack(); interactingObj.triggerIntr(this); return true; }
+	public void handleHiding(PhysicalEntity ent) {
+
+		if (ent == null || ent.selector != 1) {
+			if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000; }
+			else { hidden = false; setBack(); interactingObj.triggerIntr(this); }
+		}
 		
 	}
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
-		if (ent != null && ent.kind == "jason") dead = true;
+		if (ent != null && ent.kind == "jason" ) { dead = true; if (hidden) { setBack(); interactingObj.triggerIntr(this); } }
 		else handleHiding(ent);
 	}
 

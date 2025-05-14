@@ -35,6 +35,8 @@ public class GameLoop implements Runnable {
         while (running) {
             long start = System.currentTimeMillis();
 
+            int num_window = 0;
+            
             // Update all entities with input from any view
             for (Game window : windows) {
             	
@@ -67,8 +69,7 @@ public class GameLoop implements Runnable {
             			
             		}
             		if (intr != null) System.out.println(ent.kind + " INTERACTING WITH: " + intr.kind);
-            		if (intr != null)
-            		switch (intr.kind) {
+            		if (intr != null) switch (intr.kind) {
             		
             		case "door0": ent.exitHouse(); match = true; break;
             		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
@@ -84,13 +85,14 @@ public class GameLoop implements Runnable {
                     
                     if (ent.dead) deadEntities.add(ent);
                     
-                    if (!match && gm.checkCollision(ent.box, ent)) {
+                    if (!match && gm.checkCollision(ent.box, ent, num_window)) {
                     	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
                         
                     }
                 }
+                num_window++;
             }
 
             for (Game view : windows) {
