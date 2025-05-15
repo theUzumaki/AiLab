@@ -52,14 +52,12 @@ public class GameLoop implements Runnable {
                     ent.update(window.getKeyManager().keys);
                     if (ent.y != -1000) { ent.box.updatePosition(ent.x, ent.y); ent.intrBox.updatePosition(ent.x, ent.y); }
 
-                    boolean match = false;
-                    
                     if (ent.interaction && ent.y == -1000) {
                     	
+                    	System.out.println("CALLING INTERACTION NULL");
                     	ent.triggerIntr(null);
                     	
                     } else if (ent.interaction) {
-            		
 	            		
 	            		InteractionBox intr = null;
 	            		
@@ -68,12 +66,12 @@ public class GameLoop implements Runnable {
 	            			if (gm.checkInteraction(ent.intrBox, intr2)) { intr = intr2; break; }
             			
             		}
-            		if (intr != null) System.out.println(ent.kind + " INTERACTING WITH: " + intr.kind);
+            		if (intr != null) System.out.print(ent.kind + " INTERACTING WITH: " + intr.kind);
             		if (intr != null) switch (intr.kind) {
             		
-            		case "door0": ent.exitHouse(); match = true; break;
-            		case "door1": ent.setLocation(windows.get(1).getCamera().x, windows.get(1).getCamera().y + gm.windowValues[1][0]); match = true; break;
-            		case "door2": ent.setLocation(windows.get(2).getCamera().x, windows.get(2).getCamera().y + gm.windowValues[2][0]); match = true; break;
+            		case "door0": ent.exitHouse(); break;
+            		case "door1": ent.setLocation(windows.get(1).getCamera().x + gm.windowValues[1][0], windows.get(1).getCamera().y + gm.windowValues[1][0], 1); break;
+            		case "door2": ent.setLocation(windows.get(2).getCamera().x + gm.windowValues[1][0], windows.get(2).getCamera().y + gm.windowValues[2][0], 2);break;
             		case "box": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
             		case "warehouse": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
             		case "border": ent.triggerIntr(intr.linkObj); break;
@@ -85,13 +83,25 @@ public class GameLoop implements Runnable {
                 	}
                     
                     if (ent.dead) deadEntities.add(ent);
-                    
-                    if (!match && gm.checkCollision(ent.box, ent, num_window)) {
+                    if (ent.stage == num_window && gm.checkLimit(ent.box, num_window)) {
+                    	System.out.print(ent + " HIT LIMIT ");
                     	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
                         
+                        System.out.println();
+                        continue;
+                    	
+                    };
+                    
+                    if (gm.checkCollision(ent.box, ent)) {
+                    	
+                    	System.out.print(" COLLISION ");
+                        ent.setBack();
+                        ent.box.updatePosition(ent.x, ent.y);
+                        
                     }
+                    
                 }
                 num_window++;
             }

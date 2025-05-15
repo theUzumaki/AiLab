@@ -4,17 +4,13 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int olddoorX, olddoorY;
 	
-	// Velocita attuale
 	protected int step;
 	
 	public boolean interaction, dead, water;
 	public InteractionBox intrBox;
 	
-	// Quanto va lento
-	public int slow;
-	
-	// Velocita base
-	public int defaultStep;
+	public int slow, defaultStep;
+	public int stage = 0;
 	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
 		
@@ -30,7 +26,9 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	public abstract void update(boolean[] keys);
 
-	public void setLocation(int x, int y) {
+	public void setLocation(int x, int y, int window) {
+		
+		stage = window;
 		
 		olddoorX = this.x;
 		olddoorY = this.y;
@@ -43,6 +41,8 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	public void exitHouse() {
 		
+		stage = 0;
+		
 		this.x = olddoorX;
 		this.y = olddoorY;
 		
@@ -54,7 +54,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	}
 	
 	public void setBack() {
-		
+		System.out.println("SET BACK");
 		x = oldx;
 		y = oldy;
 	}

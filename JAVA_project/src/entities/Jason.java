@@ -62,11 +62,12 @@ public class Jason extends AnimatedEntity{
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
+		
 		if (ent != null && ent.kind == "border") {
-			
 			if (!water) { x = tile * 4; y = tile * 15; water = true; }
 			else { x = tile * 4; y = tile * 10; water = false; }
 		}
+		
 	}
 
 	@Override

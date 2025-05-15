@@ -15,7 +15,8 @@ public class GameMaster {
 
     private static GameMaster instance;
     private final int STEP = 2;
-    public int[][] windowValues; // rows, columns
+    public int[][] windowValues; // tile, rows, columns
+    public int[][] windowBorders;
     
     public Queue<PhysicalEntity> linkingObjects = new LinkedList<>();
     
@@ -37,6 +38,32 @@ public class GameMaster {
         		new int[4][windowValues[0][1]][windowValues[0][2]],
         		new int[4][windowValues[1][1]][windowValues[1][2]],
         		new int[4][windowValues[2][1]][windowValues[2][2]]
+        };
+        windowBorders = new int[][] {
+        	{
+        		windowValues[0][0],
+        		windowValues[0][0] * ( windowValues[0][2] - 1),
+        		windowValues[0][0],
+        		windowValues[0][0] * ( windowValues[0][1] - 1)
+        		
+        	},
+        	
+        	{
+        		windowValues[0][0] * windowValues[0][2],
+        		windowValues[0][0] * windowValues[0][2] + windowValues[1][0] * windowValues[1][2],
+        		windowValues[0][0] * windowValues[0][1],
+        		windowValues[0][0] * windowValues[0][1] + windowValues[1][0] * windowValues[1][1]
+        		
+        	},
+        	
+        	{
+        		windowValues[0][0] * windowValues[0][2] + windowValues[1][0] * windowValues[1][2],
+        		windowValues[0][0] * windowValues[0][2] + windowValues[1][0] * windowValues[1][2] + windowValues[2][0] * windowValues[2][2],
+        		windowValues[0][0] * windowValues[0][1] + windowValues[1][0] * windowValues[1][1],
+        		windowValues[0][0] * windowValues[0][1] + windowValues[1][0] * windowValues[1][1] + windowValues[2][0] * windowValues[2][1]
+        		
+        	}
+        	
         };
     	
     	loadImage();
@@ -234,7 +261,6 @@ public class GameMaster {
     				}
     				
     				if (match) {    
-    					System.out.println("Interior -> " + staticEntities.getLast().kind);
     					physicalEntities.add(staticEntities.getLast());
     					collisionBoxes.add(staticEntities.getLast().box);
     				}
@@ -285,20 +311,29 @@ public class GameMaster {
     	
     }
     
-    public boolean checkCollision(CollisionBox box, AnimatedEntity ent, int num_window) {
+    public boolean checkLimit(CollisionBox box, int num_window) {
     	
-    	int old_window = num_window - 1;
-    	if (old_window == -1) old_window = 0;
-    	int window_left = windowValues[num_window][0] + num_window * windowValues[old_window][0] * windowValues[old_window][2];
-    	int window_right = window_left + windowValues[num_window][0] * windowValues[num_window][2] - 2 * windowValues[num_window][0];
-    	int window_top = windowValues[num_window][0] + num_window * windowValues[old_window][0] * windowValues[old_window][1];
-    	int window_bottom = window_top + windowValues[num_window][0] * windowValues[num_window][1] - 2 * windowValues[num_window][0];
+    	int window_left = windowBorders[num_window][0];
+    	int window_right = windowBorders[num_window][1];
+    	int window_top = windowBorders[num_window][2];
+    	int window_bottom = windowBorders[num_window][3];
     	
-    	if ( box.left <= window_left) return true;
-    	else if ( box.right >= window_right ) return true;
-    	else if ( box.top <= window_top ) return true;
-    	else if ( box.bottom >= window_bottom ) return true;
+    	/*
+    	System.out.println("LEFT: " + box.left + " window: " + window_left);
+    	System.out.println("RIGHT: " + box.right + " window: " + window_right);
+    	System.out.println("TOP: " + box.top + " window: " + window_top);
+    	System.out.println("BOTTOM: " + box.bottom + " window: " + window_bottom);
+    	*/
     	
+    	if ( box.left < window_left) return true;
+    	else if ( box.right > window_right ) return true;
+    	else if ( box.top < window_top ) return true;
+    	else if ( box.bottom > window_bottom ) return true;
+    	
+    	return false;
+    }
+    
+    public boolean checkCollision(CollisionBox box, AnimatedEntity ent) {
     	
     	for (CollisionBox col : collisionBoxes) {
     		

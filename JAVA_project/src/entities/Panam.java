@@ -99,7 +99,10 @@ public class Panam extends AnimatedEntity{
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
 		if (ent != null && ent.kind == "jason" ) { dead = true; if (hidden) { setBack(); interactingObj.triggerIntr(this); } }
-		else if (ent != null && ent.kind == "border") { x = 2*ent.x - x; y = 2*ent.y - y; }
+		else if (ent != null && ent.kind == "border") {
+			if (!water) { x = tile * 4; y = tile * 15; water = true; }
+			else { x = tile * 4; y = tile * 10; water = false; }
+		}
 		else handleHiding(ent);
 	}
 

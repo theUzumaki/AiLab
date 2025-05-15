@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Bed extends StaticEntity {
+public class Bed extends HideoutEntity {
 
 	public Bed(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "bed");
@@ -39,6 +39,12 @@ public class Bed extends StaticEntity {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void triggerIntr(PhysicalEntity ent) {
+		if (ent.kind == "jason") full = false;
+		else if (ent.kind == "panam") if (selector == 0) handleHiding("panam");
 	}
 
 }
