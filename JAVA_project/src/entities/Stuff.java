@@ -37,7 +37,7 @@ public class Stuff extends StaticEntity {
 		try {
 			sprites= new BufferedImage[] {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/Stuff.PNG")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/mattoni.PNG"))
+					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/ciocco.PNG"))
 			};
 			imgResizer(sprites, width, heigth);
 			

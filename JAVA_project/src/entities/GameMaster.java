@@ -117,7 +117,7 @@ public class GameMaster {
     				case 7: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 6)); break;
     				case 8: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 7)); break;
     				case 9: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 8)); break;
-    				case 10: bgEntities2.add(new Carpet(x, y, xoffset, yoffset, 3, 3, sizetile, 0)); break;
+    				case 10: bgEntities2.add(new Carpet(x, y, xoffset, yoffset, 4, 4, sizetile, 0)); break;
     				case 11: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 10)); break;
     				case 12: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 11)); break;
     				case 13: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 12)); break;
@@ -158,8 +158,13 @@ public class GameMaster {
     					linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well);
     					match = true;
     					break;
-    				case 6: staticEntities.add(new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0)); match = true; break;
-    				case 7: staticEntities.add(new Desk(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); match = true; break;
+    				case 6: 
+    					StaticEntity bed = new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0);
+    					staticEntities.add(bed);
+    					linkingObjects.add(bed);
+    					match = true; 
+    					break;
+    				case 7: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 0, 1, 1)); match = true; break;
     				case 8: 
     					StaticEntity box = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
     					staticEntities.add(box);
@@ -204,10 +209,32 @@ public class GameMaster {
     					StaticEntity PondTSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 7);
     					staticEntities.add(PondTSX);
     					linkingObjects.add(PondTSX); match = true; break;
+    				case 21: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 2, sizetile, 1, 1, 2)); match = true; break;
+    				case 22: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 2, sizetile, 2, 1, 2)); match = true; break;
+    				case 23: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 3, 1, 1)); match = true; break;
+    				case 24: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 4, 1, 1)); match = true; break;
+    				case 25: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 5, 1, 1)); match = true; break;
+    				case 26: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 6, 1, 1)); match = true; break;
+    				case 27: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 1, sizetile, 7, 2, 1)); match = true; break;
+    				case 28: 
+    					StaticEntity scrigno_lungo = new Interior(x, y, xoffset, yoffset, 2, 1, sizetile, 8, 2, 1);
+    					staticEntities.add(scrigno_lungo);
+    					linkingObjects.add(scrigno_lungo);
+    					match = true; 
+    					break;
+    				case 29:
+    					StaticEntity scrigno = new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 9, 1, 1);
+    					staticEntities.add(scrigno); 
+    					linkingObjects.add(scrigno);
+    					match = true; 
+    					break;
+    				case 30: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 10, 2, 2)); match = true; break;
+    				case 31: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 11, 2, 2)); match = true; break;
     				
     				}
     				
-    				if (match) {    				
+    				if (match) {    
+    					System.out.println("Interior -> " + staticEntities.getLast().kind);
     					physicalEntities.add(staticEntities.getLast());
     					collisionBoxes.add(staticEntities.getLast().box);
     				}
@@ -390,6 +417,20 @@ public class GameMaster {
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 148) temp[x] = 18; // POND T
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 149) temp[x] = 19; // POND TDX
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 150) temp[x] = 20; // POND TSX
+    							
+    							// Interior
+        						else if(alpha != 0 && red == 174 && green == 232 && blue == 132) temp[x] = 21; // SCAFFALE
+        						else if(alpha != 0 && red == 72 && green == 90 && blue == 59) temp[x] = 22; // SCAFFALE BELLO
+        						else if(alpha != 0 && red == 4 && green == 20 && blue == 69) temp[x] = 23; // Tavolo
+        						else if(alpha != 0 && red == 210 && green == 29 && blue == 181) temp[x] = 24; // Sedia a destra
+        						else if(alpha != 0 && red == 159 && green == 52 && blue == 142) temp[x] = 25; // Sedia a sinistra
+        						else if(alpha != 0 && red == 62 && green == 69 && blue == 4) temp[x] = 26; // Panchina
+        						else if(alpha != 0 && red == 0 && green == 199 && blue == 255) temp[x] = 27; // Panca Lunga
+        						else if(alpha != 0 && red == 126 && green == 89 && blue == 46) temp[x] = 28; // Scrigno lungo
+        						else if(alpha != 0 && red == 138 && green == 75 && blue == 0) temp[x] = 29; // Scrigno
+        						else if(alpha != 0 && red == 159 && green == 152 && blue == 61) temp[x] = 30; // Taovlo con sedia a sinistra
+        						else if(alpha != 0 && red == 210 && green == 197 && blue == 29) temp[x] = 31; // Tavolo con sedia a destra
+    							
         						else temp[x] = -1;
     							break;
     							
