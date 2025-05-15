@@ -7,7 +7,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	// Velocita attuale
 	protected int step;
 	
-	public boolean interaction, dead;
+	public boolean interaction, dead, water;
 	public InteractionBox intrBox;
 	
 	// Quanto va lento

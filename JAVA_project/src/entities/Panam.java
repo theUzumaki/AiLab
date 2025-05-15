@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Panam extends AnimatedEntity{
 	
-	private int timer = 0;
+	private int timer = 0, dash = 50;
 	private boolean hidden;
 	private PhysicalEntity interactingObj;
 	
@@ -39,9 +39,17 @@ public class Panam extends AnimatedEntity{
 	public void update(boolean[] keys) {
 		
 		interaction = false;
+		step = defaultStep;
 		
 		if (y != -1000) {
 			
+			if (keys[15]) {
+				if (dash > 0) { step = defaultStep + 2; dash-= 1; }
+			}
+			else if (dash == 0) { dash = -299; }
+			else if (dash < -1) { dash++; }
+			else if (dash == -1) dash = 50;
+
 			if (keys[8])
 				y -= step;
 			else if (keys[9])
@@ -52,6 +60,7 @@ public class Panam extends AnimatedEntity{
 				x += step;
 			else if (keys[14])
 				if (timer >= 60) { interaction = true; timer = 0; }
+			
 			
 		} else {
 			

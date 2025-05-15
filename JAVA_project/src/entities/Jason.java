@@ -37,6 +37,7 @@ public class Jason extends AnimatedEntity{
 	public void update(boolean[] keys) {
 		
 		interaction = false;
+		step = defaultStep;
 		
 		if (keys[22])
 			y -= step;
@@ -61,8 +62,12 @@ public class Jason extends AnimatedEntity{
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
-		if (ent != null && ent.kind == "border") { x = 2*ent.x - x; y = 2*ent.y - y; }
-	};
+		if (ent != null && ent.kind == "border") {
+			
+			if (!water) { x = tile * 4; y = tile * 15; water = true; }
+			else { x = tile * 4; y = tile * 10; water = false; }
+		}
+	}
 
 	@Override
 	protected void loadImages() {

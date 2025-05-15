@@ -90,8 +90,6 @@ public class GameMaster {
     				switch (element) {
     				
     				case 0: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 0)); break;
-    				case 1: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 1)); break;
-    				case 2: bgEntities1.add(new Grass(x, y, xoffset, yoffset, 1, 1, sizetile, 2)); break;
     				case 3: bgEntities1.add(new Floor(x, y, xoffset, yoffset, 2, 2, sizetile, 9)); break;
     				
     				}
@@ -124,6 +122,7 @@ public class GameMaster {
     				case 12: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 11)); break;
     				case 13: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 12)); break;
     				case 14: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 13)); break;
+    				case 15: bgEntities1.add(new Grass(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 1)); break;
     				
     				}
     				x += 1;
@@ -137,13 +136,9 @@ public class GameMaster {
     		for (int[] row : tilemap[2]) {
     			x = 0;
     			
-    			System.out.println();
-    			
     			for (int element : row) {
     				
     				match = false;
-    				
-    				System.out.print(element + " ");
     				
     				switch (element) {
     				
@@ -219,12 +214,11 @@ public class GameMaster {
     				x += 1;
     				
     			}
-    			System.out.println();
     			y+= 1;
     		}
     		
     		y = 0;
-    		match = false;
+    		int temp2 = 0;
     		
     		for (int[] row : tilemap[3]) {
     			x = 0;
@@ -236,19 +230,20 @@ public class GameMaster {
     				
     				switch (element) {
     				
-    				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); match = true; break;
-    				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); match = true; break;
-    				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); match = true; break;
+    				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); break;
+    				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); break;
+    				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); break;
     				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); match = true; break;
     				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); match = true; break;
     				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); match = true; break;
     				
     				}
     				
-    				if (match) {    				
-    					physicalEntities.add(staticEntities.getLast());
-    					collisionBoxes.add(staticEntities.getLast().box);
+    				if (match) {
+    					temp2++;
+    					System.out.println(temp2 + " -> " + interactionBoxes.getLast().kind);
     				}
+    				
     				x += 1;
     			}
     			y+= 1;
@@ -265,7 +260,18 @@ public class GameMaster {
     
     public boolean checkCollision(CollisionBox box, AnimatedEntity ent, int num_window) {
     	
-    	if ( box.left <= windowValues[num_window][1] ) return true;
+    	int old_window = num_window - 1;
+    	if (old_window == -1) old_window = 0;
+    	int window_left = windowValues[num_window][0] + num_window * windowValues[old_window][0] * windowValues[old_window][2];
+    	int window_right = window_left + windowValues[num_window][0] * windowValues[num_window][2] - 2 * windowValues[num_window][0];
+    	int window_top = windowValues[num_window][0] + num_window * windowValues[old_window][0] * windowValues[old_window][1];
+    	int window_bottom = window_top + windowValues[num_window][0] * windowValues[num_window][1] - 2 * windowValues[num_window][0];
+    	
+    	if ( box.left <= window_left) return true;
+    	else if ( box.right >= window_right ) return true;
+    	else if ( box.top <= window_top ) return true;
+    	else if ( box.bottom >= window_bottom ) return true;
+    	
     	
     	for (CollisionBox col : collisionBoxes) {
     		
@@ -287,8 +293,6 @@ public class GameMaster {
             		else if ( col.top < box.bottom && box.bottom < col.bottom ) return true;
             	}
     		}
-    		
-    		ent.step = ent.defaultStep;
     		
     	}
     	
@@ -358,6 +362,7 @@ public class GameMaster {
     							else if(alpha != 0 && red == 141 && green == 141 && blue == 145) temp[x] = 12; // BSX
     							else if(alpha != 0 && red == 141 && green == 141 && blue == 150) temp[x] = 13; // TDX
     							else if(alpha != 0 && red == 141 && green == 141 && blue == 155) temp[x] = 14; // TSX
+    							else if (alpha != 0 && red == 0 && green == 82 && blue == 39) temp[x] = 15; // GRASS /PINE 0
     							break;
     							
     						case 2:
@@ -375,8 +380,8 @@ public class GameMaster {
     							
     							// LACHI
         						else if (alpha != 0 && red == 142 && green == 3 && blue == 3) temp[x] = 10; // MATTONI 
-        						else if (alpha != 0 && red == 9 && green == 103 && blue == 13) temp[x] = 11; // GRASS
-        						else if (alpha != 0 && red == 3 && green == 61 && blue == 142) temp[x] = 12; // POND
+        						else if (alpha != 0 && red == 8 && green == 103 && blue == 13) temp[x] = 11; // GRASS
+        						else if (alpha != 0 && red == 250 && green == 61 && blue == 142) temp[x] = 12; // POND
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 143) temp[x] = 13; // POND B
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 144) temp[x] = 14; // POND BDX
         						else if (alpha != 0 && red == 3 && green == 61 && blue == 145) temp[x] = 15; // POND BSX

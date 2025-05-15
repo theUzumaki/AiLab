@@ -28,8 +28,7 @@ public class Grass extends BackgroundEntity{
 
 			sprites= new BufferedImage[] {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass1.png")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass2.png")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/floors/grass3.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/trees/pine/front.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			
