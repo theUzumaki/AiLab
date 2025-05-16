@@ -52,18 +52,25 @@ public class GameLoop implements Runnable {
                     ent.update(window.getKeyManager().keys);
                     if (ent.y != -1000) { ent.box.updatePosition(ent.x, ent.y); ent.intrBox.updatePosition(ent.x, ent.y); }
 
+                    InteractionBox intr = null;
+                    
                     if (ent.interaction && ent.y == -1000) {
                     	
                     	System.out.println("CALLING INTERACTION NULL");
                     	ent.triggerIntr(null);
+                    	continue;
                     	
                     } else if (ent.interaction) {
 	            		
-	            		InteractionBox intr = null;
-	            		
-	            		for (InteractionBox intr2 : gm.interactionBoxes) {
+	            		for (InteractionBox intr2 : gm.interactionBoxes)
 	            			
 	            			if (gm.checkInteraction(ent.intrBox, intr2)) { intr = intr2; break; }
+            			
+            		} else if (ent.interacting) {
+            			
+            			for (AnimatedEntity ent2 : gm.animatedEntities)
+            				
+            				if ( gm.checkInteraction(ent.intrBox, ent2.intrBox) ) { intr = ent2.intrBox; break; }
             			
             		}
             		if (intr != null) System.out.print(ent.kind + " INTERACTING WITH: " + intr.kind);
@@ -78,13 +85,9 @@ public class GameLoop implements Runnable {
             		case "animated": intr.linkObj.triggerIntr(ent);
             		
             		}
-                		
-                		
-                	}
                     
                     if (ent.dead) deadEntities.add(ent);
                     if (ent.stage == num_window && gm.checkLimit(ent.box, num_window)) {
-                    	System.out.print(ent + " HIT LIMIT ");
                     	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
@@ -96,7 +99,6 @@ public class GameLoop implements Runnable {
                     
                     if (gm.checkCollision(ent.box, ent)) {
                     	
-                    	System.out.print(" COLLISION ");
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
                         

@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
-	private int timer = 0;
+	private int timer = 0, intrTimer = 120;
 	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
@@ -39,16 +39,21 @@ public class Jason extends AnimatedEntity{
 		interaction = false;
 		step = defaultStep;
 		
-		if (keys[22])
-			y -= step;
-		else if (keys[0])
-			x -= step;
-		else if (keys[18])
-			y += step;
-		else if (keys[3])
-			x += step;
-		else if (keys[4])
-			if (timer >= 60) { interaction = true; timer = 0; }
+		if (!interacting) {			
+			if (keys[22])
+				y -= step;
+			else if (keys[0])
+				x -= step;
+			else if (keys[18])
+				y += step;
+			else if (keys[3])
+				x += step;
+			else if (keys[4])
+				if (timer >= 60) { interacting = true; timer = 0; }
+		} else {
+			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 120; }
+			intrTimer--;
+		}
 		
 		timer++;
 	}

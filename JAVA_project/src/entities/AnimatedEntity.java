@@ -7,6 +7,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	protected int step;
 	
 	public boolean interaction, dead, water;
+	public boolean interacting = false;
 	public InteractionBox intrBox;
 	
 	public int slow, defaultStep;
@@ -54,7 +55,6 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	}
 	
 	public void setBack() {
-		System.out.println("SET BACK");
 		x = oldx;
 		y = oldy;
 	}

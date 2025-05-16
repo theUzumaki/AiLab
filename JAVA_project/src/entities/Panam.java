@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Panam extends AnimatedEntity{
 	
-	private int timer = 0, dash = 50;
+	private int timer = 0, dash = 50, hiddenTimer = 1200;
 	private boolean hidden;
 	private PhysicalEntity interactingObj;
 	
@@ -64,12 +64,15 @@ public class Panam extends AnimatedEntity{
 			
 		} else {
 			
-			if (hidden && !interactingObj.full) {
+			if (!interactingObj.full) {
 				hidden = false;
 				setBack();
 			} else if (keys[14]) {
-				
-				if (timer >= 60) { interaction = true; timer = 0; }
+				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0; }
+			} else if (hiddenTimer != 0) {
+				hiddenTimer--;
+			} else {
+				hiddenTimer = 240; interaction = true;
 			}
 			
 		}
@@ -98,7 +101,7 @@ public class Panam extends AnimatedEntity{
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
-		if (ent != null && ent.kind == "jason" ) { dead = true; if (hidden) { setBack(); interactingObj.triggerIntr(this); } }
+		if (ent != null && ent.kind == "jason" ) { dead = true; img = sprites[1]; if (hidden) { setBack(); interactingObj.triggerIntr(this); } }
 		else if (ent != null && ent.kind == "border") {
 			if (!water) { x = tile * 4; y = tile * 15; water = true; }
 			else { x = tile * 4; y = tile * 10; water = false; }
@@ -112,6 +115,7 @@ public class Panam extends AnimatedEntity{
 		try {
 			sprites= new BufferedImage[] {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/panam/0.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/dead/0.png")),
 			};
 			imgResizer(sprites, width, heigth);
 			
