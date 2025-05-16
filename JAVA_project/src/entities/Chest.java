@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Bed extends HideoutEntity {
+public class Chest extends HideoutEntity {
 
-	public Bed(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector) {
-		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "bed");
-		box = new CollisionBox(x, y, xoffset, yoffset, 1, 2, TILE, id);
+	public Chest(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector, int collision_x, int collision_y) {
+		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "chest");
+		box = new CollisionBox(x, y, xoffset, yoffset, collision_x, collision_y, TILE, id);
 	}
 	
 	@Override
@@ -31,8 +31,8 @@ public class Bed extends HideoutEntity {
 		
 		try {
 			sprites= new BufferedImage[] {
-					ImageIO.read(getClass().getResourceAsStream("/sprites/house_inside/letto.PNG")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/house_inside/letto2.PNG")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/house_inside/Scrigno_Aperto_largo.png")),
+					ImageIO.read(getClass().getResourceAsStream("/sprites/house_inside/scrigno.PNG")),
 			};
 			imgResizer(sprites, width, heigth);
 			
@@ -44,8 +44,9 @@ public class Bed extends HideoutEntity {
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
+		
 		if (ent.kind == "jason") full = false;
-		else if (ent.kind == "panam") if (selector == 0) handleHiding("panam");
+		else if (ent.kind == "panam") handleHiding("panam");
 	}
 
 }

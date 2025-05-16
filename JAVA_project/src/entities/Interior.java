@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Interior extends HideoutEntity {
+public class Interior extends StaticEntity {
 
 	public Interior(int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, int selector, int collision_x, int collision_y) {
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, "interior");
@@ -50,12 +50,6 @@ public class Interior extends HideoutEntity {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	@Override
-	public void triggerIntr(PhysicalEntity ent) {
-		if (ent.kind == "jason") full = false;
-		else if (ent.kind == "panam") if (selector == 0) handleHiding("panam");
 	}
 
 }

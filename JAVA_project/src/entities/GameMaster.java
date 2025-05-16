@@ -105,6 +105,8 @@ public class GameMaster {
     	
     	for (int[][][] tilemap : windowTileMaps) {
     		
+    		System.out.println( "------------");
+    		
     		int sizetile = windowValues[indexWindow][0];
     		
     		y = 0;
@@ -160,6 +162,9 @@ public class GameMaster {
     		y = 0;
     		boolean match;
     		
+    		int temp = 0;
+    		int oldsize = 0;
+    		
     		for (int[] row : tilemap[2]) {
     			x = 0;
     			
@@ -186,11 +191,12 @@ public class GameMaster {
     					match = true;
     					break;
     				case 6: 
-    					StaticEntity bed = new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0);
-    					staticEntities.add(bed);
-    					linkingObjects.add(bed);
+    					StaticEntity bedGreen = new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0);
+    					staticEntities.add(bedGreen);
+    					linkingObjects.add(bedGreen);
     					match = true; 
     					break;
+    				case 32: staticEntities.add(new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 1)); match = true; break;
     				case 7: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 0, 1, 1)); match = true; break;
     				case 8: 
     					StaticEntity box = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
@@ -244,15 +250,17 @@ public class GameMaster {
     				case 26: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 6, 1, 1)); match = true; break;
     				case 27: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 1, sizetile, 7, 2, 1)); match = true; break;
     				case 28: 
-    					StaticEntity scrigno_lungo = new Interior(x, y, xoffset, yoffset, 2, 1, sizetile, 8, 2, 1);
-    					staticEntities.add(scrigno_lungo);
-    					linkingObjects.add(scrigno_lungo);
+    					StaticEntity bigChest = new Chest(x, y, xoffset, yoffset, 2, 1, sizetile, 0, 2, 1);
+    					staticEntities.add(bigChest);
+    					linkingObjects.add(bigChest); linkingObjects.add(bigChest);
+    					System.out.println("HERE 1");
     					match = true; 
     					break;
     				case 29:
-    					StaticEntity scrigno = new Interior(x, y, xoffset, yoffset, 1, 1, sizetile, 9, 1, 1);
-    					staticEntities.add(scrigno); 
-    					linkingObjects.add(scrigno);
+    					StaticEntity chest = new Chest(x, y, xoffset, yoffset, 1, 1, sizetile, 1, 1, 1);
+    					staticEntities.add(chest); 
+    					linkingObjects.add(chest);
+    					System.out.println("HERE 2");
     					match = true; 
     					break;
     				case 30: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 10, 2, 2)); match = true; break;
@@ -260,7 +268,12 @@ public class GameMaster {
     				
     				}
     				
-    				if (match) {    
+    				if (match) {
+    					if (linkingObjects.size() != oldsize) {    						
+    						temp++;
+    						System.out.println(temp + " -> " + staticEntities.getLast().kind);
+    						oldsize = linkingObjects.size();
+    					}
     					physicalEntities.add(staticEntities.getLast());
     					collisionBoxes.add(staticEntities.getLast().box);
     				}
@@ -434,6 +447,7 @@ public class GameMaster {
     							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 8; // BOX
     							else if (alpha != 0 && red == 69 && green == 39 && blue == 4) temp[x] = 7; // DESK 0
     							else if (alpha != 0 && red == 30 && green == 210 && blue == 12) temp[x] = 6; // BED 0
+    							else if (alpha != 0 && red == 161 && green == 210 && blue == 12) temp[x] = 32; // BED 1
     							else if (alpha != 0 && red == 67 && green == 67 && blue == 67) temp[x] = 5; // WELL
         						else if (alpha != 0 && red == 242 && green == 123 && blue == 123) temp[x] = 4; // HOUSE 3
         						else if (alpha != 0 && red == 120 && green == 120 && blue == 120) temp[x] = 3; // HOUSE 2

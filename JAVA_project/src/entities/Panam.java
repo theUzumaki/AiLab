@@ -89,7 +89,7 @@ public class Panam extends AnimatedEntity{
 	
 	public void handleHiding(PhysicalEntity ent) {
 
-		if (ent == null || ent.selector != 1) {
+		if (ent == null || ent.selector != 1 || ent.kind == "chest") {
 			if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000; }
 			else { hidden = false; setBack(); interactingObj.triggerIntr(this); }
 		}
