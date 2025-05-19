@@ -41,18 +41,19 @@ public class Jason extends AnimatedEntity{
 		
 		if (!interacting) {			
 			if (keys[22])
-				y -= step;
+				{ y -= step; moved = true; }
 			else if (keys[0])
-				x -= step;
+				{ x -= step; moved = true; }
 			else if (keys[18])
-				y += step;
+				{ y += step; moved = true; }
 			else if (keys[3])
-				x += step;
+				{ x += step; moved = true; }
 			else if (keys[4])
-				if (timer >= 60) { interacting = true; timer = 0; }
+				if (timer >= 60) { interacting = true; timer = 0; moved = true; }
 		} else {
 			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 120; }
 			intrTimer--;
+			moved = true;
 		}
 		
 		timer++;

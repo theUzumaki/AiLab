@@ -10,6 +10,8 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	public boolean interacting = false;
 	public InteractionBox intrBox;
 	
+	public boolean moved = false;
+	
 	public int slow, defaultStep;
 	public int stage = 0;
 	

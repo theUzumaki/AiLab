@@ -44,22 +44,22 @@ public class Panam extends AnimatedEntity{
 		if (y != -1000) {
 			
 			if (keys[15]) {
-				if (dash > 0) { step = defaultStep + 2; dash-= 1; }
+				if (dash > 0) { step = defaultStep + 2; dash-= 1; moved = true;}
 			}
 			else if (dash == 0) { dash = -299; }
 			else if (dash < -1) { dash++; }
 			else if (dash == -1) dash = 50;
 
 			if (keys[8])
-				y -= step;
+				{ y -= step; moved = true; }
 			else if (keys[9])
-				x -= step;
+				{ x -= step; moved = true; }
 			else if (keys[10])
-				y += step;
+				{ y += step; moved = true; }
 			else if (keys[11])
-				x += step;
+				{ x += step; moved = true; }
 			else if (keys[14])
-				if (timer >= 60) { interaction = true; timer = 0; }
+				if (timer >= 60) { interaction = true; timer = 0; moved = true;}
 			
 			
 		} else {
@@ -68,7 +68,7 @@ public class Panam extends AnimatedEntity{
 				hidden = false;
 				setBack();
 			} else if (keys[14]) {
-				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0; }
+				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0; moved = true;}
 			} else if (hiddenTimer != 0) {
 				hiddenTimer--;
 			} else {

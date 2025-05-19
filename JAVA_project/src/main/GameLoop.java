@@ -2,9 +2,10 @@ package main;
 
 import java.util.List;
 
-import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import entities.AnimatedEntity;
 import entities.GameMaster;
@@ -13,6 +14,7 @@ import entities.InteractionBox;
 import java.awt.Robot;
 import java.awt.Rectangle;
 import java.awt.AWTException;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,9 @@ public class GameLoop implements Runnable {
     private final GameMaster gm;
     private final List<Game> windows;
     
+    private ImageSaver saver = new ImageSaver();
+    private Thread saverThread = new Thread(saver);
+    
     private List<AnimatedEntity> deadEntities= new ArrayList<>();
 
     public GameLoop(List<Game> views) {
@@ -36,47 +41,50 @@ public class GameLoop implements Runnable {
     public void stop() {
         running = false;
     }
+    
+    public boolean contains(int px, int py, Rectangle camera) {
+        return camera.contains(px, py);
+    }
 
     @Override
     public void run() {
-        int fps = 60;
+        int fps = 120;
         long frameTime = 1000 / fps;
         
         int counter = 0;
+        saverThread.start();
 
         while (running) {
             long start = System.currentTimeMillis();
 
             int num_window = 0;
             
+            
             // Update all entities with input from any view
             for (Game window : windows) {
-            	
-            	// Capture the screenshot
-            	Robot robot;
             	
             	for (AnimatedEntity dead : deadEntities) {
             		gm.animatedEntities.remove(dead);
             		gm.interactionBoxes.remove(dead.intrBox);
             	}
+            	
+            	
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
                 	
-                	
+                	/* 
                 	if (counter == fps && ent.stage == num_window) {
                 		
 	                	try {
-	                		robot = new Robot();
 	                		int tile = gm.windowValues[num_window][0];
-	                		System.out.println(ent.kind + " -> " + window.camera.x + " " + (ent.x - tile * 3) + " " + window.camera.y + " " + ( ent.y - tile * 2 ) + " " + ( 7 * tile + 7 * tile ) );
 	                		
-	                		if (ent.kind == "jason"){                			
-	                			Rectangle capture = new Rectangle(window.camera.x + ent.x - tile * 2, window.camera.y + ent.y - tile, 5 * tile, 5 * tile);
-	                			BufferedImage screenShot = robot.createScreenCapture(capture);
+	                		 if (ent.kind == "jason"){                			
+	                			window.captures[0] = new Rectangle(window.camera.x + ent.x - tile * 2, window.camera.y + ent.y - tile, 5 * tile, 5 * tile);
+	                			BufferedImage screenShot = robot.createScreenCapture(window.captures[0]);
 	                			ImageIO.write(screenShot, "png", new File("jason_view.png"));
 	                		} else {
-	                			Rectangle capture = new Rectangle(window.camera.x + ent.x - tile * 3, window.camera.y + ent.y - tile * 2, 7 * tile, 7 * tile);
-	                			BufferedImage screenShot = robot.createScreenCapture(capture);
+	                			window.captures[1] = new Rectangle(window.camera.x + ent.x - tile * 3, window.camera.y + ent.y - tile * 2, 7 * tile, 7 * tile);
+	                			BufferedImage screenShot = robot.createScreenCapture(window.captures[1]);
 	                			ImageIO.write(screenShot, "png", new File("victim_view.png"));
 	                		}
 	                		
@@ -84,6 +92,21 @@ public class GameLoop implements Runnable {
 	                		// TODO Auto-generated catch block
 	                		e.printStackTrace();
 	                	}
+                	} */
+                	
+                	if (ent.kind == "jason" && ent.moved == true && this.contains(ent.x, ent.y, window.camera)) {
+                		SwingUtilities.invokeLater(() -> {
+                			BufferedImage img = window.captureFrameCentered(ent.x, ent.y);
+                			saver.saveImage(img, ent.kind);
+                     	    ent.moved = false;
+                		});
+                	} else if (ent.kind == "panam" && ent.moved == true && this.contains(ent.x, ent.y, window.camera)) {
+                		window.captures[1] = window.camera;
+                		SwingUtilities.invokeLater(() -> {
+                			BufferedImage img = window.captureFrameCentered(ent.x, ent.y);
+                			saver.saveImage(img, ent.kind);
+                     	    ent.moved = false;
+                		});
                 	}
                 	
                     if (ent.y != -1000) ent.memorizeValues();
@@ -145,7 +168,7 @@ public class GameLoop implements Runnable {
             }
 
             for (Game view : windows) {
-                view.repaint();
+        	    view.repaint();
             }
 
             if (counter == 60) counter = 0;
