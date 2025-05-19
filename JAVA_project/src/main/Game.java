@@ -12,7 +12,7 @@ public class Game extends JPanel {
 
     private final GameMaster gm;
     private final KeyManager keys;
-    private final Rectangle camera;
+    final Rectangle camera;
 
     public Game(Rectangle camera) {
         this.camera = camera;

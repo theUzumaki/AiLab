@@ -1,11 +1,21 @@
 package main;
 
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
 import java.util.ArrayList;
 
 import entities.AnimatedEntity;
 import entities.GameMaster;
 import entities.InteractionBox;
+
+import java.awt.Robot;
+import java.awt.Rectangle;
+import java.awt.AWTException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class GameLoop implements Runnable {
 	
@@ -31,6 +41,8 @@ public class GameLoop implements Runnable {
     public void run() {
         int fps = 60;
         long frameTime = 1000 / fps;
+        
+        int counter = 0;
 
         while (running) {
             long start = System.currentTimeMillis();
@@ -40,12 +52,39 @@ public class GameLoop implements Runnable {
             // Update all entities with input from any view
             for (Game window : windows) {
             	
+            	// Capture the screenshot
+            	Robot robot;
+            	
             	for (AnimatedEntity dead : deadEntities) {
             		gm.animatedEntities.remove(dead);
             		gm.interactionBoxes.remove(dead.intrBox);
             	}
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
+                	
+                	
+                	if (counter == fps && ent.stage == num_window) {
+                		
+	                	try {
+	                		robot = new Robot();
+	                		int tile = gm.windowValues[num_window][0];
+	                		System.out.println(ent.kind + " -> " + window.camera.x + " " + (ent.x - tile * 3) + " " + window.camera.y + " " + ( ent.y - tile * 2 ) + " " + ( 7 * tile + 7 * tile ) );
+	                		
+	                		if (ent.kind == "jason"){                			
+	                			Rectangle capture = new Rectangle(window.camera.x + ent.x - tile * 2, window.camera.y + ent.y - tile, 5 * tile, 5 * tile);
+	                			BufferedImage screenShot = robot.createScreenCapture(capture);
+	                			ImageIO.write(screenShot, "png", new File("jason_view.png"));
+	                		} else {
+	                			Rectangle capture = new Rectangle(window.camera.x + ent.x - tile * 3, window.camera.y + ent.y - tile * 2, 7 * tile, 7 * tile);
+	                			BufferedImage screenShot = robot.createScreenCapture(capture);
+	                			ImageIO.write(screenShot, "png", new File("victim_view.png"));
+	                		}
+	                		
+	                	} catch (AWTException | IOException e) {
+	                		// TODO Auto-generated catch block
+	                		e.printStackTrace();
+	                	}
+                	}
                 	
                     if (ent.y != -1000) ent.memorizeValues();
                     
@@ -55,8 +94,7 @@ public class GameLoop implements Runnable {
                     InteractionBox intr = null;
                     
                     if (ent.interaction && ent.y == -1000) {
-                    	
-                    	System.out.println("CALLING INTERACTION NULL");
+
                     	ent.triggerIntr(null);
                     	continue;
                     	
@@ -91,8 +129,6 @@ public class GameLoop implements Runnable {
                     	
                         ent.setBack();
                         ent.box.updatePosition(ent.x, ent.y);
-                        
-                        System.out.println();
                         continue;
                     	
                     };
@@ -112,6 +148,8 @@ public class GameLoop implements Runnable {
                 view.repaint();
             }
 
+            if (counter == 60) counter = 0;
+            counter++;
             long elapsed = System.currentTimeMillis() - start;
             if (elapsed < frameTime) {
                 try {

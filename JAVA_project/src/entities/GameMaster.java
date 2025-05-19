@@ -105,8 +105,6 @@ public class GameMaster {
     	
     	for (int[][][] tilemap : windowTileMaps) {
     		
-    		System.out.println( "------------");
-    		
     		int sizetile = windowValues[indexWindow][0];
     		
     		y = 0;
@@ -161,9 +159,6 @@ public class GameMaster {
     		
     		y = 0;
     		boolean match;
-    		
-    		int temp = 0;
-    		int oldsize = 0;
     		
     		for (int[] row : tilemap[2]) {
     			x = 0;
@@ -253,14 +248,12 @@ public class GameMaster {
     					StaticEntity bigChest = new Chest(x, y, xoffset, yoffset, 2, 1, sizetile, 0, 2, 1);
     					staticEntities.add(bigChest);
     					linkingObjects.add(bigChest); linkingObjects.add(bigChest);
-    					System.out.println("HERE 1");
     					match = true; 
     					break;
     				case 29:
     					StaticEntity chest = new Chest(x, y, xoffset, yoffset, 1, 1, sizetile, 1, 1, 1);
     					staticEntities.add(chest); 
     					linkingObjects.add(chest);
-    					System.out.println("HERE 2");
     					match = true; 
     					break;
     				case 30: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 10, 2, 2)); match = true; break;
@@ -269,11 +262,6 @@ public class GameMaster {
     				}
     				
     				if (match) {
-    					if (linkingObjects.size() != oldsize) {    						
-    						temp++;
-    						System.out.println(temp + " -> " + staticEntities.getLast().kind);
-    						oldsize = linkingObjects.size();
-    					}
     					physicalEntities.add(staticEntities.getLast());
     					collisionBoxes.add(staticEntities.getLast().box);
     				}
@@ -284,7 +272,6 @@ public class GameMaster {
     		}
     		
     		y = 0;
-    		int temp2 = 0;
     		
     		for (int[] row : tilemap[3]) {
     			x = 0;
@@ -299,15 +286,10 @@ public class GameMaster {
     				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); break;
     				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); break;
     				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); break;
-    				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); match = true; break;
-    				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); match = true; break;
-    				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); match = true; break;
+    				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); break;
+    				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); break;
+    				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); break;
     				
-    				}
-    				
-    				if (match) {
-    					temp2++;
-    					System.out.println(temp2 + " -> " + interactionBoxes.getLast().kind);
     				}
     				
     				x += 1;

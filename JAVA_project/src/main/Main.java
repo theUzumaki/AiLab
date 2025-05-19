@@ -11,9 +11,9 @@ public class Main {
     public static void main(String[] args) {
         
         int[][] windowValues = new int[][] {
-        	{ 36, 20, 40 },
-        	{ 48, 8, 16 },
-        	{ 48, 8, 16 }
+        	{ 20, 20, 40 },
+        	{ 20, 8, 16 },
+        	{ 20, 8, 16 }
         };
         
         int[] dims1 = new int[] { windowValues[0][2] * windowValues[0][0], windowValues[0][1] * windowValues[0][0] };
@@ -31,8 +31,8 @@ public class Main {
         Game house2 = new Game(house2Cam);
 
         createWindow("Forest", forest, 0, 0);
-        createWindow("House 1", house1, dims1[0] / 2, 0);
-        createWindow("House 2", house2, 0, dims1[1] / 2);
+        createWindow("House 1", house1, dims1[0], dims1[1]);
+        createWindow("House 2", house2, dims1[0] + dims2[0], dims1[1] + dims2[1]);
 
         List<Game> allViews = List.of(forest, house1, house2);
         Thread gameLoop = new Thread(new GameLoop(allViews));
