@@ -8,12 +8,14 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
-	private int timer = 0, intrTimer = 120;
+	private int timer = 0, intrTimer = 120, moveTimer = 0;
+	private int direction, interval;
 	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
 		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "jason");
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
+		interval = TILE / STEP;
 		
 	}
 
@@ -37,23 +39,50 @@ public class Jason extends AnimatedEntity{
 	public void update(boolean[] keys) {
 		
 		interaction = false;
+		aligned = false;
 		step = defaultStep;
 		
-		if (!interacting) {			
+		
+		if (moved) {
+			System.out.println("1 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+			moveTimer++;
+			
+			switch(direction) {
+			case 0: y -= step; break;
+			case 1: x -= step; break;
+			case 2: y += step; break;
+			case 3: x += step; break;
+			}
+			
+			if(moveTimer + 1 > interval) {
+				System.out.println("2 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+				switch(direction) {
+				case 0: y -= tile - moveTimer * step; break;
+				case 1: x -= tile - moveTimer * step; break;
+				case 2: y += tile - moveTimer * step; break;
+				case 3: x += tile - moveTimer * step; break;
+				}
+				System.out.println("3 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+				
+				moved = false;
+				aligned = true;
+				moveTimer = 0;
+			}
+		}
+		else if (!interacting) {			
 			if (keys[22])
-				{ y -= step; moved = true; }
+				{ y -= step; moved = true; direction = 0;}
 			else if (keys[0])
-				{ x -= step; moved = true; }
+				{ x -= step; moved = true; direction = 1;}
 			else if (keys[18])
-				{ y += step; moved = true; }
+				{ y += step; moved = true; direction = 2;}
 			else if (keys[3])
-				{ x += step; moved = true; }
+				{ x += step; moved = true; direction = 3;}
 			else if (keys[4])
-				if (timer >= 60) { interacting = true; timer = 0; moved = true; }
+				if (timer >= 60) { interacting = true; timer = 0; }
 		} else {
 			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 120; }
 			intrTimer--;
-			moved = true;
 		}
 		
 		timer++;

@@ -14,10 +14,12 @@ public class ImageSaver implements Runnable {
     private final BlockingQueue<BufferedImage> queue_victim = new LinkedBlockingQueue<>();
     private volatile boolean running = true;
     
-    private void detection(String kind) {
+    public BufferedImage img_last;
+    
+    public void detection() {
     	try {
             // Comando per eseguire lo script
-            ProcessBuilder pb = new ProcessBuilder("./Object_detection/.venv/bin/python3", "Object_detection/detection.py", kind);
+            ProcessBuilder pb = new ProcessBuilder("./Object_detection/.venv/bin/python3", "Object_detection/detection.py");
 
             // Redirect dell'output della console
             pb.redirectErrorStream(true);
@@ -54,23 +56,23 @@ public class ImageSaver implements Runnable {
     @Override
     public void run() {
         while (running || !queue_jason.isEmpty() || !queue_victim.isEmpty()) {
+        	
             try {
-                BufferedImage img_jason = queue_jason.poll(); // NON blocca
-                if (img_jason != null) {
-                    ImageIO.write(img_jason, "png", new File("jason_view.png"));
+                if (!queue_jason.isEmpty()) {
+                	Object[] array = queue_jason.toArray();
+                	img_last = (BufferedImage) array[array.length - 1];
+                    ImageIO.write(img_last, "png", new File("jason_view.png"));
                     System.out.println("Saved jason screen");
-                    detection("jason");
+                    queue_jason.clear();
                 }
-
-                BufferedImage img_victim = queue_victim.poll(); // NON blocca
-                if (img_victim != null) {
-                    ImageIO.write(img_victim, "png", new File("victim_view.png"));
+                
+                if (!queue_victim.isEmpty()) {
+                	Object[] array = queue_victim.toArray();
+                	img_last = (BufferedImage) array[array.length - 1];
+                    ImageIO.write(img_last, "png", new File("victim_view.png"));
                     System.out.println("Saved panam screen");
-                    detection("panam");
+                    queue_victim.clear();
                 }
-
-                // Dorme un po’ per evitare loop troppo veloci
-                Thread.sleep(10);
 
             } catch (Exception e) {
                 e.printStackTrace();

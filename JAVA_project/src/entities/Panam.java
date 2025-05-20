@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 
 public class Panam extends AnimatedEntity{
 	
-	private int timer = 0, dash = 50, hiddenTimer = 1200;
+	private int timer = 0, dash = 50, hiddenTimer = 1200, moveTimer = 0;
 	private boolean hidden;
 	private PhysicalEntity interactingObj;
+	
+	private int direction, interval;
 	
 	public Panam(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
@@ -41,7 +43,30 @@ public class Panam extends AnimatedEntity{
 		interaction = false;
 		step = defaultStep;
 		
-		if (y != -1000) {
+		if (moved) {
+			moveTimer++;
+			
+			switch(direction) {
+			case 0: y -= step; break;
+			case 1: x -= step; break;
+			case 2: y += step; break;
+			case 3: x += step; break;
+			}
+			
+			if(moveTimer + 1 > interval) {
+				switch(direction) {
+				case 0: y -= tile - moveTimer * step; break;
+				case 1: x -= tile - moveTimer * step; break;
+				case 2: y += tile - moveTimer * step; break;
+				case 3: x += tile - moveTimer * step; break;
+				}
+				
+				moved = false;
+				aligned = true;
+				moveTimer = 0;
+			}
+		}
+		else if (y != -1000) {
 			
 			if (keys[15]) {
 				if (dash > 0) { step = defaultStep + 2; dash-= 1; moved = true;}
@@ -51,13 +76,13 @@ public class Panam extends AnimatedEntity{
 			else if (dash == -1) dash = 50;
 
 			if (keys[8])
-				{ y -= step; moved = true; }
+				{ y -= step; moved = true; direction = 0;}
 			else if (keys[9])
-				{ x -= step; moved = true; }
+				{ x -= step; moved = true; direction = 1;}
 			else if (keys[10])
-				{ y += step; moved = true; }
+				{ y += step; moved = true; direction = 2;}
 			else if (keys[11])
-				{ x += step; moved = true; }
+				{ x += step; moved = true; direction = 3;}
 			else if (keys[14])
 				if (timer >= 60) { interaction = true; timer = 0; moved = true;}
 			

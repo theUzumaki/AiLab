@@ -20,14 +20,19 @@ public class Game extends JPanel {
     private final GameMaster gm;
     private final KeyManager keys;
     final Rectangle camera;
-    public Rectangle[] captures = {new Rectangle(0, 0, 0, 0), new Rectangle(0, 0, 0, 0)};
+    
+    private final int id;
+    private final int sizeTile;
     
     public boolean screen = false;
 
-    public Game(Rectangle camera) {
+    public Game(Rectangle camera, int id, int sizeTile) {
         this.camera = camera;
         this.gm = GameMaster.getInstance();  // Shared game logic
         this.keys = new KeyManager();
+        this.id = id;
+        this.sizeTile = sizeTile;
+        
 
         setPreferredSize(new Dimension(camera.width, camera.height));
         setBackground(Color.BLACK);
@@ -41,49 +46,41 @@ public class Game extends JPanel {
     
     public BufferedImage captureFrameCentered(int playerX, int playerY) {
     	
-        int frameWidth = 160;
-        int frameHeight = 160;
+        int frameWidth = sizeTile * 5;
+        int frameHeight = sizeTile * 5;
 
-        // Calcola l'offset per centrare il giocatore nella finestra
-        int offsetX = playerX - frameWidth / 2;
-        int offsetY = playerY - frameHeight / 2;
-
+        int offsetX = playerX - camera.x - frameWidth/ 2;
+        int offsetY = playerY - camera.y - frameHeight / 2;
+        
         BufferedImage img = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = img.createGraphics();
+        Graphics g = img.getGraphics();
 
-        // Sposta tutto il disegno in modo che il punto (offsetX, offsetY) del mondo
-        // venga disegnato all’angolo (0, 0) dell’immagine
-        g2d.translate(-offsetX, -offsetY);
+        g.translate(-offsetX, -offsetY);
 
-        // Disegna l'intero mondo ma solo la parte visibile verrà “catturata” dall’immagine
         screen = true;
-        this.paint(g2d);
+        this.paint(g);
 
-        g2d.dispose();
+        g.dispose();
         screen = false;
+        
         return img;
     }
     
     protected void drawBox(float[] bbox, int player_x, int player_y, Graphics g, YoloReader.Detection d) {
-    	// Supponiamo che:
-    	int imageWidth = 160;
-    	int imageHeight = 160;
+    	int imageWidth = sizeTile * 5;
+    	int imageHeight = sizeTile * 5;
 
-    	// bbox relative all'immagine (pixel)
     	float x1_local = bbox[0];
     	float y1_local = bbox[1];
     	float x2_local = bbox[2];
     	float y2_local = bbox[3];
 
-    	// player.x e player.y sono le coordinate globali del centro
     	int centerX = player_x;
     	int centerY = player_y;
 
-    	// Calcolo offset globale dell’angolo in alto a sinistra dell’immagine
     	int imageStartX = centerX - imageWidth / 2;
     	int imageStartY = centerY - imageHeight / 2;
-
-    	// Conversione delle box in coordinate globali
+    	
     	int x1_global = imageStartX + Math.round(x1_local);
     	int y1_global = imageStartY + Math.round(y1_local);
     	int x2_global = imageStartX + Math.round(x2_local);
@@ -93,7 +90,6 @@ public class Game extends JPanel {
     	g.setColor(Color.GREEN);
     	
     	g.drawRect(x1_global, y1_global, x2_global - x1_global, y2_global - y1_global);
-    	// (Opzionale) Etichetta
         g.drawString(d.className, (int) x1_global, (int) y1_global - 5);
     }
 

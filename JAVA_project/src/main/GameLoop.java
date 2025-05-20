@@ -18,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class GameLoop implements Runnable {
 	
@@ -42,22 +43,36 @@ public class GameLoop implements Runnable {
         running = false;
     }
     
-    public boolean contains(int px, int py, Rectangle camera) {
-        return camera.contains(px, py);
-    }
 
     @Override
     public void run() {
-        int fps = 120;
+        int fps = 15;
         long frameTime = 1000 / fps;
         
         int counter = 0;
         saverThread.start();
+        
+        new Thread(() -> {
+        	saver.detection();
+        }).start();
 
         while (running) {
             long start = System.currentTimeMillis();
 
             int num_window = 0;
+            
+            for (AnimatedEntity ent : gm.animatedEntities) {
+            	if (ent.aligned) {
+            		try {
+						SwingUtilities.invokeAndWait(() -> {
+							BufferedImage img = windows.get(ent.stage).captureFrameCentered(ent.x, ent.y);
+							saver.saveImage(img, ent.kind);
+						});
+					} catch (Exception e) {
+					    e.printStackTrace();
+					}
+            	}
+            }
             
             
             // Update all entities with input from any view
@@ -72,46 +87,11 @@ public class GameLoop implements Runnable {
                 
                 for (AnimatedEntity ent : gm.animatedEntities) {
                 	
-                	/* 
-                	if (counter == fps && ent.stage == num_window) {
-                		
-	                	try {
-	                		int tile = gm.windowValues[num_window][0];
-	                		
-	                		 if (ent.kind == "jason"){                			
-	                			window.captures[0] = new Rectangle(window.camera.x + ent.x - tile * 2, window.camera.y + ent.y - tile, 5 * tile, 5 * tile);
-	                			BufferedImage screenShot = robot.createScreenCapture(window.captures[0]);
-	                			ImageIO.write(screenShot, "png", new File("jason_view.png"));
-	                		} else {
-	                			window.captures[1] = new Rectangle(window.camera.x + ent.x - tile * 3, window.camera.y + ent.y - tile * 2, 7 * tile, 7 * tile);
-	                			BufferedImage screenShot = robot.createScreenCapture(window.captures[1]);
-	                			ImageIO.write(screenShot, "png", new File("victim_view.png"));
-	                		}
-	                		
-	                	} catch (AWTException | IOException e) {
-	                		// TODO Auto-generated catch block
-	                		e.printStackTrace();
-	                	}
-                	} */
-                	
-                	if (ent.kind == "jason" && ent.moved == true && this.contains(ent.x, ent.y, window.camera)) {
-                		SwingUtilities.invokeLater(() -> {
-                			BufferedImage img = window.captureFrameCentered(ent.x, ent.y);
-                			saver.saveImage(img, ent.kind);
-                     	    ent.moved = false;
-                		});
-                	} else if (ent.kind == "panam" && ent.moved == true && this.contains(ent.x, ent.y, window.camera)) {
-                		window.captures[1] = window.camera;
-                		SwingUtilities.invokeLater(() -> {
-                			BufferedImage img = window.captureFrameCentered(ent.x, ent.y);
-                			saver.saveImage(img, ent.kind);
-                     	    ent.moved = false;
-                		});
-                	}
-                	
                     if (ent.y != -1000) ent.memorizeValues();
                     
-                    ent.update(window.getKeyManager().keys);
+                    if (ent.stage == num_window)
+                    	ent.update(window.getKeyManager().keys);
+                    
                     if (ent.y != -1000) { ent.box.updatePosition(ent.x, ent.y); ent.intrBox.updatePosition(ent.x, ent.y); }
 
                     InteractionBox intr = null;
@@ -171,7 +151,7 @@ public class GameLoop implements Runnable {
         	    view.repaint();
             }
 
-            if (counter == 60) counter = 0;
+            if (counter == fps) counter = 0;
             counter++;
             long elapsed = System.currentTimeMillis() - start;
             if (elapsed < frameTime) {

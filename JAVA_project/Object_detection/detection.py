@@ -1,42 +1,40 @@
 import json
 from ultralytics import YOLO
-import sys
 
 
-def object_detection(kind):
+INPUT_PATH = ["jason_view.png", "victim_view.png"]
+OUTPUT_PATH = ["detections_jason.json", "detections_panam.json"]
+
+
+def object_detection():
     # Carica il modello YOLO addestrato
-    model = YOLO("Object_detection/best.pt")
+    model = YOLO("object_detection/best.pt")
 
-    # Inferenzia sullo screenshot del gioco
-    if kind == "jason":
-        results = model("jason_view.png")
-    else:
-        results = model("victim_view.png")
+    i = 0
+    for path in INPUT_PATH:
+        results = model(path)
 
-    # Estrai i bounding box rilevati
-    output = []
-    for r in results:
-        for box in r.boxes:
-            cls = r.names[int(box.cls)]
-            x1, y1, x2, y2 = map(float, box.xyxy[0])
-            output.append(
-                {
-                    "class": cls,  # "killer" o "victim"
-                    "bbox": [x1, y1, x2, y2],
-                    "confidence": float(box.conf[0]),
-                }
-            )
+        output = []
+        for r in results:
+            for box in r.boxes:
+                cls = r.names[int(box.cls)]
+                x1, y1, x2, y2 = map(float, box.xyxy[0])
+                output.append(
+                    {
+                        "class": cls,  # "killer" o "victim"
+                        "bbox": [x1, y1, x2, y2],
+                        "confidence": float(box.conf[0]),
+                    }
+                )
 
-    # Salva in formato JSO
-    if kind == "jason":
-        with open("detections_jason.json", "w") as f:
-            json.dump(output, f, indent=2)
-    else:
-        with open("detections_panam.json", "w") as f:
+        # Salva in formato JSO
+        with open(OUTPUT_PATH[i], "w") as f:
             json.dump(output, f, indent=2)
 
-    print("✅ Detections salvate in detections.json")
+        print(f"✅ Detections salvate in {OUTPUT_PATH[i]}")
+        i += 1
 
 
 if __name__ == "__main__":
-    object_detection(sys.argv[1])
+    while True:
+        object_detection()

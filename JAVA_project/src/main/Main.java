@@ -26,9 +26,9 @@ public class Main {
         
         GameMaster.getInstance(windowValues);
 
-        Game forest = new Game(forestCam);
-        Game house1 = new Game(house1Cam);
-        Game house2 = new Game(house2Cam);
+        Game forest = new Game(forestCam, 0, windowValues[0][0]);
+        Game house1 = new Game(house1Cam, 1, windowValues[1][0]);
+        Game house2 = new Game(house2Cam, 2, windowValues[2][0]);
 
         createWindow("Forest", forest, 0, 0);
         createWindow("House 1", house1, dims1[0], dims1[1]);
