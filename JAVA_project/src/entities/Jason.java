@@ -44,7 +44,7 @@ public class Jason extends AnimatedEntity{
 		
 		
 		if (moved) {
-			System.out.println("1 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+			// System.out.println("1 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
 			moveTimer++;
 			
 			switch(direction) {
@@ -55,14 +55,14 @@ public class Jason extends AnimatedEntity{
 			}
 			
 			if(moveTimer + 1 > interval) {
-				System.out.println("2 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+				// System.out.println("2 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
 				switch(direction) {
 				case 0: y -= tile - moveTimer * step; break;
 				case 1: x -= tile - moveTimer * step; break;
 				case 2: y += tile - moveTimer * step; break;
 				case 3: x += tile - moveTimer * step; break;
 				}
-				System.out.println("3 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
+				// System.out.println("3 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
 				
 				moved = false;
 				aligned = true;

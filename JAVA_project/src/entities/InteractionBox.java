@@ -33,7 +33,6 @@ public class InteractionBox {
 		this.tile = TILE;
 		this.kind = kind;
 		this.linkObj= linkObj;
-		
 	}
 
 	public void updatePosition(int x, int y) {

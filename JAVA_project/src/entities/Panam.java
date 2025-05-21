@@ -3,6 +3,8 @@ package entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -11,6 +13,8 @@ public class Panam extends AnimatedEntity{
 	private int timer = 0, dash = 50, hiddenTimer = 1200, moveTimer = 0;
 	private boolean hidden;
 	private PhysicalEntity interactingObj;
+	
+	public List<WinnerObject> listOfObject = new ArrayList<>();
 	
 	private int direction, interval;
 	

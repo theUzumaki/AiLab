@@ -107,6 +107,9 @@ public class Game extends JPanel {
         for (BackgroundEntity ent : gm.bgEntities1) ent.draw(g);
         for (BackgroundEntity ent : gm.bgEntities2) ent.draw(g);
         for (PhysicalEntity ent : gm.physicalEntities) {
+        	if (ent instanceof WinnerObject && ((WinnerObject) ent).find) {
+        		continue;
+        	}
         	ent.draw(g);
         	if((ent.kind == "jason" || ent.kind == "panam") && screen == false) {
         		YoloReader.Detection[] detections;

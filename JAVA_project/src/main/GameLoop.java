@@ -1,24 +1,20 @@
 package main;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import entities.AnimatedEntity;
 import entities.GameMaster;
 import entities.InteractionBox;
+import entities.Panam;
 
-import java.awt.Robot;
-import java.awt.Rectangle;
-import java.awt.AWTException;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public class GameLoop implements Runnable {
 	
@@ -55,6 +51,8 @@ public class GameLoop implements Runnable {
         new Thread(() -> {
         	saver.detection();
         }).start();
+        
+        boolean timerStarted = false;
 
         while (running) {
             long start = System.currentTimeMillis();
@@ -62,6 +60,19 @@ public class GameLoop implements Runnable {
             int num_window = 0;
             
             for (AnimatedEntity ent : gm.animatedEntities) {
+            	if(ent.kind == "panam" && ((Panam) ent).listOfObject.size() == 2 && timerStarted == false) {
+            		
+            		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+            	    Runnable task = () -> {
+            	    	this.stop();
+            	    };
+
+            	    System.out.println("Timer partito");
+            	    scheduler.schedule(task, 60, TimeUnit.SECONDS);
+            	    timerStarted = true;
+            	}
+            	
             	if (ent.aligned) {
             		try {
 						SwingUtilities.invokeAndWait(() -> {
@@ -114,7 +125,7 @@ public class GameLoop implements Runnable {
             				if ( gm.checkInteraction(ent.intrBox, ent2.intrBox) ) { intr = ent2.intrBox; break; }
             			
             		}
-            		if (intr != null) System.out.print(ent.kind + " INTERACTING WITH: " + intr.kind);
+            		if (intr != null) System.out.println(ent.kind + " INTERACTING WITH: " + intr.kind);
             		if (intr != null) switch (intr.kind) {
             		
             		case "door0": ent.exitHouse(); break;
@@ -123,8 +134,12 @@ public class GameLoop implements Runnable {
             		case "box": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
             		case "warehouse": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
             		case "border": ent.triggerIntr(intr.linkObj); break;
-            		case "animated": intr.linkObj.triggerIntr(ent);
-            		
+            		case "animated": intr.linkObj.triggerIntr(ent); break;
+            		case "winObject":
+            			intr.linkObj.triggerIntr(ent); 
+            			gm.collisionBoxes.remove(intr.linkObj.box);
+            			gm.interactionBoxes.remove(intr);
+            			break;
             		}
                     
                     if (ent.dead) deadEntities.add(ent);

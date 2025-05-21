@@ -62,7 +62,7 @@ public class ImageSaver implements Runnable {
                 	Object[] array = queue_jason.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
                     ImageIO.write(img_last, "png", new File("jason_view.png"));
-                    System.out.println("Saved jason screen");
+                    // System.out.println("Saved jason screen");
                     queue_jason.clear();
                 }
                 
@@ -70,7 +70,7 @@ public class ImageSaver implements Runnable {
                 	Object[] array = queue_victim.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
                     ImageIO.write(img_last, "png", new File("victim_view.png"));
-                    System.out.println("Saved panam screen");
+                    // System.out.println("Saved panam screen");
                     queue_victim.clear();
                 }
 

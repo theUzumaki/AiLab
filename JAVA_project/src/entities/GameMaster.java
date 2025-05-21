@@ -149,7 +149,9 @@ public class GameMaster {
     				case 12: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 11)); break;
     				case 13: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 12)); break;
     				case 14: bgEntities2.add(new Floor(x, y, xoffset, yoffset, 1, 1, sizetile, 13)); break;
-    				case 15: bgEntities1.add(new Grass(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 1)); break;
+    				case 15: bgEntities2.add(new Grass(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 1)); break;
+    				case 16: bgEntities2.add(new Door(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 0)); break;
+    				case 17: bgEntities2.add(new Door(x, (y - 1), xoffset, yoffset, 1, 2, sizetile, 1)); break;
     				
     				}
     				x += 1;
@@ -258,9 +260,20 @@ public class GameMaster {
     					break;
     				case 30: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 10, 2, 2)); match = true; break;
     				case 31: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 11, 2, 2)); match = true; break;
-    				
+    				case 33:
+    					StaticEntity battery = new WinnerObject(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
+    					staticEntities.add(battery); 
+    					linkingObjects.add(battery);
+    					match = true; 
+    					break;
+    				case 34:
+    					StaticEntity phone = new WinnerObject(x, y, xoffset, yoffset, 1, 1, sizetile, 1);
+    					staticEntities.add(phone); 
+    					linkingObjects.add(phone);
+    					match = true; 
+    					break;
     				}
-    				
+    					
     				if (match) {
     					physicalEntities.add(staticEntities.getLast());
     					collisionBoxes.add(staticEntities.getLast().box);
@@ -289,6 +302,7 @@ public class GameMaster {
     				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); break;
     				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); break;
     				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); break;
+    				case 7: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "winObject", linkingObjects.remove())); break;
     				
     				}
     				
@@ -420,6 +434,8 @@ public class GameMaster {
     							else if(alpha != 0 && red == 141 && green == 141 && blue == 150) temp[x] = 13; // TDX
     							else if(alpha != 0 && red == 141 && green == 141 && blue == 155) temp[x] = 14; // TSX
     							else if (alpha != 0 && red == 0 && green == 82 && blue == 39) temp[x] = 15; // GRASS /PINE 0
+    							else if(alpha != 0 && red == 255 && green == 0 && blue == 236) temp[x] = 16; // DOOR RIGHT
+    							else if(alpha != 0 && red == 105 && green == 0 && blue == 97) temp[x] = 17; // DOOR LEFT
     							break;
     							
     						case 2:
@@ -461,6 +477,8 @@ public class GameMaster {
         						else if(alpha != 0 && red == 138 && green == 75 && blue == 0) temp[x] = 29; // Scrigno
         						else if(alpha != 0 && red == 159 && green == 152 && blue == 61) temp[x] = 30; // Taovlo con sedia a sinistra
         						else if(alpha != 0 && red == 210 && green == 197 && blue == 29) temp[x] = 31; // Tavolo con sedia a destra
+        						else if(alpha != 0 && red == 158 && green == 0 && blue == 0) temp[x] = 33; // Phone
+        						else if(alpha != 0 && red == 93 && green == 33 && blue == 33) temp[x] = 34; // Battery
     							
         						else temp[x] = -1;
     							break;
@@ -474,6 +492,8 @@ public class GameMaster {
     							else if(alpha != 0 && red == 219 && green == 219 && blue == 219) temp[x] = 5; // HOUSE DOWN 
     							else if (alpha != 0 && red == 142 && green == 66 && blue == 3) temp[x] = 4; // BREAK BOX
     							else if (alpha != 0 && red == 3 && green == 61 && blue == 148) temp[x] = 6; // BORDER
+    							else if (alpha != 0 && red == 167 && green == 255 && blue == 0) temp[x] = 7; // WIN OBJECT 
+    							
     							else temp[x] = -1;
     							break;
     							
