@@ -13,9 +13,9 @@ public class Jason extends AnimatedEntity{
 	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "jason");
+		super(x, y, xoffset, yoffset, width, heigth, STEP + 1, TILE, selector, "jason");
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
-		interval = TILE / STEP;
+		interval = TILE / (STEP + 1);
 		
 	}
 
@@ -118,6 +118,23 @@ public class Jason extends AnimatedEntity{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void reset() {
+		x = defaultx;
+		y = defaulty;
+		interacting = false;
+		interaction = false;
+		dead = false;
+		water = false;
+		moved = false;
+		
+		stage = 0;
+		
+		timer = 0;
+		intrTimer = 120;
+		moveTimer = 0;
 	}
 
 }

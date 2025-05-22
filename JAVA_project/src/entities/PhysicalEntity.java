@@ -27,5 +27,7 @@ public abstract class PhysicalEntity extends ConceptEntity{
 	public void triggerIntr(PhysicalEntity ent) {
 		
 	};
+	
+	public void reset() {}
 
 }

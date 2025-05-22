@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 public class Panam extends AnimatedEntity{
 	
 	private int timer = 0, dash = 50, hiddenTimer = 1200, moveTimer = 0;
-	private boolean hidden;
+	private boolean hidden, dashing;
 	private PhysicalEntity interactingObj;
 	
 	public List<WinnerObject> listOfObject = new ArrayList<>();
@@ -20,8 +20,10 @@ public class Panam extends AnimatedEntity{
 	
 	public Panam(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
-		super(x, y, xoffset, yoffset, width, heigth, STEP, TILE, selector, "panam");
+		super(x, y, xoffset, yoffset, width, heigth, STEP + 1, TILE, selector, "panam");
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
+		
+		interval = TILE / (STEP + 1);
 		
 	}
 
@@ -50,6 +52,23 @@ public class Panam extends AnimatedEntity{
 		if (moved) {
 			moveTimer++;
 			
+			if (dashing) {
+				if (dash > 0) {
+					step = defaultStep + 2; 
+					dash-= 1;
+					interval = tile / step;
+				}
+				else if (dash == 0) {
+					step = defaultStep + 2; 
+					interval = tile / step;
+				}
+				else if (dash < -1) { dash++; }
+			} else {
+				interval = tile / step;
+			}
+			
+			// System.out.println("1: " + x + " " + y + " " + moveTimer + " " + dashing);
+			
 			switch(direction) {
 			case 0: y -= step; break;
 			case 1: x -= step; break;
@@ -58,12 +77,16 @@ public class Panam extends AnimatedEntity{
 			}
 			
 			if(moveTimer + 1 > interval) {
+				// System.out.println("2: " + x + " " + y + " " + moveTimer);
+				
 				switch(direction) {
 				case 0: y -= tile - moveTimer * step; break;
 				case 1: x -= tile - moveTimer * step; break;
 				case 2: y += tile - moveTimer * step; break;
 				case 3: x += tile - moveTimer * step; break;
 				}
+				
+				// System.out.println("3: " + x + " " + y + " " + moveTimer);
 				
 				moved = false;
 				aligned = true;
@@ -73,14 +96,27 @@ public class Panam extends AnimatedEntity{
 		else if (y != -1000) {
 			
 			if (keys[15]) {
-				if (dash > 0) { step = defaultStep + 2; dash-= 1; moved = true;}
+				System.out.println("key P pressed");
+				if (dash > 0) {
+					step = defaultStep + 2; dash-= 1; moved = true;
+					dashing = true;
+				}
 			}
-			else if (dash == 0) { dash = -299; }
+			else if (dash == 0) { dash = -100; dashing = false;}
 			else if (dash < -1) { dash++; }
-			else if (dash == -1) dash = 50;
+			else if (dash == -1) {
+				dash = 50;
+				System.out.println("Dash available");
+			}
+			else {
+				dashing = false;
+			}
 
-			if (keys[8])
-				{ y -= step; moved = true; direction = 0;}
+			if (keys[8]) {
+				y -= step; 
+				moved = true; 
+				direction = 0;
+			}
 			else if (keys[9])
 				{ x -= step; moved = true; direction = 1;}
 			else if (keys[10])
@@ -97,7 +133,7 @@ public class Panam extends AnimatedEntity{
 				hidden = false;
 				setBack();
 			} else if (keys[14]) {
-				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0; moved = true;}
+				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0;}
 			} else if (hiddenTimer != 0) {
 				hiddenTimer--;
 			} else {
@@ -152,6 +188,33 @@ public class Panam extends AnimatedEntity{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void reset() {
+		x = defaultx;
+		y = defaulty;
+		
+		interacting = false;
+		interaction = false;
+		
+		dead = false;
+		water = false;
+		moved = false;
+		
+		hidden = false;
+		dashing = false;
+		
+		timer = 0; 
+		dash = 50;
+		hiddenTimer = 1200;
+		moveTimer = 0;
+		
+		stage = 0;
+		
+		img = sprites[0];
+		
+		listOfObject.clear();
 	}
 
 }

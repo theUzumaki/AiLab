@@ -50,4 +50,11 @@ public class Box extends HideoutEntity {
 		
 	}
 	
+	@Override
+	public void reset() {
+		full = false;
+		img = sprites[0];
+		selector = 0;
+	}
+	
 }

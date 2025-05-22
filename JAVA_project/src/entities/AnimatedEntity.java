@@ -16,6 +16,9 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	public int slow, defaultStep;
 	public int stage = 0;
+	protected int defaultx;
+
+	protected int defaulty;
 	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
 		
@@ -23,6 +26,9 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		this.step = STEP;
 		this.slow = STEP - 1;
 		this.defaultStep = STEP;
+		
+		defaultx = x * TILE;
+		defaulty = y * TILE;
 		
 		intrBox = new InteractionBox (x, y, xoffset, yoffset, width, heigth, TILE, "animated");
 		intrBox.linkObj = this;
@@ -62,5 +68,6 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		x = oldx;
 		y = oldy;
 	}
+
 	
 }

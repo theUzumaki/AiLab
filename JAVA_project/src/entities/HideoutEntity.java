@@ -39,5 +39,10 @@ public abstract class HideoutEntity extends StaticEntity{
 		}
 		return false;
 	}
+	
+	@Override
+	public void reset() {
+		full = false;
+	}
 
 }

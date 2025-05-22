@@ -33,6 +33,10 @@ public class InteractionBox {
 		this.tile = TILE;
 		this.kind = kind;
 		this.linkObj= linkObj;
+		
+		if (kind == "winObject") {
+			System.out.println(linkObj.kind);
+		}
 	}
 
 	public void updatePosition(int x, int y) {

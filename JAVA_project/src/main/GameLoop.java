@@ -13,6 +13,7 @@ import entities.AnimatedEntity;
 import entities.GameMaster;
 import entities.InteractionBox;
 import entities.Panam;
+import entities.PhysicalEntity;
 
 import java.awt.image.BufferedImage;
 
@@ -35,7 +36,7 @@ public class GameLoop implements Runnable {
         running = true;
     }
 
-    public void stop() {
+    public void reset() {
         running = false;
     }
     
@@ -51,8 +52,6 @@ public class GameLoop implements Runnable {
         new Thread(() -> {
         	saver.detection();
         }).start();
-        
-        boolean timerStarted = false;
 
         while (running) {
             long start = System.currentTimeMillis();
@@ -60,17 +59,22 @@ public class GameLoop implements Runnable {
             int num_window = 0;
             
             for (AnimatedEntity ent : gm.animatedEntities) {
-            	if(ent.kind == "panam" && ((Panam) ent).listOfObject.size() == 2 && timerStarted == false) {
+            	if(ent.kind == "panam" && ((Panam) ent).listOfObject.size() == 2) {
             		
             		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
             	    Runnable task = () -> {
-            	    	this.stop();
+            	    	for (PhysicalEntity reset : gm.resetEntities) {
+            	    		if (reset instanceof Panam) {
+            	    			gm.collisionBoxes.add(((Panam) reset).listOfObject.get(0).box); 
+            	    			gm.collisionBoxes.add(((Panam) reset).listOfObject.get(1).box);
+            	    		}
+            	    		reset.reset();
+            	    	}
+            	    	ResultWriter.writeWinner(false, true);
             	    };
 
-            	    System.out.println("Timer partito");
-            	    scheduler.schedule(task, 60, TimeUnit.SECONDS);
-            	    timerStarted = true;
+            	    scheduler.schedule(task, 5, TimeUnit.SECONDS);
             	}
             	
             	if (ent.aligned) {
@@ -85,6 +89,24 @@ public class GameLoop implements Runnable {
             	}
             }
             
+            if (deadEntities.size() == 1) {
+            	deadEntities.clear();
+            	
+            	for (PhysicalEntity reset : gm.resetEntities) {
+    	    		if (reset instanceof Panam) {
+    	    			
+    	    			gm.animatedEntities.add((Panam) reset);
+                		gm.interactionBoxes.add(((Panam)reset).intrBox);
+                		
+    	    			try {
+    	    				gm.collisionBoxes.add(((Panam) reset).listOfObject.get(0).box); 
+    	    				gm.collisionBoxes.add(((Panam) reset).listOfObject.get(1).box);    	    				
+    	    			} catch (IndexOutOfBoundsException e) {}
+    	    		}
+    	    		reset.reset();
+    	    	}
+            	ResultWriter.writeWinner(true, false);
+            }
             
             // Update all entities with input from any view
             for (Game window : windows) {
@@ -138,7 +160,6 @@ public class GameLoop implements Runnable {
             		case "winObject":
             			intr.linkObj.triggerIntr(ent); 
             			gm.collisionBoxes.remove(intr.linkObj.box);
-            			gm.interactionBoxes.remove(intr);
             			break;
             		}
                     

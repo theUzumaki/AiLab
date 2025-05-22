@@ -29,6 +29,8 @@ public class GameMaster {
     public List<BackgroundEntity> bgEntities1 = new ArrayList<>();
     public List<BackgroundEntity> bgEntities2 = new ArrayList<>();
     
+    public List<PhysicalEntity> resetEntities = new ArrayList<>();
+    
     private int[][][][] windowTileMaps;
 
     private GameMaster(int[][] windowValues) {
@@ -89,12 +91,14 @@ public class GameMaster {
     	
     	Jason jason = Jason.getInstance(16, 2, 0, 0, 1, 1, 3, windowValues[0][0], 0);
     	animatedEntities.add(jason);
+    	resetEntities.add(jason);
     	physicalEntities.add(jason);
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
     	
     	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
     	animatedEntities.add(panam);
+    	resetEntities.add(panam);
     	physicalEntities.add(panam);
     	collisionBoxes.add(panam.box);
     	interactionBoxes.add(panam.intrBox);
@@ -178,18 +182,21 @@ public class GameMaster {
     				case 4:
     					StaticEntity warehouse = new Warehouse((x - 2), (y - 4), xoffset, yoffset, 4, 5, sizetile, 0);
     					staticEntities.add(warehouse);
+    					resetEntities.add(warehouse);
     					linkingObjects.add(warehouse);
     					match = true;
     					break;
     				case 5:
     					StaticEntity well = new Well(x, y, xoffset, yoffset, 2, 2, sizetile, 0);
     					staticEntities.add(well);
+    					resetEntities.add(well);
     					linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well); linkingObjects.add(well);
     					match = true;
     					break;
     				case 6: 
     					StaticEntity bedGreen = new Bed(x, y, xoffset, yoffset, 1, 2, sizetile, 0);
     					staticEntities.add(bedGreen);
+    					resetEntities.add(bedGreen);
     					linkingObjects.add(bedGreen);
     					match = true; 
     					break;
@@ -198,6 +205,7 @@ public class GameMaster {
     				case 8: 
     					StaticEntity box = new Box(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
     					staticEntities.add(box);
+    					resetEntities.add(box);
     					linkingObjects.add(box);
     					match = true;
     					break;
@@ -210,34 +218,42 @@ public class GameMaster {
     				case 13: 
     					StaticEntity PondB = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
     					staticEntities.add(PondB);
+    					resetEntities.add(PondB);
     					linkingObjects.add(PondB); match = true; break;
     				case 14: 
     					StaticEntity PondBDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 1);
     					staticEntities.add(PondBDX);
+    					resetEntities.add(PondBDX);
     					linkingObjects.add(PondBDX); match = true; break;
     				case 15:
     					StaticEntity PondBSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 2);
     					staticEntities.add(PondBSX);
+    					resetEntities.add(PondBSX);
     					linkingObjects.add(PondBSX); match = true; break;
     				case 16:
     					StaticEntity PondDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 3);
     					staticEntities.add(PondDX);
+    					resetEntities.add(PondDX);
     					linkingObjects.add(PondDX); match = true; break;
     				case 17:
     					StaticEntity PondSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 4);
     					staticEntities.add(PondSX);
+    					resetEntities.add(PondSX);
     					linkingObjects.add(PondSX); match = true; break;
     				case 18:
     					StaticEntity PondT = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 5);
     					staticEntities.add(PondT);
+    					resetEntities.add(PondT);
     					linkingObjects.add(PondT); match = true; break;
     				case 19:
     					StaticEntity PondTDX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 6);
     					staticEntities.add(PondTDX);
+    					resetEntities.add(PondTDX);
     					linkingObjects.add(PondTDX); match = true; break;
     				case 20: 
     					StaticEntity PondTSX = new Border(x, y, xoffset, yoffset, 1, 1, sizetile, 7);
     					staticEntities.add(PondTSX);
+    					resetEntities.add(PondTSX);
     					linkingObjects.add(PondTSX); match = true; break;
     				case 21: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 2, sizetile, 1, 1, 2)); match = true; break;
     				case 22: staticEntities.add(new Interior(x, y, xoffset, yoffset, 1, 2, sizetile, 2, 1, 2)); match = true; break;
@@ -249,12 +265,14 @@ public class GameMaster {
     				case 28: 
     					StaticEntity bigChest = new Chest(x, y, xoffset, yoffset, 2, 1, sizetile, 0, 2, 1);
     					staticEntities.add(bigChest);
+    					resetEntities.add(bigChest);
     					linkingObjects.add(bigChest); linkingObjects.add(bigChest);
     					match = true; 
     					break;
     				case 29:
     					StaticEntity chest = new Chest(x, y, xoffset, yoffset, 1, 1, sizetile, 1, 1, 1);
     					staticEntities.add(chest); 
+    					resetEntities.add(chest);
     					linkingObjects.add(chest);
     					match = true; 
     					break;
@@ -262,13 +280,15 @@ public class GameMaster {
     				case 31: staticEntities.add(new Interior(x, y, xoffset, yoffset, 2, 2, sizetile, 11, 2, 2)); match = true; break;
     				case 33:
     					StaticEntity battery = new WinnerObject(x, y, xoffset, yoffset, 1, 1, sizetile, 0);
-    					staticEntities.add(battery); 
+    					staticEntities.add(battery);
+    					resetEntities.add(battery);
     					linkingObjects.add(battery);
     					match = true; 
     					break;
     				case 34:
     					StaticEntity phone = new WinnerObject(x, y, xoffset, yoffset, 1, 1, sizetile, 1);
-    					staticEntities.add(phone); 
+    					staticEntities.add(phone);
+    					resetEntities.add(phone);
     					linkingObjects.add(phone);
     					match = true; 
     					break;
@@ -286,11 +306,13 @@ public class GameMaster {
     		
     		y = 0;
     		
+    		// System.out.println("3:");
     		for (int[] row : tilemap[3]) {
     			x = 0;
     			
     			
     			for (int element : row) {
+    				// System.out.print(element + " ");
     				
     				match = false;
     				
@@ -308,6 +330,7 @@ public class GameMaster {
     				
     				x += 1;
     			}
+    			// System.out.println();
     			y+= 1;
     		}
     		
@@ -393,6 +416,7 @@ public class GameMaster {
     				
     				int width = image.getWidth();
     				int height = image.getHeight();
+    				
     				
     				for (int y = 0; y < height; y++) {
     					

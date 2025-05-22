@@ -38,15 +38,24 @@ public class WinnerObject extends HideoutEntity {
 	
 	@Override
 	public void triggerIntr(PhysicalEntity ent) {
+		System.out.println("trigger");
 		
 		if (ent.kind == "panam" && find == false) { 
 			find = true;
+			
+			System.out.println("Dentro if");
 
 	        if (!((Panam) ent).listOfObject.contains(this)) {
+	        	System.out.println("Added");
 	        	((Panam) ent).listOfObject.add(this);
 	        }
 	    }
 		
+	}
+	
+	@Override
+	public void reset() {
+		find = false;
 	}
 
 }
