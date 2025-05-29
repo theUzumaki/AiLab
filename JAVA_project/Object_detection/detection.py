@@ -31,10 +31,8 @@ def object_detection():
         with open(OUTPUT_PATH[i], "w") as f:
             json.dump(output, f, indent=2)
 
-        print(f"✅ Detections salvate in {OUTPUT_PATH[i]}")
         i += 1
 
 
 if __name__ == "__main__":
-    while True:
-        object_detection()
+    object_detection()

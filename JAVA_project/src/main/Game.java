@@ -1,14 +1,10 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -107,9 +103,6 @@ public class Game extends JPanel {
         for (BackgroundEntity ent : gm.bgEntities1) ent.draw(g);
         for (BackgroundEntity ent : gm.bgEntities2) ent.draw(g);
         for (PhysicalEntity ent : gm.physicalEntities) {
-        	if (ent instanceof WinnerObject && ((WinnerObject) ent).find) {
-        		continue;
-        	}
         	ent.draw(g);
         	if((ent.kind == "jason" || ent.kind == "panam") && screen == false) {
         		YoloReader.Detection[] detections;
@@ -118,6 +111,10 @@ public class Game extends JPanel {
         				detections = YoloReader.getDetections("detections_jason.json");
         			} else {
         				detections = YoloReader.getDetections("detections_panam.json");
+        			}
+        			
+        			if(detections == null) {
+        				continue;
         			}
         			
         			for(YoloReader.Detection d : detections) {

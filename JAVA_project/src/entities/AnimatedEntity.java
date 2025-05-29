@@ -4,7 +4,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int olddoorX, olddoorY;
 	
-	protected int step;
+	public int step;
 	
 	public boolean interaction, dead, water;
 	public boolean interacting = false;
@@ -20,6 +20,8 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 
 	protected int defaulty;
 	
+	public int timer = 0;
+	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
 		
 		super(x, y, xoffset, yoffset, width, heigth, TILE, selector, kind);
@@ -30,6 +32,12 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		defaultx = x * TILE;
 		defaulty = y * TILE;
 		
+		if(kind == "jason") {
+			width = 3;
+			heigth = 3;
+			x -= 1;
+			y -= 1;
+		}
 		intrBox = new InteractionBox (x, y, xoffset, yoffset, width, heigth, TILE, "animated");
 		intrBox.linkObj = this;
 		
@@ -48,6 +56,7 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		this.y = y;
 		box.updatePosition(x, y);
 		intrBox.updatePosition(x, y);
+
 	}
 	
 	public void exitHouse() {

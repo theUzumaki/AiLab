@@ -2,6 +2,7 @@ package main;
 
 import java.util.List;
 import java.awt.Rectangle;
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -36,6 +37,8 @@ public class Main {
 
         List<Game> allViews = List.of(forest, house1, house2);
         Thread gameLoop = new Thread(new GameLoop(allViews));
+        
+        System.out.println("[JAVA] Game loop starting");
         gameLoop.start();
     }
 

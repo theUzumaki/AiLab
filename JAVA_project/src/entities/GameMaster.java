@@ -397,8 +397,12 @@ public class GameMaster {
     public boolean checkInteraction(InteractionBox box, InteractionBox intr) {
 
     	if ( intr.left < box.left && box.left < intr.right || intr.left < box.right && box.right < intr.right ) {
-    		if ( intr.top < box.top && box.top < intr.bottom ) return true;
-    		else if ( intr.top < box.bottom && box.bottom < intr.bottom ) return true;
+    		if ( intr.top < box.top && box.top < intr.bottom ) {
+    			return true;
+    		}
+    		else if ( intr.top < box.bottom && box.bottom < intr.bottom ) {
+    			return true;
+    		}
     	}
     	
 		return false;

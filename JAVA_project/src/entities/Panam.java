@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 
 public class Panam extends AnimatedEntity{
 	
-	private int timer = 0, dash = 50, hiddenTimer = 1200, moveTimer = 0;
-	private boolean hidden, dashing;
+	private int dash = 50, hiddenTimer = 1200, moveTimer = 0;
+	public boolean hidden, dashing;
 	private PhysicalEntity interactingObj;
 	
 	public List<WinnerObject> listOfObject = new ArrayList<>();
@@ -96,7 +96,6 @@ public class Panam extends AnimatedEntity{
 		else if (y != -1000) {
 			
 			if (keys[15]) {
-				System.out.println("key P pressed");
 				if (dash > 0) {
 					step = defaultStep + 2; dash-= 1; moved = true;
 					dashing = true;
@@ -106,7 +105,6 @@ public class Panam extends AnimatedEntity{
 			else if (dash < -1) { dash++; }
 			else if (dash == -1) {
 				dash = 50;
-				System.out.println("Dash available");
 			}
 			else {
 				dashing = false;
@@ -124,7 +122,7 @@ public class Panam extends AnimatedEntity{
 			else if (keys[11])
 				{ x += step; moved = true; direction = 3;}
 			else if (keys[14])
-				if (timer >= 60) { interaction = true; timer = 0; moved = true;}
+				if (timer >= 60) { interaction = true; timer = 0;}
 			
 			
 		} else {
@@ -209,6 +207,8 @@ public class Panam extends AnimatedEntity{
 		dash = 50;
 		hiddenTimer = 1200;
 		moveTimer = 0;
+		
+		step = defaultStep;
 		
 		stage = 0;
 		

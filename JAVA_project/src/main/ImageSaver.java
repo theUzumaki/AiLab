@@ -8,6 +8,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 public class ImageSaver implements Runnable {
     private final BlockingQueue<BufferedImage> queue_jason = new LinkedBlockingQueue<>();
@@ -18,14 +21,11 @@ public class ImageSaver implements Runnable {
     
     public void detection() {
     	try {
-            // Comando per eseguire lo script
             ProcessBuilder pb = new ProcessBuilder("./Object_detection/.venv/bin/python3", "Object_detection/detection.py");
 
-            // Redirect dell'output della console
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
-            // Leggi l'output dello script
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -61,17 +61,39 @@ public class ImageSaver implements Runnable {
                 if (!queue_jason.isEmpty()) {
                 	Object[] array = queue_jason.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
-                    ImageIO.write(img_last, "png", new File("jason_view.png"));
-                    // System.out.println("Saved jason screen");
+                	
+                	try (RandomAccessFile file = new RandomAccessFile("jason_view.png", "rw");
+                		     FileChannel channel = file.getChannel();
+                		     FileLock lock = channel.lock()) {
+                		
+                		// Scrittura
+                	    file.write("{\"key\": \"value\"}".getBytes());
+
+                		ImageIO.write(img_last, "png", new File("jason_view.png"));
+                	} catch (IOException e) {
+                	    e.printStackTrace();
+                	}
+                    
                     queue_jason.clear();
                 }
                 
                 if (!queue_victim.isEmpty()) {
                 	Object[] array = queue_victim.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
-                    ImageIO.write(img_last, "png", new File("victim_view.png"));
-                    // System.out.println("Saved panam screen");
-                    queue_victim.clear();
+                	
+                	try (RandomAccessFile file = new RandomAccessFile("victim_view.png", "rw");
+               		     FileChannel channel = file.getChannel();
+               		     FileLock lock = channel.lock()) {
+                		
+                		// Scrittura
+                	    file.write("{\"key\": \"value\"}".getBytes());
+                		
+	               		ImageIO.write(img_last, "png", new File("victim_view.png"));
+	               	} catch (IOException e) {
+	               	    e.printStackTrace();
+	               	}
+                    
+                	queue_victim.clear();
                 }
 
             } catch (Exception e) {
