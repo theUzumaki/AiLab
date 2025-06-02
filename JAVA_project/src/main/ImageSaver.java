@@ -19,27 +19,6 @@ public class ImageSaver implements Runnable {
     
     public BufferedImage img_last;
     
-    public void detection() {
-    	try {
-            ProcessBuilder pb = new ProcessBuilder("./Object_detection/.venv/bin/python3", "Object_detection/detection.py");
-
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println("[PYTHON] " + line);
-            }
-
-            int exitCode = process.waitFor();
-            System.out.println("Script terminato con codice: " + exitCode);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
     public void saveImage(BufferedImage img, String who) {
         if ("jason".equals(who)) {
             queue_jason.offer(img);
@@ -47,7 +26,6 @@ public class ImageSaver implements Runnable {
             queue_victim.offer(img);
         }
     }
-    
 
     public void stop() {
         running = false;
@@ -62,16 +40,11 @@ public class ImageSaver implements Runnable {
                 	Object[] array = queue_jason.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
                 	
-                	try (RandomAccessFile file = new RandomAccessFile("jason_view.png", "rw");
+                	try (RandomAccessFile file = new RandomAccessFile("Object_detection/jason_view.png", "rw");
                 		     FileChannel channel = file.getChannel();
-                		     FileLock lock = channel.lock()) {
-                		
-                		// Scrittura
-                	    file.write("{\"key\": \"value\"}".getBytes());
-
-                		ImageIO.write(img_last, "png", new File("jason_view.png"));
+                			FileLock lock = channel.lock(0L, Long.MAX_VALUE, false)) {
+                		ImageIO.write(img_last, "png", new File("Object_detection/jason_view.png"));
                 	} catch (IOException e) {
-                	    e.printStackTrace();
                 	}
                     
                     queue_jason.clear();
@@ -81,16 +54,11 @@ public class ImageSaver implements Runnable {
                 	Object[] array = queue_victim.toArray();
                 	img_last = (BufferedImage) array[array.length - 1];
                 	
-                	try (RandomAccessFile file = new RandomAccessFile("victim_view.png", "rw");
+                	try (RandomAccessFile file = new RandomAccessFile("Object_detection/victim_view.png", "rw");
                		     FileChannel channel = file.getChannel();
-               		     FileLock lock = channel.lock()) {
-                		
-                		// Scrittura
-                	    file.write("{\"key\": \"value\"}".getBytes());
-                		
-	               		ImageIO.write(img_last, "png", new File("victim_view.png"));
+                		FileLock lock = channel.lock(0L, Long.MAX_VALUE, false)) {
+	               		ImageIO.write(img_last, "png", new File("Object_detection/victim_view.png"));
 	               	} catch (IOException e) {
-	               	    e.printStackTrace();
 	               	}
                     
                 	queue_victim.clear();

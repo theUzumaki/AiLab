@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Jason extends AnimatedEntity{
 	
-	private int intrTimer = 120, moveTimer = 0;
+	private int intrTimer = 30, moveTimer = 0;
 	private int direction, interval;
 	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
@@ -17,6 +17,10 @@ public class Jason extends AnimatedEntity{
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
 		interval = TILE / (STEP + 1);
 		
+		timer = 15;
+		
+		intrBox = new InteractionBox(x - 1, y - 1, xoffset, yoffset, 2, 2, TILE, "animated");
+		intrBox.linkObj = this;
 	}
 
 	private static Jason instance;
@@ -62,11 +66,11 @@ public class Jason extends AnimatedEntity{
 				case 2: y += tile - moveTimer * step; break;
 				case 3: x += tile - moveTimer * step; break;
 				}
-				// System.out.println("3 Move timer: " + moveTimer + " ( " + x + ", " + y + " )");
 				
 				moved = false;
 				aligned = true;
 				moveTimer = 0;
+				// System.out.println("( " + x + ", " + y + " )");
 			}
 		}
 		else if (!interacting) {			
@@ -81,7 +85,7 @@ public class Jason extends AnimatedEntity{
 			else if (keys[4])
 				if (timer >= 15) { interacting = true; timer = 0; }
 		} else {
-			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 30; }
+			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 30;}
 			intrTimer--;
 		}
 		
@@ -99,8 +103,8 @@ public class Jason extends AnimatedEntity{
 	public void triggerIntr(PhysicalEntity ent) {
 		
 		if (ent != null && ent.kind == "border") {
-			if (!water) { x = tile * 4; y = tile * 15; water = true; }
-			else { x = tile * 4; y = tile * 10; water = false; }
+			if (!water) { x = tile * 4; y = tile * 15; water = true;}
+			else { x = tile * 4; y = tile * 10; water = false;}
 		}
 		
 	}
@@ -132,8 +136,8 @@ public class Jason extends AnimatedEntity{
 		
 		stage = 0;
 		
-		timer = 0;
-		intrTimer = 120;
+		timer = 15;
+		intrTimer = 30;
 		moveTimer = 0;
 	}
 

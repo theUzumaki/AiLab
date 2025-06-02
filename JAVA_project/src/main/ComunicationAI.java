@@ -34,49 +34,88 @@ public class ComunicationAI {
 	
 	public void writeAck(String aiFile) {
 	    JSONObject ack = new JSONObject();
-	    ack.put("moving", moving);
+	    ack.put("moving", true);
 
-	    try (RandomAccessFile file = new RandomAccessFile("ack_" + aiFile + ".json", "rw");
+	    try (RandomAccessFile file = new RandomAccessFile("Comunications_files/ack_" + aiFile + ".json", "rw");
 	         FileChannel channel = file.getChannel();
 	         FileLock lock = channel.lock(0L, Long.MAX_VALUE, false)) {
 
-	        file.setLength(0);
-	        file.writeBytes(ack.toString());
-
+	    	if (file.length() == 0) {
+	    		file.setLength(0);
+	    		file.writeBytes(ack.toString());
+	    		file.getFD().sync();
+	    	}
 	    } catch (Exception e) {
 	    }
 	}
 	
 	public void writeGameState(String aiFile) {
-        try (RandomAccessFile file = new RandomAccessFile("game_state_"+ aiFile +".json", "rw");
-             FileChannel channel = file.getChannel();
-             FileLock lock = channel.lock(0L, Long.MAX_VALUE, false)) {
-        	
-        	JSONObject state = game_info();
-
-            file.setLength(0);
-            file.writeBytes(state.toString());
-
-        } catch (Exception e) {
-        }
+		try (RandomAccessFile file1 = new RandomAccessFile("Comunications_files/game_state_" + aiFile + ".json", "rw");
+				FileChannel channel1 = file1.getChannel();
+				FileLock lock1 = channel1.lock(0L, Long.MAX_VALUE, false)) {
+			
+			JSONObject state = game_info();
+			
+			if (file1.length() == 0) {
+				file1.setLength(0);
+				file1.writeBytes(state.toString());
+				file1.getFD().sync();
+			}
+			
+		} catch (Exception e) {
+		}
+    }
+	
+	public void writeGameState(String aiFile1, String aiFile2) {
+		while(true) {
+			try (RandomAccessFile file1 = new RandomAccessFile("Comunications_files/game_state_" + aiFile1 + ".json", "rw");
+					FileChannel channel1 = file1.getChannel();
+					FileLock lock1 = channel1.lock(0L, Long.MAX_VALUE, false);
+					
+					RandomAccessFile file2 = new RandomAccessFile("Comunications_files/game_state_" + aiFile2 + ".json", "rw");
+					FileChannel channel2 = file2.getChannel();
+					FileLock lock2 = channel2.lock(0L, Long.MAX_VALUE, false)) {
+				
+				JSONObject state = game_info();
+				
+				if (file1.length() == 0 && file2.length() == 0) {
+					file1.setLength(0);
+					file1.writeBytes(state.toString());
+					file1.getFD().sync();
+					
+					file2.setLength(0);
+					file2.writeBytes(state.toString());
+					file2.getFD().sync();
+					break;
+				} else {
+					continue;
+				}
+				
+			} catch (Exception e) {
+			}
+		}
     }
 	
 	public JSONObject readAIAction(String aiFile) {
-        try (RandomAccessFile file = new RandomAccessFile("action_" + aiFile + ".json", "rw");
+		String path = "Comunications_files/action_" + aiFile + ".json";
+
+        try (RandomAccessFile file = new RandomAccessFile(path, "rw");
              FileChannel channel = file.getChannel();
-             FileLock lock = channel.lock()) {
-        	
-        	InputStream is = Channels.newInputStream(channel);
-    		
-    		JSONTokener tokener = new JSONTokener(is);
+             FileLock lock = channel.lock(0L, Long.MAX_VALUE, false)) {
+
+            if (file.length() == 0) {
+                return null;
+            }
+
+            InputStream is = Channels.newInputStream(channel);
+            JSONTokener tokener = new JSONTokener(is);
             JSONObject obj = new JSONObject(tokener);
-            
+
             file.setLength(0);
-            
             return obj;
-        } catch (Exception e) {
-            return null;
-        }
+
+        } catch (Exception e) {}
+		return null;
     }
         
     public JSONObject game_info() {
@@ -94,7 +133,10 @@ public class ComunicationAI {
     		status = "visible";
     	}
     	victim.put("status", status);
-    	victim.put("items", panam.listOfObject.size());
+    	
+    	victim.put("phone", panam.phone);
+    	victim.put("battery", panam.battery);
+    	
     	victim.put("map", panam.stage);
     	if (panam.step == panam.slow) {
     		victim.put("slow", true);                        		
@@ -106,6 +148,35 @@ public class ComunicationAI {
     	victim.put("dead", panam.dead);
     	victim.put("end-game", gl.end_game);
     	victim.put("finished", gl.timer_finished);
+    	
+    	int sub_map = 0;
+    	
+    	// Right house
+    	if (584 <= panam.x && panam.x <= 764 && 136 <= panam.y && panam.y <= 184)
+    		sub_map = 1;
+    	// Left House
+    	else if(16 <= panam.x && panam.x <= 152 && 136 <= panam.y && panam.y <= 184)
+    		sub_map = 2;
+    	// Battery zone
+    	else if(1036 <= panam.x && panam.x <= 1100 && 468 <= panam.y && panam.y <= 500)
+    		sub_map = 3;
+    	// Phone zone
+    	else if(1164 <= panam.x && panam.x <= 1220 && 652 <= panam.y && panam.y <= 704)
+    		sub_map = 4;
+    	// Spawn point
+    	else if (280 <= panam.x && panam.x <= 548 && 16 <= panam.y && panam.y <= 92)
+    		sub_map = 5;
+    	// Fountain
+    	else if(296 <= panam.x && panam.x <= 536 && 104 <= panam.y && panam.y <= 200)
+    		sub_map = 6;
+    	// Lake
+    	else if(36 <= panam.x && panam.x <= 280 && 200 <= panam.y && panam.y <= 360)
+    		sub_map = 7;
+    	// High Grass
+    	else if(440 <= panam.x && panam.x <= 760 && 224 <= panam.y && panam.y <= 360)
+    		sub_map = 8;
+    	
+    	victim.put("sub_map", sub_map);
 
     	JSONObject killer = new JSONObject();
     	
@@ -125,6 +196,29 @@ public class ComunicationAI {
     	killer.put("win", gl.killerWin);
     	killer.put("end-game", gl.end_game);
     	killer.put("finished", gl.timer_finished);
+    	
+    	sub_map = 0;
+    	
+    	// Spawn point
+    	if (280 <= jason.x && jason.x <= 548 && 16 <= jason.y && jason.y <= 92)
+    		sub_map = 1;
+    	// Right house
+    	else if(572 <= jason.x && jason.x <= 764 && 76 <= jason.y && jason.y <= 200)
+    		sub_map = 2;
+    	// Fountain
+    	else if(296 <= jason.x && jason.x <= 536 && 104 <= jason.y && jason.y <= 200)
+    		sub_map = 3;
+    	// Left House
+    	else if(20 <= jason.x && jason.x <= 272 && 16 <= jason.y && jason.y <= 188)
+    		sub_map = 4;
+    	// Lake
+    	else if(36 <= jason.x && jason.x <= 280 && 200 <= jason.y && jason.y <= 360)
+    		sub_map = 5;
+    	// High Grass
+    	else if(440 <= jason.x && jason.x <= 760 && 224 <= jason.y && jason.y <= 360)
+    		sub_map = 6;
+    	
+    	killer.put("sub_map", sub_map);
 
     	response.put("victim", victim);
     	response.put("killer", killer);

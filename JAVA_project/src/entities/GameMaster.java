@@ -96,7 +96,7 @@ public class GameMaster {
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
     	
-    	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[1][0], 0);
     	animatedEntities.add(panam);
     	resetEntities.add(panam);
     	physicalEntities.add(panam);

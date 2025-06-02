@@ -32,15 +32,17 @@ public class InteractionBox {
 		this.heigth = heigth;
 		this.tile = TILE;
 		this.kind = kind;
-		this.linkObj= linkObj;
+		this.linkObj= linkObj;			
+	
 	}
 
 	public void updatePosition(int x, int y) {
 		
-		if(linkObj.kind == "jason") {
-			x -= tile;
-			y -= tile;
+		if (linkObj.kind == "jason") {
+			x -= tile / 2;
+			y -= tile / 2;
 		}
+		
 		left = x - tile / 2;
 		right = x + width * tile + tile / 2;
 		top = y - tile / 2;

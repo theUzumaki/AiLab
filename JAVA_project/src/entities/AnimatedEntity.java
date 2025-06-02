@@ -1,5 +1,7 @@
 package entities;
 
+import main.YoloReader;
+
 public abstract class AnimatedEntity extends PhysicalEntity{
 	
 	protected int olddoorX, olddoorY;
@@ -20,7 +22,11 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 
 	protected int defaulty;
 	
-	public int timer = 0;
+	public boolean hidden;
+	
+	public YoloReader.Detection[] detections;
+	
+	public int timer;
 	
 	public AnimatedEntity(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector, String kind) {
 		
@@ -31,16 +37,6 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		
 		defaultx = x * TILE;
 		defaulty = y * TILE;
-		
-		if(kind == "jason") {
-			width = 3;
-			heigth = 3;
-			x -= 1;
-			y -= 1;
-		}
-		intrBox = new InteractionBox (x, y, xoffset, yoffset, width, heigth, TILE, "animated");
-		intrBox.linkObj = this;
-		
 	}
 	
 	public abstract void update(boolean[] keys);

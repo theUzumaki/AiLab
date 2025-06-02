@@ -45,13 +45,18 @@ public class Game extends JPanel {
         int frameWidth = sizeTile * 5;
         int frameHeight = sizeTile * 5;
 
-        int offsetX = playerX - camera.x - frameWidth/ 2;
-        int offsetY = playerY - camera.y - frameHeight / 2;
+        // 1. Calcola il centro del giocatore
+        int centerX = playerX + sizeTile / 2;
+        int centerY = playerY + sizeTile / 2;
+        
+        // 3. Centra il frame sul blocco
+        int frameX = centerX - frameWidth / 2;
+        int frameY = centerY - frameHeight / 2;
         
         BufferedImage img = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
 
-        g.translate(-offsetX, -offsetY);
+        g.translate(-(frameX - camera.x), -(frameY - camera.y));
 
         screen = true;
         this.paint(g);
@@ -71,8 +76,9 @@ public class Game extends JPanel {
     	float x2_local = bbox[2];
     	float y2_local = bbox[3];
 
-    	int centerX = player_x;
-    	int centerY = player_y;
+    	// 1. Calcola il centro del giocatore
+        int centerX = player_x + sizeTile / 2;
+        int centerY = player_y + sizeTile / 2;
 
     	int imageStartX = centerX - imageWidth / 2;
     	int imageStartY = centerY - imageHeight / 2;
@@ -107,21 +113,14 @@ public class Game extends JPanel {
         	if((ent.kind == "jason" || ent.kind == "panam") && screen == false) {
         		YoloReader.Detection[] detections;
         		try {
-        			if(ent.kind == "jason") {
-        				detections = YoloReader.getDetections("detections_jason.json");
-        			} else {
-        				detections = YoloReader.getDetections("detections_panam.json");
+        			detections = YoloReader.getDetections("Object_detection/detections_"+ent.kind+".json");
+        			if (detections != null) {
+        				((AnimatedEntity) ent).detections = detections;
         			}
-        			
-        			if(detections == null) {
-        				continue;
-        			}
-        			
-        			for(YoloReader.Detection d : detections) {
+        			for(YoloReader.Detection d : ((AnimatedEntity) ent).detections) {
         				this.drawBox(d.bbox, ent.x, ent.y, g, d);
         	        }
-        		} catch (IOException e) {
-        			// TODO Auto-generated catch block
+        		} catch (IOException | NullPointerException e) {
         			continue;
         		}
         	}

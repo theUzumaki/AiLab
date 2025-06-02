@@ -9,24 +9,16 @@ from ultralytics import YOLO
 import json
 import socket
 import time
-
+import os
 import fcntl
-
-# Function used to get abosulte path
-def get_absolute_path(relative_path):
-    """Returns the absolute path of the given relative path."""
-    import os
-    return os.path.abspath(relative_path)
 
 ABSOLUTE_PATH = "/Users/lachithaperera/Documents/AiLab/JAVA_project/"
 
-class KillerVictimEnv(MultiAgentEnv):
+class KillerVictimEnv(BaseEnv):
     def __init__(self, config: EnvContext = None):
         self.config = config or {}
         self.agents = ["killer", "victim"]  # Initialize agents based on the configuration
         self._agent_ids = set(self.agents)
-
-        self.comunication_path = ABSOLUTE_PATH  + self.config["msg_path"]
 
         # confi print
         print(f"[ENV] KillerVictimEnv initialized with agents: {config}")
@@ -52,11 +44,10 @@ class KillerVictimEnv(MultiAgentEnv):
 
         self._spaces_in_preferred_format = True
         self.observation_spaces = {
-            "killer": spaces.Box(low=-0, high=100, shape=(10, 5), dtype=np.float32),
-            "victim": spaces.Box(low=-0, high=100, shape=(10, 5), dtype=np.float32),
+            config["agent"] : spaces.Box(low=-0, high=100, shape=(10, 5), dtype=np.float32),
         }
 
-        self.action_spaces = {"killer": spaces.Discrete(5), "victim": spaces.Discrete(6)}
+        self.action_spaces = { config["agent"]: spaces.Discrete(5) if config["agent"] == "killer" else spaces.Discrete(6) }
 
         super().__init__()
 
@@ -159,14 +150,16 @@ class KillerVictimEnv(MultiAgentEnv):
 
         # print(f"[ACTION] {agent} is performing action: {action}")
 
-        if agent == "killer" and self.info[agent]["status"] != "interact":
+        """if agent == "killer" and self.info[agent]["status"] != "interact":
             self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})
         elif agent == "victim" and self.info[agent]["status"] == "hide" and action_meaning[action] == "interact":
             self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})
         elif agent == "victim" and self.info[agent]["speed"] == True and action_meaning[action] != "dash":
             self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})
         elif agent == "victim" and self.info[agent]["status"] != "hide":
-            self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})
+            self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})"""
+
+        self.send_action_to_java({"get-game": False, "agent": agent, "action": action_meaning[action]})
 
         # ******************************************************************************
         # Part 2: GET GAME STATE
@@ -187,20 +180,20 @@ class KillerVictimEnv(MultiAgentEnv):
         if self.info[agent]["finished"] == True:
             terminateds[agent] = True
             print(f"[INFO] {agent} has finished the game!")
-            return obs, rew, terminateds
         
         # Check if the agent has won
         if self.info[agent]['win']:
             rew[agent] += 1.0
             terminateds[agent] = True
             print(f"[INFO] {agent} has won the game!")
-            return obs, rew, terminateds
         
         # If the agent is the victim and is dead, give a large negative reward
-        if agent == "victim" and self.info[agent]['status'] == "dead":
+        if agent == "victim" and self.info[agent]['dead']:
             rew[agent] -= 1.0
             print("[INFO] Victim is dead, ending game.")
             terminateds[agent] = True
+
+        if terminateds[agent] == True:
             return obs, rew, terminateds
 
         self.info[agent]["global_timer"] += 1
@@ -260,7 +253,7 @@ class KillerVictimEnv(MultiAgentEnv):
         # KILLER
 
         if agent == "killer" and self.info[agent]["timer"] < 15:
-            rew[agent] += 0.05
+            rew[agent] += (0.2 - 0.01 * self.info[agent]["timer"]) if (0.2 - 0.01 * self.info[agent]["timer"]) > 0 else 0
 
         # If the agent is the killer and sees a victim, give a small reward
         if agent == "killer" and any(obj[4] == 1 for obj in obs[agent]) and self.info[agent]['status'] == "interact":
@@ -270,10 +263,10 @@ class KillerVictimEnv(MultiAgentEnv):
 
         # If the agent is the killer and interacts with a object, give a small reward
         if agent == "killer" and self.info[agent]['status'] == "interact" and (any(obj[4] == 4 for obj in obs[agent]) or any(obj[4] == 2 for obj in obs[agent])):
-            rew[agent] += 0.1
+            rew[agent] += 0.05
 
         if agent == "killer" and self.info[agent]['status'] == "interact":
-            rew[agent] -= 0.05
+            rew[agent] -= 0.1
 
         return obs, rew, terminateds
     
@@ -311,23 +304,23 @@ class KillerVictimEnv(MultiAgentEnv):
         response = None  # Initialize response variable
 
         if action["get-game"]:
-            print(f"[INFO] {self.config['agent']} requesting game state from Java server")
             while not response:
                 try:
-                    with open(ABSOLUTE_PATH + "game_state_" + self.config["agent"] + ".json", "r") as f:
-                        print("[DEBUG] Waiting for game state file to be ready...")
+                    with open(ABSOLUTE_PATH + "game_state_" + self.config["agent"] + ".json", "r+") as f:
                         # Lock the file to prevent concurrent reads
                         fcntl.flock(f, fcntl.LOCK_SH)
-                        print("[DEBUG] Game state file is ready, reading...")
                         response = json.load(f)
+
+                        f.seek(0)
+                        f.truncate()
+                        
                         # Unlock the file after reading
                         fcntl.flock(f, fcntl.LOCK_UN)
-                        print("[DEBUG] Game state file content:", response)
                         break
                 except Exception as e:
-                    print("[DEBUG] Game state file not ready, waiting... " + e)
+                    print("[DEBUG] Game state file not ready, waiting... ")
                     continue  # If the file is not ready, continue waiting
-            print(f"[GAME STATE] {self.config['agent']} received game state: {response}")
+            # print(f"[GAME STATE] {self.config['agent']} received game state: {response}")
         else:
             with open(ABSOLUTE_PATH + "action_" + self.config["agent"] + ".json", "w") as f:
                 # Lock the file to prevent concurrent writes
@@ -335,11 +328,11 @@ class KillerVictimEnv(MultiAgentEnv):
                 json.dump(action, f)
                 fcntl.flock(f, fcntl.LOCK_UN)
 
-            print(f"[SENT ACTION] {self.config['agent']} sent action: {action}")
+            # print(f"[SENT ACTION] {self.config['agent']} sent action: {action}")
 
             _ = self.wait_for_ack(ABSOLUTE_PATH + "ack_" + self.config["agent"] + ".json")
             
-            print(f"[ACK RECEIVED] {self.config['agent']} received ack from Java server")
+            # print(f"[ACK RECEIVED] {self.config['agent']} received ack from Java server")
 
         return response # Return the response from the Java server
 
@@ -359,8 +352,6 @@ class KillerVictimEnv(MultiAgentEnv):
         global_timer = self.info[agent]["global_timer"]
 
         # print(f"[DEBUG] {agent} received game state: {response}")
-
-        print(f"[GAME STATE] {agent} game state: {game_state}")
         
         # Update agent states based on the game state
         if agent == "victim":
@@ -434,9 +425,7 @@ class KillerVictimEnv(MultiAgentEnv):
 
         # Salva in formato JSON
         with open(output_path, "w") as f:
-            fcntl.flock(f, fcntl.LOCK_EX)  # Lock the file to prevent concurrent writes
             json.dump(output, f, indent=2)
-            fcntl.flock(f, fcntl.LOCK_UN)  # Unlock the file after writing
 
         return output
 

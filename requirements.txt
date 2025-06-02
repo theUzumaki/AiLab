@@ -1,0 +1,3 @@
+ultralytics
+stable-baselines3[extra]
+gymnasium

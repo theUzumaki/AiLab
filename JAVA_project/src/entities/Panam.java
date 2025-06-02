@@ -11,10 +11,11 @@ import javax.imageio.ImageIO;
 public class Panam extends AnimatedEntity{
 	
 	private int dash = 50, hiddenTimer = 1200, moveTimer = 0;
-	public boolean hidden, dashing;
+	public boolean dashing;
 	private PhysicalEntity interactingObj;
 	
 	public List<WinnerObject> listOfObject = new ArrayList<>();
+	public boolean phone = false, battery = false;
 	
 	private int direction, interval;
 	
@@ -24,7 +25,10 @@ public class Panam extends AnimatedEntity{
 		box = new CollisionBox(x, y, xoffset, yoffset, width, heigth, TILE, id, true);
 		
 		interval = TILE / (STEP + 1);
+		timer=60;
 		
+		intrBox = new InteractionBox(x, y, xoffset, yoffset, width, heigth, TILE, "animated");
+		intrBox.linkObj = this;
 	}
 
 	private static Panam instance;
@@ -203,7 +207,7 @@ public class Panam extends AnimatedEntity{
 		hidden = false;
 		dashing = false;
 		
-		timer = 0; 
+		timer = 60; 
 		dash = 50;
 		hiddenTimer = 1200;
 		moveTimer = 0;

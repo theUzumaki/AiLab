@@ -45,6 +45,11 @@ public class WinnerObject extends HideoutEntity {
 
 	        if (!((Panam) ent).listOfObject.contains(this)) {
 	        	((Panam) ent).listOfObject.add(this);
+	        	if (selector == 0) {
+	        		((Panam) ent).battery = true;
+	        	} else {
+	        		((Panam) ent).phone = true;
+	        	}
 	        }
 	    }
 		
