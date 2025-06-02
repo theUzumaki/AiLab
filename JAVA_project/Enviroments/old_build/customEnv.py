@@ -12,7 +12,7 @@ import time
 import os
 import fcntl
 
-ABSOLUTE_PATH = "/Users/lachithaperera/Documents/AiLab/JAVA_project/"
+ABSOLUTE_PATH = "/Users/mattia/Desktop/Studio/Uni/AiLab/JAVA_project/"
 
 class KillerVictimEnv(BaseEnv):
     def __init__(self, config: EnvContext = None):

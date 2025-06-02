@@ -50,8 +50,8 @@ if __name__ == "__main__":
     start_game_server()  # Start the Java game server
 
     # Comandi per avviare i processi
-    command_killer = "cd Documents/AiLab/JAVA_project && source .venv/bin/activate && python3 Enviroments/new_train.py killer"
-    command_victim = "cd Documents/AiLab/JAVA_project && source .venv/bin/activate && python3 Enviroments/new_train.py victim"
+    command_killer = "cd Desktop/Studio/Uni/AiLab/JAVA_project && source .venv/bin/activate && python3 Enviroments/new_train.py killer"
+    command_victim = "cd Desktop/Studio/Uni/AiLab/JAVA_project && source .venv/bin/activate && python3 Enviroments/new_train.py victim"
 
     print("[INFO] Starting training processes in separate terminals...")
     start_process_in_terminal(command_killer)

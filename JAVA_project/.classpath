@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java21.0.1">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/lachithaperera/Documents/AiLab/Librerie/JSON-java 2025.jar">
+	<classpathentry kind="lib" path="/Users/Mattia/Desktop/studio/uni/AiLab/Librerie/JSON-java 2025.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

@@ -27,6 +27,11 @@ public class Panam extends AnimatedEntity{
 		interval = TILE / (STEP + 1);
 		timer=60;
 		
+		stage = 1;
+		
+		olddoorX = 34 * TILE;
+		olddoorY = 9 * TILE;
+		
 		intrBox = new InteractionBox(x, y, xoffset, yoffset, width, heigth, TILE, "animated");
 		intrBox.linkObj = this;
 	}
@@ -126,7 +131,7 @@ public class Panam extends AnimatedEntity{
 			else if (keys[11])
 				{ x += step; moved = true; direction = 3;}
 			else if (keys[14])
-				if (timer >= 60) { interaction = true; timer = 0;}
+				if (timer >= 15) { interaction = true; timer = 0;}
 			
 			
 		} else {
@@ -135,7 +140,7 @@ public class Panam extends AnimatedEntity{
 				hidden = false;
 				setBack();
 			} else if (keys[14]) {
-				if (timer >= 60) { interaction = true; hiddenTimer = 1200; timer = 0;}
+				if (timer >= 15) { interaction = true; hiddenTimer = 240; timer = 0;}
 			} else if (hiddenTimer != 0) {
 				hiddenTimer--;
 			} else {
@@ -159,8 +164,8 @@ public class Panam extends AnimatedEntity{
 	
 	public void handleHiding(PhysicalEntity ent) {
 
-		if (ent == null || ent.selector != 1 || ent.kind == "chest") {
-			if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000; }
+		if (ent == null || ent.kind == "chest" || ent.kind == "box") {
+			if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000;  interactingObj.triggerIntr(this); }
 			else { hidden = false; setBack(); interactingObj.triggerIntr(this); }
 		}
 		

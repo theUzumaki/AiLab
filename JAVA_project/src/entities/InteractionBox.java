@@ -20,6 +20,13 @@ public class InteractionBox {
 		this.tile = TILE;
 		this.kind = kind;
 		
+		if (kind == "animated") {
+			right -= 1;
+			left += 1;
+			bottom -= 1;
+			top += 1;
+		}
+		
 	}
 	
 	public InteractionBox (int x, int y, int xoffset, int yoffset, int width, int heigth, int TILE, String kind, PhysicalEntity linkObj) {
@@ -47,6 +54,13 @@ public class InteractionBox {
 		right = x + width * tile + tile / 2;
 		top = y - tile / 2;
 		bottom = y + heigth * tile + tile / 2;
+		
+		if (kind == "animated") {
+			right -= 1;
+			left += 1;
+			bottom -= 1;
+			top += 1;
+		}
 		
 	}
 	

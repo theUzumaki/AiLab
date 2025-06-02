@@ -96,7 +96,7 @@ public class GameMaster {
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
     	
-    	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[1][0], 0);
+    	Panam panam = Panam.getInstance(53, 24, 0, 0, 1, 1, STEP, windowValues[1][0], 0);
     	animatedEntities.add(panam);
     	resetEntities.add(panam);
     	physicalEntities.add(panam);
@@ -396,11 +396,20 @@ public class GameMaster {
     
     public boolean checkInteraction(InteractionBox box, InteractionBox intr) {
 
-    	if ( intr.left < box.left && box.left < intr.right || intr.left < box.right && box.right < intr.right ) {
-    		if ( intr.top < box.top && box.top < intr.bottom ) {
-    			return true;
-    		}
-    		else if ( intr.top < box.bottom && box.bottom < intr.bottom ) {
+    	if ( ( intr.left < box.left && box.left < intr.right ) || ( intr.left < box.right && box.right < intr.right )
+    			||
+    		( box.left < intr.left && intr.left < box.right && box.left < intr.right && intr.right < box.right )
+    			||
+    		( intr.left < box.left && box.left < intr.right && intr.left < box.right && box.right < intr.right )
+    		)
+    	{
+    		if ( ( intr.top < box.top && box.top < intr.bottom ) || ( intr.top < box.bottom && box.bottom < intr.bottom )
+    				||	
+    			( box.top < intr.top && intr.top < box.bottom && box.top < intr.bottom && intr.bottom < box.bottom )
+					||	
+				( intr.top < box.top && box.top < intr.bottom && intr.top < box.bottom && box.bottom < intr.bottom )
+    			)
+    		{
     			return true;
     		}
     	}

@@ -47,6 +47,7 @@ public class Chest extends HideoutEntity {
 		
 		if (ent.kind == "jason") full = false;
 		else if (ent.kind == "panam") handleHiding("panam");
+		
 	}
 
 }

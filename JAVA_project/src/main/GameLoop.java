@@ -256,6 +256,7 @@ public class GameLoop implements Runnable {
                     
                     if (ent.stage == num_window) {
                     	
+                    	
                     	ent.update(window.getKeyManager().keys);
                     	
                 		if(ent.aligned || ent.interaction || ent.hidden) {
@@ -278,7 +279,6 @@ public class GameLoop implements Runnable {
                 				com.writeAck("victim");
                 			}
                 		}
-                    }
                     
                     if (ent.y != -1000) { ent.box.updatePosition(ent.x, ent.y); ent.intrBox.updatePosition(ent.x, ent.y); }
 
@@ -300,7 +300,9 @@ public class GameLoop implements Runnable {
 	            		}
 	            			
             			
-            		} else if (ent.interacting) {
+            		}
+                    /*
+                    else if (ent.interacting) {
             			
             			for (AnimatedEntity ent2 : gm.animatedEntities) {
             				if(ent.kind == "panam" && ent2.kind == "jason") {continue;}
@@ -308,13 +310,16 @@ public class GameLoop implements Runnable {
             			}
             			
             		}
+            		*/
                     
+                    if (intr != null) System.out.println(ent.kind + " has interacted with: " + intr.kind); ent.interaction = false;
             		if (intr != null) switch (intr.kind) {
             		
-            		case "door0": ent.exitHouse(); break;
-            		case "door1": ent.setLocation(windows.get(1).getCamera().x + gm.windowValues[1][0], windows.get(1).getCamera().y + gm.windowValues[1][0], 1); break;
-            		case "door2": ent.setLocation(windows.get(2).getCamera().x + gm.windowValues[1][0], windows.get(2).getCamera().y + gm.windowValues[2][0], 2);break;
-            		case "box": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); 
+            		
+            		case "door0": System.out.println(ent.kind + "EXIT"); ent.exitHouse(); break;
+            		case "door1": System.out.println(ent.kind + "HOUSE1"); ent.setLocation(windows.get(1).getCamera().x + gm.windowValues[1][0], windows.get(1).getCamera().y + gm.windowValues[1][0], 1); break;
+            		case "door2": System.out.println(ent.kind + "HOUSE2"); ent.setLocation(windows.get(2).getCamera().x + gm.windowValues[1][0], windows.get(2).getCamera().y + gm.windowValues[2][0], 2);break;
+            		case "box": ent.triggerIntr(intr.linkObj); 
             			if(ent.kind == "jason")
             				gm.interactionBoxes.remove(intr);
             			break;
@@ -349,6 +354,7 @@ public class GameLoop implements Runnable {
                         
                     }
                     
+                    }
                 }
                 num_window++;
             }

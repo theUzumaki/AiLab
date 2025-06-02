@@ -9,8 +9,8 @@ from gymnasium import Env
 import sys
 import contextlib
 
-COM_FILES = "/Users/lachithaperera/Documents/AiLab/JAVA_project/Comunications_files/"
-OBJ_FILES = "/Users/lachithaperera/Documents/AiLab/JAVA_project/Object_detection/"
+COM_FILES = "/users/Mattia/Desktop/studio/uni/AiLab/JAVA_project/Comunications_files/"
+OBJ_FILES = "/users/Mattia/Desktop/studio/uni/AiLab/JAVA_project/Object_detection/"
 
 class KillerVictimEnv(Env):
     def __init__(self, config=None):
@@ -253,7 +253,7 @@ class KillerVictimEnv(Env):
         elif agent == "victim" and self.info['timer'] <= 15 and self.info['status'] == "hide":
             rew += 0.2
         elif agent == "victim" and self.info['status'] == "hide" and self.info['end-game'] == False:
-            rew -= 0.01 * self.info["timer"] if 0.01 * self.info["timer"] < 0.2 else 0.2
+            rew -= 0.01 * self.info["timer"] if 0.01 * self.info["timer"] < 0.4 else 0.4
 
         if agent == "victim" and sub_map == self.info["sub_map"]:
             self.info["timer_map"] += 1

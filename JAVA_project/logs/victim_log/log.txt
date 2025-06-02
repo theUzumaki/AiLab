@@ -2500,3 +2500,327 @@ Step 1
   Explained Var     : N/A
   Total Reward      : [      -0.65]
 -------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -1.2]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       0.15]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       0.05]
+-------------------------------------------------------------------------------------
+Step 2
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [        0.1]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.2]
+-------------------------------------------------------------------------------------
+Step 2
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 3
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 4
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 35.146516364812854
+  Entropy           : -1.519394040852785
+  Approx KL         : 0.009246590547263622
+  Explained Var     : 0.25653785467147827
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 5
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 35.146516364812854
+  Entropy           : -1.519394040852785
+  Approx KL         : 0.009246590547263622
+  Explained Var     : 0.25653785467147827
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 6
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 35.146516364812854
+  Entropy           : -1.519394040852785
+  Approx KL         : 0.009246590547263622
+  Explained Var     : 0.25653785467147827
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 7
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.4437384961172939
+  Entropy           : -1.4670437537133694
+  Approx KL         : 0.00771314837038517
+  Explained Var     : -0.008550524711608887
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 8
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.4437384961172939
+  Entropy           : -1.4670437537133694
+  Approx KL         : 0.00771314837038517
+  Explained Var     : -0.008550524711608887
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 9
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.4437384961172939
+  Entropy           : -1.4670437537133694
+  Approx KL         : 0.00771314837038517
+  Explained Var     : -0.008550524711608887
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 10
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.5742121627554297
+  Entropy           : -1.3979956217110157
+  Approx KL         : 0.012091074138879776
+  Explained Var     : 0.006756782531738281
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 2
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 3
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 4
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6935347225517035
+  Entropy           : -1.4316547006368636
+  Approx KL         : 0.005192859098315239
+  Explained Var     : 0.009100735187530518
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 5
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6935347225517035
+  Entropy           : -1.4316547006368636
+  Approx KL         : 0.005192859098315239
+  Explained Var     : 0.009100735187530518
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 6
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6935347225517035
+  Entropy           : -1.4316547006368636
+  Approx KL         : 0.005192859098315239
+  Explained Var     : 0.009100735187530518
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 7
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6826151486486196
+  Entropy           : -1.5100196145474911
+  Approx KL         : 0.007477590814232826
+  Explained Var     : 0.00722271203994751
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 8
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6826151486486196
+  Entropy           : -1.5100196145474911
+  Approx KL         : 0.007477590814232826
+  Explained Var     : 0.00722271203994751
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 9
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.6826151486486196
+  Entropy           : -1.5100196145474911
+  Approx KL         : 0.007477590814232826
+  Explained Var     : 0.00722271203994751
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 10
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.734166119992733
+  Entropy           : -1.5523665472865105
+  Approx KL         : 0.010923303663730621
+  Explained Var     : 0.006478250026702881
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 2
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 3
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 4
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.8075146708637475
+  Entropy           : -1.5323355607688427
+  Approx KL         : 0.006352959666401148
+  Explained Var     : 0.007850170135498047
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 5
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.8075146708637475
+  Entropy           : -1.5323355607688427
+  Approx KL         : 0.006352959666401148
+  Explained Var     : 0.007850170135498047
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 6
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.8075146708637475
+  Entropy           : -1.5323355607688427
+  Approx KL         : 0.006352959666401148
+  Explained Var     : 0.007850170135498047
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 7
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.801326597109437
+  Entropy           : -1.5426964454352856
+  Approx KL         : 0.009352460503578186
+  Explained Var     : 0.007036030292510986
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 8
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.801326597109437
+  Entropy           : -1.5426964454352856
+  Approx KL         : 0.009352460503578186
+  Explained Var     : 0.007036030292510986
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 9
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.801326597109437
+  Entropy           : -1.5426964454352856
+  Approx KL         : 0.009352460503578186
+  Explained Var     : 0.007036030292510986
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 10
+  Learning Rate     : 0.000300
+  Policy Loss       : N/A
+  Value Loss        : 1.8125670559704303
+  Entropy           : -1.4942437887191773
+  Approx KL         : 0.00765771372243762
+  Explained Var     : 0.00646442174911499
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 1
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
+Step 2
+  Learning Rate     : 0.000000
+  Policy Loss       : N/A
+  Value Loss        : N/A
+  Entropy           : N/A
+  Approx KL         : N/A
+  Explained Var     : N/A
+  Total Reward      : [       -0.1]
+-------------------------------------------------------------------------------------
