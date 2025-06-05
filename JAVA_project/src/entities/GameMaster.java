@@ -31,6 +31,9 @@ public class GameMaster {
     
     public List<PhysicalEntity> resetEntities = new ArrayList<>();
     
+    private int[][] houses = new int[][] {{}, {}};
+    private int[][] objects = new int[][] {{}, {}};
+    
     private int[][][][] windowTileMaps;
 
     private GameMaster(int[][] windowValues) {
@@ -96,7 +99,7 @@ public class GameMaster {
     	collisionBoxes.add(jason.box);
     	interactionBoxes.add(jason.intrBox);
     	
-    	Panam panam = Panam.getInstance(53, 24, 0, 0, 1, 1, STEP, windowValues[1][0], 0);
+    	Panam panam = Panam.getInstance(24, 2, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
     	animatedEntities.add(panam);
     	resetEntities.add(panam);
     	physicalEntities.add(panam);
@@ -283,6 +286,8 @@ public class GameMaster {
     					staticEntities.add(battery);
     					resetEntities.add(battery);
     					linkingObjects.add(battery);
+    					// Stage 1
+    					objects[0] = new int[] {x * sizetile + windowBorders[1][0], y * sizetile + windowBorders[1][2]};
     					match = true; 
     					break;
     				case 34:
@@ -290,6 +295,8 @@ public class GameMaster {
     					staticEntities.add(phone);
     					resetEntities.add(phone);
     					linkingObjects.add(phone);
+    					// Stage 2
+    					objects[1] = new int[] {x * sizetile + windowBorders[2][0], y * sizetile + windowBorders[2][2]};
     					match = true; 
     					break;
     				}
@@ -319,8 +326,12 @@ public class GameMaster {
     				switch (element) {
     				
     				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); break;
-    				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1")); break;
-    				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); break;
+    				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1"));
+    					houses[1] = new int[] {x * sizetile, y * sizetile};
+    					break;
+    				case 3: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door2")); 
+    					houses[0] = new int[] {x * sizetile, y * sizetile};
+    					break;
     				case 2: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "warehouse", linkingObjects.remove())); break;
     				case 4: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "box", linkingObjects.remove())); break;
     				case 6: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "border", linkingObjects.remove())); break;
@@ -424,7 +435,6 @@ public class GameMaster {
 
     		for (int j = 0; j < 3; j++) {    			
     			for (int i = 0; i < 4; i++) {
-    				
     				BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/sprites/tilemap/"+(j+1)+"/"+i+".png"));
     				
     				int width = image.getWidth();
@@ -544,7 +554,15 @@ public class GameMaster {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    	
+    }
+    
+    public double distance(AnimatedEntity panam, int idx_house) {
+    	if (panam.stage == 0) {
+    		return Math.sqrt(Math.pow((panam.x - houses[idx_house][0]), 2) + Math.pow((panam.y - houses[idx_house][1]), 2));
+    	}
+    	else {
+    		return Math.sqrt(Math.pow((panam.x - objects[idx_house][0]), 2) + Math.pow((panam.y - objects[idx_house][1]), 2));
+    	}
     }
 	
 }

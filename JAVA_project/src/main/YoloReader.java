@@ -1,7 +1,6 @@
 package main;
 
 import java.io.*;
-import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
@@ -9,7 +8,6 @@ import java.nio.file.Files;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class YoloReader {
     public static class Detection {
@@ -51,7 +49,7 @@ public class YoloReader {
             }
             
         	return detections;
-    	} catch(JSONException e) {
+    	} catch(Error e) {
     		return null;
     	}
     	

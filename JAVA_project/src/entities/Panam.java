@@ -27,8 +27,6 @@ public class Panam extends AnimatedEntity{
 		interval = TILE / (STEP + 1);
 		timer=60;
 		
-		stage = 1;
-		
 		olddoorX = 34 * TILE;
 		olddoorY = 9 * TILE;
 		
@@ -211,6 +209,9 @@ public class Panam extends AnimatedEntity{
 		
 		hidden = false;
 		dashing = false;
+		
+		phone = false;
+		battery = false;
 		
 		timer = 60; 
 		dash = 50;

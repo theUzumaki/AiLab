@@ -151,33 +151,36 @@ public class ComunicationAI {
     	
     	int sub_map = 0;
     	
-    	// Right house
-    	if (584 <= panam.x && panam.x <= 764 && 136 <= panam.y && panam.y <= 184)
-    		sub_map = 1;
-    	// Left House
-    	else if(16 <= panam.x && panam.x <= 152 && 136 <= panam.y && panam.y <= 184)
-    		sub_map = 2;
-    	// Battery zone
-    	else if(1036 <= panam.x && panam.x <= 1100 && 468 <= panam.y && panam.y <= 500)
-    		sub_map = 3;
-    	// Phone zone
-    	else if(1164 <= panam.x && panam.x <= 1220 && 652 <= panam.y && panam.y <= 704)
-    		sub_map = 4;
     	// Spawn point
-    	else if (280 <= panam.x && panam.x <= 548 && 16 <= panam.y && panam.y <= 92)
-    		sub_map = 5;
+    	if (280 <= panam.x && panam.x <= 548 && 16 <= panam.y && panam.y <= 92)
+    		sub_map = 1;
     	// Fountain
     	else if(296 <= panam.x && panam.x <= 536 && 104 <= panam.y && panam.y <= 200)
-    		sub_map = 6;
+    		sub_map = 2;
     	// Lake
     	else if(36 <= panam.x && panam.x <= 280 && 200 <= panam.y && panam.y <= 360)
-    		sub_map = 7;
+    		sub_map = 3;
     	// High Grass
     	else if(440 <= panam.x && panam.x <= 760 && 224 <= panam.y && panam.y <= 360)
-    		sub_map = 8;
+    		sub_map = 4;
+    	
+    	double dist1;
+    	double dist2;
+    	
+    	// Battery
+		dist1 = gl.gm.distance(panam, 0);
+		
+		// Phone
+		dist2 = gl.gm.distance(panam, 1);
     	
     	victim.put("sub_map", sub_map);
-
+    	
+    	// Distance from the house of the battery or distance from the battery
+    	victim.put("distance_1", dist1);
+    	
+    	// Distance from the house of the phone or distance from the phone
+    	victim.put("distance_2", dist2);
+    	
     	JSONObject killer = new JSONObject();
     	
     	Jason jason = (Jason) animatedEntities.getFirst();

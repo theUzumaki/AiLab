@@ -28,7 +28,7 @@ public class GameLoop implements Runnable {
     private boolean running = false;
 	
     // Main objects
-    private final GameMaster gm;
+    public final GameMaster gm;
     private final List<Game> windows;
     
     
@@ -61,33 +61,6 @@ public class GameLoop implements Runnable {
 
     public void reset() {
         running = false;
-    }
-    
-    private boolean toggle = false;
-    private int lastTrigger = -1;
-    
-    public void updateLocationIfNeeded(int cont1, int cont2, int cont3) {
-        int sum = cont1 + cont2 + cont3;
-
-		if (sum % 10 == 0 && sum != lastTrigger) {
-            lastTrigger = sum;
-
-			if (toggle) {
-                gm.animatedEntities.getLast().setLocation(
-                    windows.get(1).getCamera().x + gm.windowValues[1][0],
-                    windows.get(1).getCamera().y + gm.windowValues[1][0],
-                    1
-                );
-            } else {
-                gm.animatedEntities.getLast().setLocation(
-                    windows.get(2).getCamera().x + gm.windowValues[1][0],
-                    windows.get(2).getCamera().y + gm.windowValues[2][0],
-                    2
-                );
-            }
-
-            toggle = !toggle;
-        }
     }
     
     @Override
@@ -131,9 +104,6 @@ public class GameLoop implements Runnable {
             	
             	com.writeGameState("killer", "victim");
             	
-                
-                System.out.println("game state writed");
-            	
             	for (PhysicalEntity reset : gm.resetEntities) {
     	    		if (reset instanceof Panam) {
     	    			try {
@@ -147,16 +117,25 @@ public class GameLoop implements Runnable {
             	// gm.animatedEntities.getLast().setLocation( windows.get(1).getCamera().x + gm.windowValues[1][0], windows.get(1).getCamera().y + gm.windowValues[1][0],1);
             	
             	timer_finished = false;
+            	
+            	try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
         		start_game = System.currentTimeMillis();
             
             } else if (panam.kind == "panam" && ((Panam) panam).listOfObject.size() == 2) {
-            	start_game = System.currentTimeMillis();
+            	
+            	if(!end_game) {
+            		start_game = System.currentTimeMillis();            		
+            	}
+            	
         		end_game = true;
         		
-        		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        		
-        		Runnable task = () -> {
-        			
+        		if (elapsedTime > 60 * 1000) {
         			killerWin = false;
         			victimWin = true;
         			
@@ -180,12 +159,18 @@ public class GameLoop implements Runnable {
         			
         			killerWin = false;
         			victimWin = false;
+        			end_game = false;
+        			
+        			try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
         			
         			start_game = System.currentTimeMillis();
-        			end_game = false;
-        		};
+        		}
         		
-        		scheduler.schedule(task, 60, TimeUnit.SECONDS);
             } else if (deadEntities.size() >= 1) {
             	deadEntities.clear();
             	
@@ -214,6 +199,13 @@ public class GameLoop implements Runnable {
             	
             	killerWin = false;
     			victimWin = false;
+    			
+    			try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     			
     			start_game = System.currentTimeMillis();
             }
@@ -312,7 +304,7 @@ public class GameLoop implements Runnable {
             		}
             		*/
                     
-                    if (intr != null) System.out.println(ent.kind + " has interacted with: " + intr.kind); ent.interaction = false;
+                    if (intr != null) ent.interaction = false;
             		if (intr != null) switch (intr.kind) {
             		
             		
