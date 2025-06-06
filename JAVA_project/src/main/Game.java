@@ -16,8 +16,6 @@ public class Game extends JPanel {
     private final GameMaster gm;
     private final KeyManager keys;
     final Rectangle camera;
-    
-    private final int id;
     private final int sizeTile;
     
     public boolean screen = false;
@@ -26,7 +24,6 @@ public class Game extends JPanel {
         this.camera = camera;
         this.gm = GameMaster.getInstance();  // Shared game logic
         this.keys = new KeyManager();
-        this.id = id;
         this.sizeTile = sizeTile;
         
 

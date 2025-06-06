@@ -1,3 +1,2 @@
 /bin/
-JAVA_project/Object_detection/.venv
-JAVA_project/.venv/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib
+JAVA_project/.venv

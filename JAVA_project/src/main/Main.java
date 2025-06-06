@@ -2,7 +2,6 @@ package main;
 
 import java.util.List;
 import java.awt.Rectangle;
-import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -17,6 +16,8 @@ public class Main {
         	{ 20, 8, 16 }
         };
         
+        int map = Integer.valueOf("1");
+        
         int[] dims1 = new int[] { windowValues[0][2] * windowValues[0][0], windowValues[0][1] * windowValues[0][0] };
         int[] dims2 = new int[] { windowValues[1][2] * windowValues[1][0], windowValues[1][1] * windowValues[1][0] };
         int[] dims3 = new int[] { windowValues[2][2] * windowValues[2][0], windowValues[2][1] * windowValues[2][0] };
@@ -25,7 +26,7 @@ public class Main {
         Rectangle house1Cam = new Rectangle(dims1[0], dims1[1], dims2[0], dims2[1] );
         Rectangle house2Cam = new Rectangle(dims1[0] + dims2[0], dims1[1] + dims2[1], dims3[0], dims3[1] );
         
-        GameMaster.getInstance(windowValues);
+        GameMaster.getInstance(windowValues, map);
 
         Game forest = new Game(forestCam, 0, windowValues[0][0]);
         Game house1 = new Game(house1Cam, 1, windowValues[1][0]);
@@ -36,7 +37,8 @@ public class Main {
         createWindow("House 2", house2, dims1[0] + dims2[0], dims1[1] + dims2[1]);
 
         List<Game> allViews = List.of(forest, house1, house2);
-        Thread gameLoop = new Thread(new GameLoop(allViews));
+        
+        Thread gameLoop = new Thread(new GameLoop(allViews, map));
         
         System.out.println("[JAVA] Game loop starting");
         gameLoop.start();

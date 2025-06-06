@@ -1,12 +1,8 @@
 package main;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +15,6 @@ import java.util.ArrayList;
 import entities.AnimatedEntity;
 import entities.GameMaster;
 import entities.InteractionBox;
-import entities.Jason;
 import entities.Panam;
 import entities.PhysicalEntity;
 
@@ -34,6 +29,8 @@ public class GameLoop implements Runnable {
     
     private ImageSaver saver = new ImageSaver();
     private Thread saverThread = new Thread(saver);
+    
+    int map = 0;
     
     public boolean killerWin = false, victimWin = false, end_game = false, timer_finished = false;
     
@@ -52,15 +49,43 @@ public class GameLoop implements Runnable {
     
     ComunicationAI com;
 
-    public GameLoop(List<Game> views) {
+    public GameLoop(List<Game> views, int map) {
         gm = GameMaster.getInstance();
         windows = views;
         running = true;
+        this.map = map;
         com = new ComunicationAI(windows, gm.animatedEntities, this);
     }
 
     public void reset() {
         running = false;
+    }
+    
+    private boolean toggle = false;
+    private int lastTrigger = -1;
+    
+    public void updateLocationIfNeeded(int cont1, int cont2, int cont3) {
+        int sum = cont1 + cont2 + cont3;
+
+		if (sum % 10 == 0 && sum != lastTrigger) {
+            lastTrigger = sum;
+
+			if (toggle) {
+                gm.animatedEntities.getLast().setLocation(
+                    windows.get(1).getCamera().x + gm.windowValues[1][0],
+                    windows.get(1).getCamera().y + gm.windowValues[1][0],
+                    1
+                );
+            } else {
+                gm.animatedEntities.getLast().setLocation(
+                    windows.get(2).getCamera().x + gm.windowValues[1][0],
+                    windows.get(2).getCamera().y + gm.windowValues[2][0],
+                    2
+                );
+            }
+
+            toggle = !toggle;
+        }
     }
     
     @Override
@@ -76,12 +101,15 @@ public class GameLoop implements Runnable {
         	saver.detection();
         }).start(); */
         
+        gm.animatedEntities.getLast().setLocation( windows.get(map).getCamera().x + gm.windowValues[map][0] + 20, windows.get(map).getCamera().y + gm.windowValues[map][0] + 20, map);
+
         try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
         
         start_game = System.currentTimeMillis();
 
@@ -104,6 +132,9 @@ public class GameLoop implements Runnable {
             	
             	com.writeGameState("killer", "victim");
             	
+                
+                System.out.println("game state writed");
+            	
             	for (PhysicalEntity reset : gm.resetEntities) {
     	    		if (reset instanceof Panam) {
     	    			try {
@@ -114,10 +145,6 @@ public class GameLoop implements Runnable {
     	    		reset.reset();
     	    	}
             	
-            	// gm.animatedEntities.getLast().setLocation( windows.get(1).getCamera().x + gm.windowValues[1][0], windows.get(1).getCamera().y + gm.windowValues[1][0],1);
-            	
-            	timer_finished = false;
-            	
             	try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -125,10 +152,13 @@ public class GameLoop implements Runnable {
 					e.printStackTrace();
 				}
             	
+
+                gm.animatedEntities.getLast().setLocation( windows.get(map).getCamera().x + gm.windowValues[map][0] + 20, windows.get(map).getCamera().y + gm.windowValues[map][0] + 20,map);
+                
+            	timer_finished = false;
         		start_game = System.currentTimeMillis();
             
             } else if (panam.kind == "panam" && ((Panam) panam).listOfObject.size() == 2) {
-            	
             	if(!end_game) {
             		start_game = System.currentTimeMillis();            		
             	}
@@ -167,10 +197,11 @@ public class GameLoop implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-        			
+
+        	        gm.animatedEntities.getLast().setLocation( windows.get(map).getCamera().x + gm.windowValues[map][0] + 20, windows.get(map).getCamera().y + gm.windowValues[map][0] + 20,map);
+        	        
         			start_game = System.currentTimeMillis();
         		}
-        		
             } else if (deadEntities.size() >= 1) {
             	deadEntities.clear();
             	
@@ -199,14 +230,16 @@ public class GameLoop implements Runnable {
             	
             	killerWin = false;
     			victimWin = false;
-    			
+
     			try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-    			
+
+    	        gm.animatedEntities.getLast().setLocation( windows.get(map).getCamera().x + gm.windowValues[map][0] + 20, windows.get(map).getCamera().y + gm.windowValues[map][0] + 20,map);
+    	        
     			start_game = System.currentTimeMillis();
             }
             
@@ -304,7 +337,10 @@ public class GameLoop implements Runnable {
             		}
             		*/
                     
-                    if (intr != null) ent.interaction = false;
+                    if (intr != null) {
+                    	// System.out.println(ent.kind + " has interacted with: " + intr.kind); 
+                    	ent.interaction = false;
+                    }
             		if (intr != null) switch (intr.kind) {
             		
             		
@@ -315,7 +351,7 @@ public class GameLoop implements Runnable {
             			if(ent.kind == "jason")
             				gm.interactionBoxes.remove(intr);
             			break;
-            		case "warehouse": intr.linkObj.triggerIntr(ent); ent.triggerIntr(intr.linkObj); break;
+            		case "warehouse": ent.triggerIntr(intr.linkObj); break;
             		case "border":
             			ent.triggerIntr(intr.linkObj); 
             			break;

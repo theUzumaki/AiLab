@@ -61,7 +61,6 @@ public abstract class AnimatedEntity extends PhysicalEntity{
 		
 		this.x = olddoorX;
 		this.y = olddoorY;
-		
 	}
 	
 	public void memorizeValues() {

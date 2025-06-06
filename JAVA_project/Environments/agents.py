@@ -1,5 +1,3 @@
-import sys
-
 import numpy as np
 from gymnasium import spaces
 from ultralytics import YOLO
@@ -7,7 +5,6 @@ import json
 import fcntl
 import time
 from gymnasium import Env
-import sys
 
 from utils import COM_FILES, OBJ_FILES, reset_files
 
@@ -21,7 +18,7 @@ class KillerVictimEnv(Env):
             "status": "visible",
             "items": 0,
             "end-game": False,
-            "map": 0,
+            "map": self.config["map"],
             "slow": False,
             "speed": False ,
             "win": False,
@@ -49,7 +46,7 @@ class KillerVictimEnv(Env):
             "status": "visible",
             "items": 0,
             "end-game": False,
-            "map": 0,
+            "map": self.config["map"],
             "slow": False,
             "speed": False,
             "win": False,

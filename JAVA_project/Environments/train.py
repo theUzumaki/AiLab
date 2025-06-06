@@ -5,21 +5,20 @@ import torch.nn.functional as F
 from agents import KillerVictimEnv
 from network import ActorCritic
 
-from utils import log_episode, get_args, plot_metrics
-from utils import CLIP_EPSILON, CLIP_EPSILON, TARGET_KL, GAMMA, LAM
+from utils import log_episode, get_args, plot_metrics, send_mail_with_logs, extract_info_features_victim, extract_info_features_killer 
+from utils import CLIP_EPSILON, TARGET_KL, GAMMA, LAM
 
-def compute_gae(rewards, values, gamma=GAMMA, lam=LAM):
+def compute_gae(rewards, values):
     advantages = []
     gae = 0
     values = values + [0]
     for t in reversed(range(len(rewards))):
-        delta = rewards[t] + gamma * values[t + 1] - values[t]
-        gae = delta + gamma * lam * gae
+        delta = rewards[t] + GAMMA * values[t + 1] - values[t]
+        gae = delta + GAMMA * LAM * gae
         advantages.insert(0, gae)
     return advantages
 
-def ppo_update_v2( model, optimizer, states, actions, log_probs_old, returns, advantages,
-    clip_epsilon=CLIP_EPSILON, epochs=4, batch_size=32, target_kl=TARGET_KL):
+def ppo_update_v2(model, optimizer, states, actions, log_probs_old, returns, advantages, epochs=4, batch_size=32):
     
     if len(states) == 0:
         print("[DEBUG] states empty")
@@ -36,7 +35,6 @@ def ppo_update_v2( model, optimizer, states, actions, log_probs_old, returns, ad
     dataset_size = states.size(0)
     approx_kl = 0
 
-    # Inizializza i valori di default
     policy_loss = value_loss = entropy = torch.tensor(0.0)
 
     for _ in range(int(epochs)):
@@ -58,7 +56,7 @@ def ppo_update_v2( model, optimizer, states, actions, log_probs_old, returns, ad
 
             ratio = torch.exp(log_probs - batch_log_probs_old)
             surr1 = ratio * batch_advantages
-            surr2 = torch.clamp(ratio, 1.0 - clip_epsilon, 1.0 + clip_epsilon) * batch_advantages
+            surr2 = torch.clamp(ratio, 1.0 - CLIP_EPSILON, 1.0 + CLIP_EPSILON) * batch_advantages
             policy_loss = -torch.min(surr1, surr2).mean()
             value_loss = F.mse_loss(values.view(-1), batch_returns.view(-1))
             loss = policy_loss + 0.5 * value_loss - 0.01 * entropy
@@ -74,38 +72,47 @@ def ppo_update_v2( model, optimizer, states, actions, log_probs_old, returns, ad
             optimizer.step()
 
             # Early stopping se KL troppo alto
-            if kl > 1.5 * target_kl:
+            if kl > 1.5 * TARGET_KL:
                 print(f"Early stopping PPO update per KL troppo alto: {kl:.4f}")
                 break
 
     approx_kl /= (epochs * max(1, dataset_size // batch_size))
     return policy_loss.item(), value_loss.item(), entropy.item(), approx_kl
 
-def train(env, model, optimizer, num_episodes=150, log_file="log.txt", gamma=GAMMA, lam=LAM, clip_epsilon=CLIP_EPSILON, episodes_per_batch=1, max_episode_batch=5):
+def train(env, model, optimizer, num_episodes=150, log_file="log.txt", episodes_per_batch=1, max_episode_batch=5, batch_ppo = 32):
     episode = 0
+    prev_policy_loss = None
+    prev_value_loss = None
+
     while episode < num_episodes:
-        current_batch = episodes_per_batch + episode // 5
-        current_batch = min(current_batch, max_episode_batch)
+        # Usa sempre il valore corrente di episodes_per_batch (non più dipendente da episode)
+        current_batch = episodes_per_batch
 
         # Buffer per batch multipli di episodi
         batch_states, batch_actions, _, _, batch_log_probs, batch_returns, batch_advantages = [], [], [], [], [], [], []
         batch_total_rewards = []
 
         for _ in range(current_batch):
-            obs, _ = env.reset()
+            obs, info = env.reset()
             done = False
             total_reward = 0
 
             states, actions, rewards, values, log_probs = [], [], [], [], []
 
             while not done:
-                obs_tensor = torch.FloatTensor(obs).unsqueeze(0).unsqueeze(0) / 100.0
-                action, log_prob, _, value = model.act(obs_tensor)
-                next_obs, reward, terminated, truncated, _ = env.step(action)
+                obs_tensor = torch.FloatTensor(obs).flatten() / 100.0  # (50,)
+                if env.agent == "victim":
+                    info_features = extract_info_features_victim(info)            # (n_info,)
+                else:
+                    info_features = extract_info_features_killer(info)            # (n_info,)
+                full_obs = np.concatenate([obs_tensor.numpy(), info_features])  # (50 + n_info,)
+                full_obs_tensor = torch.FloatTensor(full_obs).unsqueeze(0)      # (1, 50 + n_info)
+                action, log_prob, _, value = model.act(full_obs_tensor)
+                next_obs, reward, terminated, truncated, info = env.step(action)
                 done = terminated or truncated
                 reward = np.clip(reward, -1.0, 1.0)
 
-                states.append(obs_tensor.squeeze(0))
+                states.append(torch.FloatTensor(full_obs))
                 actions.append(action)
                 rewards.append(reward)
                 values.append(value.squeeze().item())
@@ -118,7 +125,7 @@ def train(env, model, optimizer, num_episodes=150, log_file="log.txt", gamma=GAM
             returns = []
             R = 0
             for r in reversed(rewards):
-                R = r + gamma * R
+                R = r + GAMMA * R
                 returns.insert(0, R)
 
             # Normalizzazione dei returns
@@ -126,7 +133,7 @@ def train(env, model, optimizer, num_episodes=150, log_file="log.txt", gamma=GAM
             returns = (returns - returns.mean()) / (returns.std() + 1e-8)
             returns = returns.tolist()
 
-            advantages = compute_gae(rewards, values, gamma, lam)
+            advantages = compute_gae(rewards, values)
 
             # Accumula batch
             batch_states.extend(states)
@@ -142,8 +149,7 @@ def train(env, model, optimizer, num_episodes=150, log_file="log.txt", gamma=GAM
 
         # PPO update su tutto il batch accumulato
         policy_loss, value_loss, entropy_val, approx_kl = ppo_update_v2(
-            model, optimizer, batch_states, batch_actions, batch_log_probs, batch_returns, batch_advantages, clip_epsilon
-        )
+            model, optimizer, batch_states, batch_actions, batch_log_probs, batch_returns, batch_advantages, batch_size = batch_ppo)
 
         lr = optimizer.param_groups[0]['lr']
         # Logga la media dei reward degli episodi nel batch
@@ -151,40 +157,82 @@ def train(env, model, optimizer, num_episodes=150, log_file="log.txt", gamma=GAM
         log_episode(log_file, episode, lr, policy_loss, value_loss, entropy_val, approx_kl, avg_total_reward)
         print(f"Episodes {episode - episodes_per_batch + 1}-{episode}/{num_episodes}, Avg Total Reward: {avg_total_reward}")
 
+        # --- Adattamento dinamico episodes_per_batch ---
+        POLICY_LOSS_THRESHOLD = 0.5
+        VALUE_LOSS_THRESHOLD = 0.5
+
+        if prev_policy_loss is not None and prev_value_loss is not None:
+            if (abs(policy_loss - prev_policy_loss) > POLICY_LOSS_THRESHOLD or
+                abs(value_loss - prev_value_loss) > VALUE_LOSS_THRESHOLD):
+                episodes_per_batch = min(episodes_per_batch + 1, max_episode_batch)
+                print(f"[ADAPTIVE] Aumento episodes_per_batch a {episodes_per_batch} per maggiore stabilità.")
+                if episodes_per_batch == max_episode_batch:
+                    print("[TRAINING] Training instabile")
+                    break
+
+        prev_policy_loss = policy_loss
+        prev_value_loss = value_loss
+
 if __name__ == "__main__":
-    
-    # Get argument
-    args = get_args()
 
-    print("[DEBUG]")
-    print("Argomenti passati:")
-    for k, v in vars(args).items():
-        print(f"  {k}: {v}")
-
-    # Set the env
-    env = KillerVictimEnv(config={"agent": args.agent})  # or "victim"
-    obs_dim = env.observation_space.shape[0] * env.observation_space.shape[1]
-    act_dim = env.action_space.n
-
-    # Set the model
-    model = ActorCritic(obs_dim, act_dim)
-
-    percorso_modello = f"Model_game/{args.agent}/model_3.pth"
     try:
-        model.load_state_dict(torch.load(percorso_modello))
-        print(f"Modello caricato da {percorso_modello}")
-    except FileNotFoundError:
-        print("Nessun modello precedente trovato, si parte da zero.")
+        # Get argument
+        args = get_args()
 
-    optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
+        print("[DEBUG]")
+        print("Argomenti passati:")
+        for k, v in vars(args).items():
+            print(f"  {k}: {v}")
 
-    # Start training
-    log = "Logs/" + args.agent + "_log/" + args.log_file
-    train(env, model, optimizer, 
-          num_episodes=args.episodes,
-          log_file=log,
-          episodes_per_batch=args.ibatch_ep,
-          max_episode_batch=args.fbatch_ep)
+        # Set the env
+        env = KillerVictimEnv(config={"agent": args.agent, "map": args.map})  # or "victim"
+        obs_dim = env.observation_space.shape[0] * env.observation_space.shape[1] + (9 if args.agent == "victim" else 5)
+        act_dim = env.action_space.n
 
-    torch.save(model.state_dict(), f"Model_game/{args.agent}/model_3.pth")
-    plot_metrics(log, args.agent, args.n_train)
+        # Set the model
+        model = ActorCritic(obs_dim, act_dim)
+
+        percorso_modello = f"Model_game/{args.agent}/model_5.pth"
+        try:
+            model.load_state_dict(torch.load(percorso_modello))
+            print(f"Modello caricato da {percorso_modello}")
+        except FileNotFoundError:
+            print("Nessun modello precedente trovato, si parte da zero.")
+
+        optimizer = optim.Adam(model.parameters(), lr=1e-4)
+
+        # Start training
+        log = "Logs/" + args.agent + "_log/" + args.log_file
+
+        train(env, model, optimizer, 
+            num_episodes=args.episodes,
+            log_file=log,
+            episodes_per_batch=args.ibatch_ep,
+            max_episode_batch=args.fbatch_ep,
+            batch_ppo=args.batch    
+        )
+
+        torch.save(model.state_dict(), f"Model_game/{args.agent}/model_5.pth")
+        plot_metrics(log, args.agent, args.n_train)
+
+        send_mail_with_logs(
+            subject=f"Training {args.agent} PPO",
+            body="In allegato i log del training.",
+            to="lachithaperera75@gmail.com",
+            files=[
+                log,
+                f"../Plots/{args.agent}/total_rewards_{args.n_train}.png"
+                f"../Plots/{args.agent}/approx_kl_{args.n_train}.png"
+                f"../Plots/{args.agent}/value_loss_{args.n_train}.png"
+                f"../Plots/{args.agent}/policy_los_{args.n_train}.png"
+            ]
+        )
+    except Exception as e:
+        send_mail_with_logs(
+            subject=f"Error training {args.agent} PPO",
+            body=f"In allegato i log del training, ha dato il seguente errore\n {e}",
+            to="lachithaperera75@gmail.com",
+            files=[
+                log
+            ]
+        )

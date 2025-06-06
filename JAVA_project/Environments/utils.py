@@ -1,7 +1,12 @@
 import argparse, time, fcntl, json
 import os
 
+import smtplib
+from email.message import EmailMessage
+import mimetypes
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 def get_args():
     """
@@ -21,9 +26,10 @@ def get_args():
     parser.add_argument('--ep_ibatch', dest='ibatch_ep', type=int, default=1)
     parser.add_argument('--ep_fbatch', dest='fbatch_ep', type=int, default=5)
     parser.add_argument('--log_file', dest='log_file', type=str, default='log.txt')
-    parser.add_argument('--batch_ppo', dest='batch', type=int, default=32)
+    parser.add_argument('--batch', dest='batch', type=int, default=32)
     parser.add_argument('--learning_rate', dest='learning_rate', type=float, default=1e-4)
     parser.add_argument('--n_train', dest='n_train', type=int, default=0)
+    parser.add_argument('--map', dest="map", type=int, default=0)
 
     args = parser.parse_args()
 
@@ -83,6 +89,47 @@ def get_absolute_path(relative_path):
     """
     return os.path.abspath(os.path.join(os.getcwd(), relative_path))
 
+def extract_info_features_victim(info):
+    # Ordine delle chiavi fisso per coerenza
+    keys = [
+        "end-game", "map", "win", "finished",
+        "dead", "distance_1", "distance_2", "battery", "phone"
+    ]
+    features = []
+    for k in keys:
+        v = info.get(k, 0)
+        # Codifica: numerici lasciati così, booleani come float, stringhe come one-hot semplice
+        if isinstance(v, bool):
+            features.append(float(v))
+        elif isinstance(v, (int, float)):
+            features.append(float(v))
+        elif isinstance(v, str):
+            # Esempio: status può essere "visible" o altro, codifica come 1 se "visible", 0 altrimenti
+            features.append(1.0 if v == "visible" else 0.0)
+        else:
+            features.append(0.0)
+    return np.array(features, dtype=np.float32)
+
+def extract_info_features_killer(info):
+    # Ordine delle chiavi fisso per coerenza
+    keys = [
+        "end-game", "map", "win", "finished", "sub_map"
+    ]
+    features = []
+    for k in keys:
+        v = info.get(k, 0)
+        # Codifica: numerici lasciati così, booleani come float, stringhe come one-hot semplice
+        if isinstance(v, bool):
+            features.append(float(v))
+        elif isinstance(v, (int, float)):
+            features.append(float(v))
+        elif isinstance(v, str):
+            # Esempio: status può essere "visible" o altro, codifica come 1 se "visible", 0 altrimenti
+            features.append(1.0 if v == "visible" else 0.0)
+        else:
+            features.append(0.0)
+    return np.array(features, dtype=np.float32)
+
 # Function used to save data in the log file
 def log_episode(log_file, episode, lr, policy_loss, value_loss, entropy, approx_kl, total_reward):
     with open(log_file, "a") as f:
@@ -102,12 +149,14 @@ def plot_metrics(log_file, agent, n):
     policy_losses = []
     value_losses = []
     approx_kls = []
+    rewards = []
 
     with open(log_file, 'r') as f:
         episode = None
         policy_loss = None
         value_loss = None
         approx_kl = None
+        total_rew = None
 
         for line in f:
             if "Episode_number" in line:
@@ -122,6 +171,7 @@ def plot_metrics(log_file, agent, n):
                 policy_loss = None
                 value_loss = None
                 approx_kl = None
+                total_rew = None
             elif "Policy Loss" in line:
                 try:
                     policy_loss = float(line.split(':')[1].strip())
@@ -137,6 +187,11 @@ def plot_metrics(log_file, agent, n):
                     approx_kl = float(line.split(':')[1].strip())
                 except:
                     approx_kl = None
+            elif "Total Reward" in line:
+                try:
+                    total_rew = float(line.split(':')[1].strip())
+                except:
+                    total_rew = None
 
         # Salva l'ultimo episodio se presente
         if episode is not None and (policy_loss is not None and value_loss is not None and approx_kl is not None):
@@ -144,6 +199,7 @@ def plot_metrics(log_file, agent, n):
             policy_losses.append(policy_loss)
             value_losses.append(value_loss)
             approx_kls.append(approx_kl)
+            rewards.append(total_rew)
 
     # Policy Loss Plot
     plt.figure(figsize=(6, 4))
@@ -178,7 +234,47 @@ def plot_metrics(log_file, agent, n):
     plt.savefig(f'../Plots/{agent}/approx_kl_{n}.png')
     plt.close()
 
-CLIP_EPSILON = 0.2
+    # Total rewards Plot
+    plt.figure(figsize=(6, 4))
+    plt.plot(episodes, rewards, marker='o', label='Total rewards', color='red')
+    plt.xlabel('Episodes')
+    plt.ylabel('KL Divergence')
+    plt.title('Approx KL Over Episodes')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'../Plots/{agent}/total_rewards_{n}.png')
+    plt.close()
+
+def send_mail_with_logs(subject, body, to, files):
+
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = "ginofausto9@gmail.com"
+    msg['To'] = to
+    msg.set_content(body)
+
+    for file_path in files:
+        ctype, encoding = mimetypes.guess_type(file_path)
+        if ctype is None or encoding is not None:
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(file_path, 'rb') as f:
+            file_data = f.read()
+            file_name = os.path.basename(file_path)
+        msg.add_attachment(file_data, maintype=maintype, subtype=subtype, filename=file_name)
+
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_user = 'ginofausto9@gmail.com'
+    smtp_password = 'johm onxq vhfw cfjm'
+
+    with smtplib.SMTP(smtp_server, smtp_port) as smtp:
+        smtp.starttls()
+        smtp.login(smtp_user, smtp_password)
+        smtp.send_message(msg)
+        print("[INFO] Mail inviata con successo.")
+
+CLIP_EPSILON = 0.1
 TARGET_KL = 0.01
 GAMMA = 0.99
 LAM = 0.95

@@ -98,6 +98,8 @@ public class Panam extends AnimatedEntity{
 				moved = false;
 				aligned = true;
 				moveTimer = 0;
+				
+				// System.out.println("( " + x + " " + y + ")");
 			}
 		}
 		else if (y != -1000) {
@@ -161,8 +163,8 @@ public class Panam extends AnimatedEntity{
 	}
 	
 	public void handleHiding(PhysicalEntity ent) {
-
-		if (ent == null || ent.kind == "chest" || ent.kind == "box") {
+		
+		if (ent == null || ent.kind == "chest" || ent.kind == "box" || ent.kind == "warehouse" || ent.kind == "well" || ent.kind == "bed") {
 			if (!hidden) { hidden = true; memorizeValues(); interactingObj = ent; x = -1000; y = -1000;  interactingObj.triggerIntr(this); }
 			else { hidden = false; setBack(); interactingObj.triggerIntr(this); }
 		}
@@ -176,7 +178,9 @@ public class Panam extends AnimatedEntity{
 			if (!water) { x = tile * 4; y = tile * 15; water = true; }
 			else { x = tile * 4; y = tile * 10; water = false; }
 		}
-		else handleHiding(ent);
+		else {
+			handleHiding(ent);
+		}
 	}
 
 	@Override
@@ -209,9 +213,6 @@ public class Panam extends AnimatedEntity{
 		
 		hidden = false;
 		dashing = false;
-		
-		phone = false;
-		battery = false;
 		
 		timer = 60; 
 		dash = 50;

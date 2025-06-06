@@ -6,7 +6,6 @@ import java.nio.channels.FileLock;
 import java.nio.file.Files;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class YoloReader {

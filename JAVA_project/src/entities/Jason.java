@@ -105,6 +105,8 @@ public class Jason extends AnimatedEntity{
 		if (ent != null && ent.kind == "border") {
 			if (!water) { x = tile * 4; y = tile * 15; water = true;}
 			else { x = tile * 4; y = tile * 10; water = false;}
+		} else if ( ent.kind == "box" ){
+			ent.triggerIntr(this);
 		}
 		
 	}
