@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 7
+names: ['Hide', 'Interaction', 'Jason', 'Obstacle', 'Slow', 'Victim', 'Win']
+
+roboflow:
+  workspace: ciao-eup1n
+  project: mygame-klevp
+  version: 15
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ciao-eup1n/mygame-klevp/dataset/15

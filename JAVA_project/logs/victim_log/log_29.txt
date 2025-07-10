@@ -1,0 +1,65 @@
+Episode_number 20
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.010721503756940365
+  Value Loss        : 0.13082671165466309
+  Entropy           : 1.0544856786727905
+  Approx KL         : 0.015006979927420616
+  Total Reward      : 661.2712351870211
+  Battery           : 20
+  Exit House        : 20
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 40
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.11852174997329712
+  Value Loss        : 0.16729408502578735
+  Entropy           : 1.018427848815918
+  Approx KL         : 0.006727072410285473
+  Total Reward      : 654.918755603429
+  Battery           : 20
+  Exit House        : 20
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 62
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.12667720019817352
+  Value Loss        : 0.1389247179031372
+  Entropy           : 0.9953138828277588
+  Approx KL         : 0.029232153668999672
+  Total Reward      : 725.0701702542834
+  Battery           : 22
+  Exit House        : 22
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 85
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.08342478424310684
+  Value Loss        : 0.18573932349681854
+  Entropy           : 0.9677636623382568
+  Approx KL         : 0.00711336312815547
+  Total Reward      : 707.6209712196363
+  Battery           : 22
+  Exit House        : 22
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 100
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.12683162093162537
+  Value Loss        : 0.09450925141572952
+  Entropy           : 0.9373458027839661
+  Approx KL         : 0.0021860720589756966
+  Total Reward      : 440.06064703550766
+  Battery           : 14
+  Exit House        : 14
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+

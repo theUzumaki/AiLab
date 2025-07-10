@@ -1,0 +1,117 @@
+Episode_number 16
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.11493886262178421
+  Value Loss        : 0.5078809857368469
+  Entropy           : 1.1846866607666016
+  Approx KL         : 0.007565042935311794
+  Total Reward      : 493.5000000000075
+  Battery           : 16
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 33
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.007253705989569426
+  Value Loss        : 0.5064394474029541
+  Entropy           : 1.1542984247207642
+  Approx KL         : 0.020030144602060318
+  Total Reward      : 502.2571790714439
+  Battery           : 17
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 49
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.0002600644074846059
+  Value Loss        : 0.4568766951560974
+  Entropy           : 1.141702651977539
+  Approx KL         : 0.011682211421430111
+  Total Reward      : 501.52017025429967
+  Battery           : 16
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 67
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.025280453264713287
+  Value Loss        : 0.14553222060203552
+  Entropy           : 1.1357364654541016
+  Approx KL         : 0.014466505497694016
+  Total Reward      : 591.849213950497
+  Battery           : 18
+  Exit House        : 18
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 85
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.034296877682209015
+  Value Loss        : 0.33020979166030884
+  Entropy           : 1.090857744216919
+  Approx KL         : 0.02387346513569355
+  Total Reward      : 526.6864757033525
+  Battery           : 18
+  Exit House        : 16
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 105
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.11997392028570175
+  Value Loss        : 0.140991672873497
+  Entropy           : 1.1294080018997192
+  Approx KL         : 0.028272613883018494
+  Total Reward      : 664.8499999999954
+  Battery           : 20
+  Exit House        : 20
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 124
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.07677363604307175
+  Value Loss        : 0.12571363151073456
+  Entropy           : 1.1055657863616943
+  Approx KL         : 0.00703038927167654
+  Total Reward      : 626.0678252170223
+  Battery           : 19
+  Exit House        : 19
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 144
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.011728388257324696
+  Value Loss        : 0.12785808742046356
+  Entropy           : 1.0903681516647339
+  Approx KL         : 0.010960756801068783
+  Total Reward      : 660.7892767086103
+  Battery           : 20
+  Exit House        : 20
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 150
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.08308222144842148
+  Value Loss        : 0.08849908411502838
+  Entropy           : 1.0980814695358276
+  Approx KL         : 0.05290348827838898
+  Total Reward      : 201.23647570334418
+  Battery           : 6
+  Exit House        : 6
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+

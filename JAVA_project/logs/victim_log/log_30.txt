@@ -1,0 +1,91 @@
+Episode_number 12
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.02408679947257042
+  Value Loss        : 0.6306658387184143
+  Entropy           : 1.7800453901290894
+  Approx KL         : 0.01023767702281475
+  Total Reward      : -187.20000000000084
+  Phone             : 5
+  Exit House        : 0
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 24
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.014485794119536877
+  Value Loss        : 0.6895815134048462
+  Entropy           : 1.7791887521743774
+  Approx KL         : 0.009214750491082668
+  Total Reward      : -149.1000000000018
+  Phone             : 7
+  Exit House        : 0
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 41
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.0031188817229121923
+  Value Loss        : 0.7390416264533997
+  Entropy           : 1.7748669385910034
+  Approx KL         : 0.010271070525050163
+  Total Reward      : -272.1000000000043
+  Phone             : 6
+  Exit House        : 1
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 57
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.03880052641034126
+  Value Loss        : 0.7941184043884277
+  Entropy           : 1.765784740447998
+  Approx KL         : 0.013594000600278378
+  Total Reward      : -184.15000000000293
+  Phone             : 8
+  Exit House        : 2
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 71
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.021784229204058647
+  Value Loss        : 0.8434749245643616
+  Entropy           : 1.7564711570739746
+  Approx KL         : 0.01486724428832531
+  Total Reward      : -186.7500000000017
+  Phone             : 6
+  Exit House        : 2
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 86
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.026599125936627388
+  Value Loss        : 0.7526136636734009
+  Entropy           : 1.748443841934204
+  Approx KL         : 0.012568882666528225
+  Total Reward      : -142.3500000000005
+  Phone             : 9
+  Exit House        : 2
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 100
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.1783035546541214
+  Value Loss        : 0.7795080542564392
+  Entropy           : 1.7289248704910278
+  Approx KL         : 0.014106018468737602
+  Total Reward      : 62.20000000000029
+  Phone             : 12
+  Exit House        : 6
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+

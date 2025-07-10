@@ -1,3 +1,5 @@
-ultralytics
 gymnasium
 numpy
+torch
+torchvision
+pyyaml

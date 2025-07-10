@@ -1,0 +1,117 @@
+Episode_number 19
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.08543520420789719
+  Value Loss        : 0.2502368688583374
+  Entropy           : 1.2034457921981812
+  Approx KL         : 0.007741378154605627
+  Total Reward      : 326.60000000000076
+  Phone             : 14
+  Exit House        : 14
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 37
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.0290702972561121
+  Value Loss        : 0.36142635345458984
+  Entropy           : 1.2384520769119263
+  Approx KL         : 0.011427738703787327
+  Total Reward      : 215.09999999999965
+  Phone             : 12
+  Exit House        : 11
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 55
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.12681496143341064
+  Value Loss        : 0.23392556607723236
+  Entropy           : 1.208868384361267
+  Approx KL         : 0.008148751221597195
+  Total Reward      : 211.19999999999965
+  Phone             : 12
+  Exit House        : 11
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 73
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.1268519163131714
+  Value Loss        : 0.3291707932949066
+  Entropy           : 1.2258518934249878
+  Approx KL         : 0.013514039106667042
+  Total Reward      : 223.8500000000002
+  Phone             : 13
+  Exit House        : 11
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 90
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.15998803079128265
+  Value Loss        : 0.1967770904302597
+  Entropy           : 1.2427022457122803
+  Approx KL         : 0.0017439767252653837
+  Total Reward      : 156.35000000000036
+  Phone             : 10
+  Exit House        : 10
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 109
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.45263105630874634
+  Value Loss        : 0.24206462502479553
+  Entropy           : 1.312171220779419
+  Approx KL         : 0.05462855100631714
+  Total Reward      : 404.1500000000032
+  Phone             : 16
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 126
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.12881134450435638
+  Value Loss        : 0.1719672530889511
+  Entropy           : 1.3103781938552856
+  Approx KL         : 0.00439881207421422
+  Total Reward      : 257.8499999999997
+  Phone             : 12
+  Exit House        : 12
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 143
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.02813330665230751
+  Value Loss        : 0.2917623519897461
+  Entropy           : 1.3317316770553589
+  Approx KL         : 0.012953708879649639
+  Total Reward      : 259.0999999999986
+  Phone             : 12
+  Exit House        : 12
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 150
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.0067252470180392265
+  Value Loss        : 0.18603095412254333
+  Entropy           : 1.3089635372161865
+  Approx KL         : 0.017681024968624115
+  Total Reward      : 120.3
+  Phone             : 6
+  Exit House        : 5
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+

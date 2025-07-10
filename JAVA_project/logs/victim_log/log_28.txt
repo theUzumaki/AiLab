@@ -1,0 +1,247 @@
+Episode_number 19
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.14755190908908844
+  Value Loss        : 0.1875712275505066
+  Entropy           : 1.1372665166854858
+  Approx KL         : 0.0058735450729727745
+  Total Reward      : 435.9268075263874
+  Battery           : 16
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 38
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.4058309495449066
+  Value Loss        : 0.24042542278766632
+  Entropy           : 1.082556962966919
+  Approx KL         : 0.049419060349464417
+  Total Reward      : 487.2500000000075
+  Battery           : 17
+  Exit House        : 16
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 56
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.27288347482681274
+  Value Loss        : 0.3914164900779724
+  Entropy           : 1.1101685762405396
+  Approx KL         : 0.038527462631464005
+  Total Reward      : 570.5333556765856
+  Battery           : 18
+  Exit House        : 17
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 72
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.0791231170296669
+  Value Loss        : 0.4677886962890625
+  Entropy           : 1.1585915088653564
+  Approx KL         : 0.004145010840147734
+  Total Reward      : 463.62873756818425
+  Battery           : 16
+  Exit House        : 14
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 86
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.06224288418889046
+  Value Loss        : 0.4762074947357178
+  Entropy           : 1.1436395645141602
+  Approx KL         : 0.012718407437205315
+  Total Reward      : 347.10616056044324
+  Battery           : 13
+  Exit House        : 11
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 101
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.11941330879926682
+  Value Loss        : 0.23685027658939362
+  Entropy           : 1.147933006286621
+  Approx KL         : 0.001187500893138349
+  Total Reward      : 365.00799487252164
+  Battery           : 13
+  Exit House        : 12
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 117
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.3055206835269928
+  Value Loss        : 0.21016652882099152
+  Entropy           : 1.1207475662231445
+  Approx KL         : 0.043256185948848724
+  Total Reward      : 474.89643433583024
+  Battery           : 15
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 133
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.17225021123886108
+  Value Loss        : 0.1535598635673523
+  Entropy           : 1.1375898122787476
+  Approx KL         : 0.02681901305913925
+  Total Reward      : 538.0154366168729
+  Battery           : 16
+  Exit House        : 16
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 148
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.01703735627233982
+  Value Loss        : 0.18882502615451813
+  Entropy           : 1.140285611152649
+  Approx KL         : 0.015923194587230682
+  Total Reward      : 392.4564642605077
+  Battery           : 13
+  Exit House        : 13
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 165
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.2319261133670807
+  Value Loss        : 0.1880732923746109
+  Entropy           : 1.1170215606689453
+  Approx KL         : 0.02004227414727211
+  Total Reward      : 569.9972123196621
+  Battery           : 17
+  Exit House        : 17
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 180
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.10024905949831009
+  Value Loss        : 0.44170576333999634
+  Entropy           : 1.1211416721343994
+  Approx KL         : 0.02571241185069084
+  Total Reward      : 463.04848338748985
+  Battery           : 15
+  Exit House        : 14
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 195
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.11774197220802307
+  Value Loss        : 0.3723500669002533
+  Entropy           : 1.0963510274887085
+  Approx KL         : 0.0026621355209499598
+  Total Reward      : 399.2985096329319
+  Battery           : 14
+  Exit House        : 12
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 210
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.17295227944850922
+  Value Loss        : 0.4971606731414795
+  Entropy           : 1.0930737257003784
+  Approx KL         : 0.02576359175145626
+  Total Reward      : 405.30224563764637
+  Battery           : 15
+  Exit House        : 12
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 226
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.008721660822629929
+  Value Loss        : 0.45594948530197144
+  Entropy           : 1.0751593112945557
+  Approx KL         : 0.00886572152376175
+  Total Reward      : 500.1979249722992
+  Battery           : 16
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 242
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.02125401236116886
+  Value Loss        : 0.5382483005523682
+  Entropy           : 1.0620027780532837
+  Approx KL         : 0.024655215442180634
+  Total Reward      : 487.0294690223358
+  Battery           : 15
+  Exit House        : 15
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 258
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.1297188401222229
+  Value Loss        : 0.18100911378860474
+  Entropy           : 1.0625144243240356
+  Approx KL         : 0.028306318446993828
+  Total Reward      : 536.1987670461256
+  Battery           : 16
+  Exit House        : 16
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 275
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.1671852171421051
+  Value Loss        : 0.3595147132873535
+  Entropy           : 1.0723679065704346
+  Approx KL         : 0.006287713069468737
+  Total Reward      : 539.208573383613
+  Battery           : 17
+  Exit House        : 16
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 293
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : 0.0833655297756195
+  Value Loss        : 0.17921166121959686
+  Entropy           : 1.0839745998382568
+  Approx KL         : 0.0237443670630455
+  Total Reward      : 607.0299605692345
+  Battery           : 18
+  Exit House        : 18
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
+Episode_number 300
+  Lr Actor          : 0.000300
+  Lr Critic         : 0.001000
+  Policy Loss       : -0.026635533198714256
+  Value Loss        : 0.10746348649263382
+  Entropy           : 1.0997594594955444
+  Approx KL         : 0.014108307659626007
+  Total Reward      : 235.85000000000207
+  Battery           : 7
+  Exit House        : 7
+  Enter House       : 0
+-------------------------------------------------------------------------------------
+
