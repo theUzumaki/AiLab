@@ -20,8 +20,7 @@ public class WinnerObject extends HideoutEntity {
 		try {
 			sprites= new BufferedImage[] {
 					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/battery.png")),
-					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/phone.png"))
-					
+					ImageIO.read(getClass().getResourceAsStream("/sprites/misc/phone.png"))		
 			};
 			imgResizer(sprites, width, heigth);
 			

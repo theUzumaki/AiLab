@@ -38,5 +38,4 @@ public abstract class ConceptEntity {
 			sprites[i]= scaledImage;
 		}
 	}
-
 }

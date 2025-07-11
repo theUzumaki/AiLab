@@ -17,13 +17,15 @@ public class Game extends JPanel {
     private final KeyManager keys;
     final Rectangle camera;
     private final int sizeTile;
+    public String phase;
     
     public boolean screen = false;
 
-    public Game(Rectangle camera, int id, int sizeTile) {
+    public Game(Rectangle camera, int id, int sizeTile, String phase) {
         this.camera = camera;
         this.gm = GameMaster.getInstance();  // Shared game logic
         this.keys = new KeyManager();
+        this.phase = phase;
         this.sizeTile = sizeTile;
         
 
@@ -73,7 +75,6 @@ public class Game extends JPanel {
     	float x2_local = bbox[2];
     	float y2_local = bbox[3];
 
-    	// 1. Calcola il centro del giocatore
         int centerX = player_x + sizeTile / 2;
         int centerY = player_y + sizeTile / 2;
 
@@ -94,6 +95,7 @@ public class Game extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+    	
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -107,7 +109,7 @@ public class Game extends JPanel {
         for (BackgroundEntity ent : gm.bgEntities2) ent.draw(g);
         for (PhysicalEntity ent : gm.physicalEntities) {
         	ent.draw(g);
-        	if((ent.kind == "jason" || ent.kind == "panam") && screen == false) {
+        	if(screen == false && ent instanceof AnimatedEntity) {
         		YoloReader.Detection[] detections;
         		try {
         			detections = YoloReader.getDetections("Object_detection/detections_"+ent.kind+".json");

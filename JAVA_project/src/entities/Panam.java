@@ -54,7 +54,10 @@ public class Panam extends AnimatedEntity{
 	public void update(boolean[] keys) {
 		
 		interaction = false;
-		step = defaultStep;
+		
+		if (step != slow) {
+			step = defaultStep;			
+		}
 		
 		if (moved) {
 			moveTimer++;
@@ -106,7 +109,7 @@ public class Panam extends AnimatedEntity{
 			
 			if (keys[15]) {
 				if (dash > 0) {
-					step = defaultStep + 2; dash-= 1; moved = true;
+					step = defaultStep + 2; dash-= 1;
 					dashing = true;
 				}
 			}
@@ -213,6 +216,9 @@ public class Panam extends AnimatedEntity{
 		
 		hidden = false;
 		dashing = false;
+		
+		phone = false;
+		battery = false;
 		
 		timer = 60; 
 		dash = 50;

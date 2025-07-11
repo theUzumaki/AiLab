@@ -11,6 +11,8 @@ public class Jason extends AnimatedEntity{
 	private int intrTimer = 30, moveTimer = 0;
 	private int direction, interval;
 	
+	public int boxBroken;
+	
 	public Jason(int x, int y, int xoffset, int yoffset, int width, int heigth, int STEP, int TILE, int selector) {
 		
 		super(x, y, xoffset, yoffset, width, heigth, STEP + 1, TILE, selector, "jason");
@@ -44,7 +46,10 @@ public class Jason extends AnimatedEntity{
 		
 		interaction = false;
 		aligned = false;
-		step = defaultStep;
+		
+		if (step != slow) {
+			step = defaultStep;			
+		}
 		
 		
 		if (moved) {
@@ -85,7 +90,7 @@ public class Jason extends AnimatedEntity{
 			else if (keys[4])
 				if (timer >= 15) { interacting = true; timer = 0; }
 		} else {
-			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 30;}
+			if (intrTimer == 0) { interaction = true; interacting = false; intrTimer = 7;}
 			intrTimer--;
 		}
 		
@@ -106,6 +111,7 @@ public class Jason extends AnimatedEntity{
 			if (!water) { x = tile * 4; y = tile * 15; water = true;}
 			else { x = tile * 4; y = tile * 10; water = false;}
 		} else if ( ent.kind == "box" ){
+			if (ent.selector == 0) boxBroken++;
 			ent.triggerIntr(this);
 		}
 		

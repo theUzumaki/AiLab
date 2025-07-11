@@ -18,6 +18,9 @@ public class GameMaster {
     public int[][] windowValues; // tile, rows, columns
     public int[][] windowBorders;
     
+    public Panam panam;
+    public Jason jason;
+    
     public Queue<PhysicalEntity> linkingObjects = new LinkedList<>();
     
     public List<CollisionBox> collisionBoxes = new ArrayList<>();
@@ -35,6 +38,10 @@ public class GameMaster {
     
     private int[][] houses = new int[][] {{}, {}};
     private int[][] objects = new int[][] {{}, {}};
+    private int[][] exit_houses = new int[][] {{}, {}};
+    
+    public List<List<List<Integer>>> free_pos = new ArrayList<>();
+    
     int map = 0;
 
     private GameMaster(int[][] windowValues, int map) {
@@ -95,7 +102,7 @@ public class GameMaster {
     
     private void loadStage() {
     	
-    	Jason jason = Jason.getInstance(16, 2, 0, 0, 1, 1, 3, windowValues[0][0], 0);
+    	jason = Jason.getInstance(16, 2, 0, 0, 1, 1, 3, windowValues[0][0], 0);
     	animatedEntities.add(jason);
     	resetEntities.add(jason);
     	physicalEntities.add(jason);
@@ -116,7 +123,7 @@ public class GameMaster {
     		panam_y = 2;
     	}
     	
-    	Panam panam = Panam.getInstance(panam_x, panam_y, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
+    	panam = Panam.getInstance(panam_x, panam_y, 0, 0, 1, 1, STEP, windowValues[0][0], 0);
     	animatedEntities.add(panam);
     	resetEntities.add(panam);
     	physicalEntities.add(panam);
@@ -185,6 +192,7 @@ public class GameMaster {
     		
     		y = 0;
     		boolean match;
+    		List<List<Integer>> sottoLista = new ArrayList<>();
     		
     		for (int[] row : tilemap[2]) {
     			x = 0;
@@ -314,6 +322,8 @@ public class GameMaster {
     					objects[1] = new int[] {x * sizetile + windowBorders[2][0], y * sizetile + windowBorders[2][2]};
     					match = true; 
     					break;
+    				case 35:
+    					sottoLista.add(List.of(x * sizetile, y * sizetile));
     				}
     					
     				if (match) {
@@ -325,6 +335,7 @@ public class GameMaster {
     			}
     			y+= 1;
     		}
+    		free_pos.add(indexWindow, sottoLista);
     		
     		y = 0;
     		
@@ -340,7 +351,13 @@ public class GameMaster {
     				
     				switch (element) {
     				
-    				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); break;
+    				case 0: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door0")); 
+    					if (indexWindow == 1) {
+    						exit_houses[0] = new int[] {x * sizetile + windowBorders[1][0], y * sizetile + windowBorders[1][2]};
+    					} else if (indexWindow == 2) {
+    						exit_houses[1] = new int[] {x * sizetile + windowBorders[2][0], y * sizetile + windowBorders[2][2]};
+    					}
+    					break;
     				case 1: interactionBoxes.add(new InteractionBox(x, y, xoffset, yoffset, 1, 1, sizetile, "door1"));
 						houses[1] = new int[] {x * sizetile, y * sizetile};
 						break;
@@ -412,6 +429,7 @@ public class GameMaster {
             		if ( col.top < box.top && box.top < col.bottom ) return true;
             		else if ( col.top < box.bottom && box.bottom < col.bottom ) return true;
             	}
+    			ent.step = ent.defaultStep;
     		}
     		
     	}
@@ -541,7 +559,8 @@ public class GameMaster {
         						else if(alpha != 0 && red == 159 && green == 152 && blue == 61) temp[x] = 30; // Taovlo con sedia a sinistra
         						else if(alpha != 0 && red == 210 && green == 197 && blue == 29) temp[x] = 31; // Tavolo con sedia a destra
         						else if(alpha != 0 && red == 158 && green == 0 && blue == 0) temp[x] = 33; // Phone
-        						else if(alpha != 0 && red == 93 && green == 33 && blue == 33) temp[x] = 34; // Battery
+        						else if(alpha != 0 && red == 93 && green == 33 && blue == 33) temp[x] = 34; // Battery    							
+        						else if(alpha != 0 && red == 0 && green == 244 && blue == 255) temp[x] = 35; // Spawn Points
     							
         						else temp[x] = -1;
     							break;
@@ -573,12 +592,28 @@ public class GameMaster {
     	
     }
     
-    public double distance(AnimatedEntity panam, int idx_house) {
+    public double distance(Panam panam, int idx_house) {
     	if (panam.stage == 0) {
+    		
     		return Math.sqrt(Math.pow((panam.x - houses[idx_house][0]), 2) + Math.pow((panam.y - houses[idx_house][1]), 2));
     	}
     	else {
+    		if (panam.battery == true || panam.phone == true) {
+    			return Math.sqrt(Math.pow((panam.x - exit_houses[idx_house][0]), 2) + Math.pow((panam.y - exit_houses[idx_house][1]), 2));
+    		}
     		return Math.sqrt(Math.pow((panam.x - objects[idx_house][0]), 2) + Math.pow((panam.y - objects[idx_house][1]), 2));
+    	}
+    }
+    
+    public int[] distance(int idx_house) {
+    	if (panam.stage == 0) {
+    		return new int[] {houses[idx_house][0], houses[idx_house][1]};
+    	}
+    	else {
+    		if (panam.battery == true || panam.phone == true) {
+    			return new int[] {exit_houses[idx_house][0], exit_houses[idx_house][1]};
+    		}
+    		return new int[] {objects[idx_house][0], objects[idx_house][1]};
     	}
     }
 	

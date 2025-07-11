@@ -21,15 +21,13 @@ public class ComunicationAI {
 	private List<AnimatedEntity> animatedEntities;
 	private GameLoop gl;
 	private int TIME_SLEEP = 100;
+	String phase;
 	
-	// Used to check in the game loop what send to the AI
-	public boolean get_game = false;
-	public boolean moving = false;
-	
-	public ComunicationAI(List<Game> windows, List<AnimatedEntity> animatedEntities, GameLoop gl) {
+	public ComunicationAI(List<Game> windows, List<AnimatedEntity> animatedEntities, GameLoop gl, String phase) {
 		this.windows = windows;
 		this.animatedEntities = animatedEntities;
 		this.gl = gl;
+		this.phase = phase;
 	}
 	
 	public void writeAck(String aiFile) {
@@ -78,17 +76,32 @@ public class ComunicationAI {
 				
 				JSONObject state = game_info();
 				
-				if (file1.length() == 0 && file2.length() == 0) {
-					file1.setLength(0);
-					file1.writeBytes(state.toString());
-					file1.getFD().sync();
-					
-					file2.setLength(0);
-					file2.writeBytes(state.toString());
-					file2.getFD().sync();
-					break;
+				if (!phase.equals("jason")) {
+					if (file2.length() == 0) {
+						file1.setLength(0);
+						file1.writeBytes(state.toString());
+						file1.getFD().sync();
+						
+						file2.setLength(0);
+						file2.writeBytes(state.toString());
+						file2.getFD().sync();
+						break;
+					} else {
+						continue;
+					}					
 				} else {
-					continue;
+					if (file2.length() == 0 && file1.length() == 0) {
+						file1.setLength(0);
+						file1.writeBytes(state.toString());
+						file1.getFD().sync();
+						
+						file2.setLength(0);
+						file2.writeBytes(state.toString());
+						file2.getFD().sync();
+						break;
+					} else {
+						continue;
+					}
 				}
 				
 			} catch (Exception e) {
@@ -127,7 +140,7 @@ public class ComunicationAI {
     	Panam panam = (Panam) animatedEntities.getLast();
     	if (panam.hidden) {
     		status = "hide";
-    	} else if (panam.interacting) {
+    	} else if (panam.interaction) {
     		status = "interact";
     	} else {
     		status = "visible";
@@ -139,7 +152,7 @@ public class ComunicationAI {
     	
     	victim.put("map", panam.stage);
     	if (panam.step == panam.slow) {
-    		victim.put("slow", true);                        		
+    		victim.put("slow", true);
     	} else {
     		victim.put("slow", false);
     	}
@@ -148,6 +161,8 @@ public class ComunicationAI {
     	victim.put("dead", panam.dead);
     	victim.put("end-game", gl.end_game);
     	victim.put("finished", gl.timer_finished);
+    	victim.put("agent_x", panam.x);
+    	victim.put("agent_y", panam.y);
     	
     	int sub_map = 0;
     	
@@ -164,27 +179,34 @@ public class ComunicationAI {
     	else if(440 <= panam.x && panam.x <= 760 && 224 <= panam.y && panam.y <= 360)
     		sub_map = 4;
     	
-    	double dist1;
-    	double dist2;
+    	int[] dist1;
+    	int[] dist2;
     	
     	// Battery
-		dist1 = gl.gm.distance(panam, 0);
+		dist1 = gl.gm.distance(0);
+		
 		
 		// Phone
-		dist2 = gl.gm.distance(panam, 1);
+		dist2 = gl.gm.distance(1);
+		
+		if(panam.stage == 0 && panam.battery) {
+			dist2 = new int[] {0, 0};
+		}
     	
     	victim.put("sub_map", sub_map);
     	
-    	// Distance from the house of the battery or distance from the battery
-    	victim.put("distance_1", dist1);
+    	// Distance from the house of the battery or distance from the phone
+    	victim.put("distance_1_x", dist1[0]);
+    	victim.put("distance_1_y", dist1[1]);
     	
-    	// Distance from the house of the phone or distance from the phone
-    	victim.put("distance_2", dist2);
+    	// Distance from the house of the phone or distance from the battery
+    	victim.put("distance_2_x", dist2[0]);
+    	victim.put("distance_2_y", dist2[1]);
     	
     	JSONObject killer = new JSONObject();
     	
     	Jason jason = (Jason) animatedEntities.getFirst();
-    	if (jason.interacting) {
+    	if (jason.interaction) {
     		status = "interact";
     	} else {
     		status = "visible";
@@ -222,6 +244,8 @@ public class ComunicationAI {
     		sub_map = 6;
     	
     	killer.put("sub_map", sub_map);
+    	killer.put("agent_x", jason.x);
+    	killer.put("agent_y", jason.y);
 
     	response.put("victim", victim);
     	response.put("killer", killer);
